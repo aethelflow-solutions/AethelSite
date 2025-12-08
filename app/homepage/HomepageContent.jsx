@@ -1,7 +1,9 @@
 
 import Services from "../sections/Services";
 import HeroSection from "../sections/HeroSection";
-import Navbar from "../components/Navbar"
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
 import MissionSection from "../sections/MissionSection";
 import ContactSection from "../sections/ContactSection";
 
@@ -11,7 +13,7 @@ function HomepageContent() {
 
 
       <div className="mx-auto bg-white" >
-        {/* <Navbar /> */}
+       <Navbar /> 
         <div className="sm:p-2 lg:p-4 " >
           <HeroSection />
         </div>
@@ -20,6 +22,7 @@ function HomepageContent() {
           <MissionSection />
         </div>
         <ContactSection />
+        <Footer />
       </div>
 
     </>
@@ -27,4 +30,4 @@ function HomepageContent() {
   )
 }
 
-export default HomepageContent
+export default HomepageContent   
