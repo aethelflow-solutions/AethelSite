@@ -6,7 +6,7 @@ import ContactForm from "../components/ContactForm";
 
 export default function ContactSection() {
     return (
-        <section className="flex flex-col" >
+        <section id="contact" className="flex flex-col" >
             <div>
                 <div className="lg:py-12 py-8 flex justify-center">
                     <h2 className="text-blue-800" >Our Partners</h2>

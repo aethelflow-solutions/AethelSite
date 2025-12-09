@@ -31,9 +31,10 @@ export default function MediaCardServices({ data }: MediaCardProps) {
                 <Card
                     className=""
                     sx={{
-                        maxWidth: 380,
-                        bgcolor: "#0D0D0D",
-                        color: "white",
+                        minHeight:400,
+                        maxWidth: 400,
+                        bgcolor: "#F7F6FF",
+                        color: "black",
                         borderRadius: "32px",
                         padding: "32px",
                         display: "flex",
@@ -44,7 +45,8 @@ export default function MediaCardServices({ data }: MediaCardProps) {
                         overflow: "visible",
                         transition: 'background-color 0.25s ease, transform 0.25s ease',
                         '&:hover': {
-                            bgcolor: '#000000',
+                            bgcolor: '#222121',
+                            color: 'white'
                         },
                         "&:hover .text-block": {
                             transform: "translateY(-12px)",
