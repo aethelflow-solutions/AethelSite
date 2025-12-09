@@ -9,33 +9,39 @@ export interface CardData {
 export const cardsData: CardData[] = [
     {
         id: 1,
-        title: "Full Stack Development",
+        title: " AI & Automations",
         description: "Design and deploy AI/ML models for automation, predictive analytics, and intelligent decision-making.",
-        icon: "../../static/AI.png",
+        icon: "/Send.webp",
     },
     {
         id: 2,
-        title: "AIOps & Automations",
-        description: "Design and deploy AI/ML models for automation, predictive analytics, and intelligent decision-making.",
-        icon: "../../static/AI.png",
+        title: "Full Stack Solutions",
+        description: "Our company creates intelligent models of AI tech that utilize the power of advanced algorithms and strategic techniques.",
+        icon: "/Send.webp",
     },
     {
         id: 3,
-        title: "Cloud Solutions",
-        description: "Design and deploy AI/ML models for automation, predictive analytics, and intelligent decision-making.",
-        icon: "../../static/AI.png",
+        title: "Agent Call Services",
+        description: "Enable you to maintain personalized, efficient, and outcome-driven communication with customers, helping businesses optimize sales funnels, enhance support quality, and achieve operational goals.",
+        icon: "/Send.webp",
     },
     {
         id: 4,
-        title: "Data Engineering",
-        description: "Design and deploy AI/ML models for automation, predictive analytics, and intelligent decision-making.",
-        icon: "../../static/AI.png",
+        title: "Digital Transformation Consulting",
+        description: "Help businesses adopt and optimize digital technologies across all operations to improve efficiency and customer engagement.",
+        icon: "/Send.webp",
     },
     {
         id: 5,
-        title: "Data Engineering",
-        description: "Design and deploy AI/ML models for automation, predictive analytics, and intelligent decision-making.",
-        icon: "../../static/AI.png",
+        title: "Software Development and Modernization",
+        description: "Assist in architecting, engineering, and updating legacy software to modern platforms.",
+        icon: "/Send.webp",
+    },
+      {
+        id: 6,
+        title: "Data Analytics and Business Intelligence",
+        description: "Provide data strategy, governance, advanced analytics, and actionable insights for data-driven decision-making.",
+        icon: "/Send.webp",
     },
 ];
 

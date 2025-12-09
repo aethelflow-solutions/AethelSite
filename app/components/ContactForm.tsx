@@ -5,8 +5,6 @@ import {
     MenuItem,
     Button,
     Card,
-    InputAdornment,
-    IconButton,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { SelectChangeEvent } from "@mui/material/Select";
@@ -55,16 +53,13 @@ export default function ContactForm(): JSX.Element {
         e.preventDefault();
         setSubmitting(true);
 
-        // Replace with real submit logic (API call)
         console.log("Submitting", form);
-        await new Promise((r) => setTimeout(r, 700)); // demo delay
+        await new Promise((r) => setTimeout(r, 700));
 
         setSubmitting(false);
-        // reset or show success message
-        // setForm({ name: "", email: "", company: "", phone: "", service: "", message: "" });
     };
 
-    // Shared style for inputs to match screenshot: rounded soft bg, subtle outline only on focus
+    // Smaller height input style
     const textFieldSx = {
         backgroundColor: "#f6f6f6",
         borderRadius: "12px",
@@ -72,34 +67,35 @@ export default function ContactForm(): JSX.Element {
             border: "1px solid rgba(0,0,0,0.06)",
         },
         "& .MuiOutlinedInput-root.Mui-focused": {
-            boxShadow: "inset 0 0 0 2px rgba(0,0,0,0.06)",
+            boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.08)",
             "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#000",
                 borderWidth: 1,
             },
         },
         "& .MuiInputBase-input": {
-            padding: "12px 14px",
-            fontSize: "0.95rem",
+            padding: "10px 12px", // reduced height
+            fontSize: "0.9rem",
         },
     };
 
     return (
         <Card
             elevation={0}
-            className="max-w-2xl mx-auto bg-white rounded-2xl p-8 md:p-10 shadow-md"
+           className="mx-auto bg-white rounded-[40px] p-6 md:p-8 shadow-md w-full max-w-md"
+
+              // increased width, reduced padding
         >
-            <header className="mb-6">
-                <h2 className="text-2xl font-semibold mb-2">Get in touch</h2>
-                <p className="text-sm text-gray-600">
-                    Just fill out the form and our global experts will be in touch right
-                    away with package and price solution to help you!
+            <header className="mb-4">
+                <h2 className="text-xl font-semibold mb-1">Get in touch</h2>
+                <p className="text-sm text-gray-600 leading-tight">
+                    Just fill out the form and we will contact you instantly!
                 </p>
             </header>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                {/* Two-column rows */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                {/* Row 1 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <TextField
                         name="name"
                         value={form.name}
@@ -110,6 +106,7 @@ export default function ContactForm(): JSX.Element {
                         sx={textFieldSx}
                         InputLabelProps={{ shrink: false }}
                     />
+
                     <TextField
                         name="email"
                         value={form.email}
@@ -122,7 +119,8 @@ export default function ContactForm(): JSX.Element {
                     />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Row 2 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <TextField
                         name="company"
                         value={form.company}
@@ -133,6 +131,7 @@ export default function ContactForm(): JSX.Element {
                         sx={textFieldSx}
                         InputLabelProps={{ shrink: false }}
                     />
+
                     <TextField
                         name="phone"
                         value={form.phone}
@@ -145,44 +144,44 @@ export default function ContactForm(): JSX.Element {
                     />
                 </div>
 
-                {/* Service select (full width) */}
-                <TextField
-                    select
-                    name="service"
-                    value={form.service}
-                    // onChange={handleSelectChange}
-                    placeholder="AI Integration solutions"
-                    fullWidth
-                    variant="outlined"
-                    sx={{ ...textFieldSx, px: 0 }}
-                    InputLabelProps={{ shrink: false }}
-                >
-                    {/* Add an empty item so placeholder-like initially */}
-                    <MenuItem value="">
-                        <em>Select a service</em>
-                    </MenuItem>
-                    {SERVICES.map((s) => (
-                        <MenuItem key={s} value={s}>
-                            {s}
-                        </MenuItem>
-                    ))}
-                </TextField>
+                {/* Select */}
+               <TextField
+    select
+    name="service"
+    value={form.service}
+    onChange={(e) => setForm((s) => ({ ...s, service: e.target.value }))}
+    placeholder="Select a service"
+    fullWidth
+    variant="outlined"
+    sx={textFieldSx}
+    InputLabelProps={{ shrink: false }}
+>
+    <MenuItem value="">
+        <em>Select a service</em>
+    </MenuItem>
+    {SERVICES.map((s) => (
+        <MenuItem key={s} value={s}>
+            {s}
+        </MenuItem>
+    ))}
+</TextField>
+
 
                 {/* Message */}
                 <TextField
                     name="message"
                     value={form.message}
                     onChange={handleTextChange}
-                    placeholder="Kindly provide enough information about your business..."
+                    placeholder="Write your message..."
                     fullWidth
                     variant="outlined"
                     multiline
-                    rows={4}
+                    rows={3}  
                     sx={textFieldSx}
                 />
 
-                {/* Submit button */}
-                <div className="pt-3">
+                {/* Submit */}
+                <div className="pt-2">
                     <Button
                         type="submit"
                         variant="contained"

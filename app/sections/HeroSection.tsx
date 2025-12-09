@@ -3,21 +3,22 @@ import { Typography } from "@mui/material";
 
 export default function HeroSection() {
     return (
-        <section className="flex items-center bg-[url('/HeroSection-bg.jpg')] bg-cover h-screen text-white pt-32 pb-28 px-6 rounded-3xl">
-            <div className="w-full flex flex-col items-center md:items-start justify-center gap-6 max-w-3xl mx-auto text-center md:text-left">
+        <section className="flex items-center bg-[url('/Image-bg.webp')] bg-cover h-screen text-white pt-32 pb-28 px-6 rounded-3xl">
+            <div className="w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left md:text-left ml-10"> 
+                {/* ADDED ml-10 (40px approx) & changed items-center → items-start */}
 
                 <Typography
                     variant="h3"
                     className="font-bold leading-tight"
-                    sx={{ fontSize: { xs: "24px", md: "38px" } }}
+                    sx={{ fontSize: { xs: "26px", md: "34px" } }} // Reduced for balance
                 >
-                    Supercharge your operations with AI that delivers Seamless automation
+                    Supercharge your operations with AI that delivers seamless automation
                 </Typography>
 
                 <Typography
                     variant="body1"
                     className="leading-tight"
-                    sx={{ fontSize: { xs: "14px", md: "18px" } }}
+                    sx={{ fontSize: { xs: "14px", md: "17px" } }}
                 >
                     At Aethel Flow, we harness AI and automation to streamline workflows,
                     spark innovation, and empower businesses to move faster with seamless,
@@ -33,10 +34,10 @@ export default function HeroSection() {
                             color: "white",
                             borderColor: "white",
                             borderRadius: "50px",
-                            paddingX: 4,
-                            paddingY: 1.5,
+                            paddingX: 2.2,     
+            paddingY: 0.6, 
                             textTransform: "none",
-                            fontSize: "16px",
+                            fontSize: "14px",
                         }}
                         onClick={() => {
                             document
