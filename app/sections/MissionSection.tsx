@@ -15,7 +15,7 @@ const data: CardData = {
 
 export default function MissionSection() {
     return (
-        <section className="relative flex justify-center bg-black min-h-[150vh] text-white rounded-[50px] " >
+        <section id="mission" className="relative bg-[length:600px_600px] bg-no-repeat bg-center flex justify-center bg-[#1B1A1A] min-h-[130vh] text-white rounded-[50px] " style={{backgroundImage: "url(/Image2.png)"}} >
             {/* <div className="absolute w-full h-full">
                 <Prism
                     animationType="rotate"

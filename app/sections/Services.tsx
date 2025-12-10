@@ -7,12 +7,12 @@ import AnimatedContent from '../utils/AnimatedContent'
 
 export default function Services() {
     return (
-        <section className="py-24 bg-white ">
+        <section id='services' className="py-24 bg-white ">
             <div className="text-center text-black mb-12 pb-12">
                 <h2 className="text-5xl font-medium ">
                     Our Services
                 </h2>
-                <h4 className="text-xl font-normal" >
+                <h4 className="text-xl font-normal mt-5" >
                     Comprehensive technology solutions tailored to accelerate your digital journey
                     and drive sustainable business growth.
                 </h4>
