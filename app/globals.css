@@ -39,3 +39,39 @@ body {
   rgba(0, 0, 0, 0.548) 100%
 );
 }
+/* Gradient + shimmer animation for heading */
+.heroTitle {
+  background: linear-gradient(
+    90deg,
+    #00cfff 0%,
+    #00cfff55 50%,
+    #00cfff 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 2.5s infinite linear;
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Paragraph fade-in effect */
+.heroText {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn 1.5s forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
