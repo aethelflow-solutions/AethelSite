@@ -3,7 +3,6 @@ import { cardsData } from '../data/data'
 import { Box } from '@mui/material'
 import Button from "@mui/material/Button";
 import { ArrowRight } from 'lucide-react';
-import AnimatedContent from '../utils/AnimatedContent'
 
 export default function Services() {
     return (

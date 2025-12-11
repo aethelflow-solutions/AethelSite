@@ -20,9 +20,9 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 w-full max-w-5xl z-50">
+    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 w-full px-6 z-50">
       <nav
-        className={"rounded-3xl px-5 py-3 flex items-center justify-between gap-4 shadow-2xl"}
+        className={"rounded-1xl px-5 py-3 flex items-center justify-between gap-4 shadow-2xl"}
         style={{
           // ensure backdrop-filter works cross-browser
           WebkitBackdropFilter: "blur(14px) saturate(150%)",
@@ -45,7 +45,7 @@ export default function Navbar() {
 
         {/* Left: Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-rose-400 flex items-center justify-center text-white font-semibold shadow">G</div>
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-rose-400 flex items-center justify-center text-white font-semibold shadow">A</div>
           <div onClick={() => {
               document
                 .getElementById("home")

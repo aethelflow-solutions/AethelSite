@@ -31,7 +31,6 @@ export default function HeroSection() {
 
         <div className="mt-4">
           <AButton
-            children="Contact Us"
             variant="outlined"
             sx={{
               color: "white",
@@ -48,7 +47,9 @@ export default function HeroSection() {
                 .getElementById("contact")
                 ?.scrollIntoView({ behavior: "smooth" });
             }}
-          />
+          >
+            Contact Us
+          </AButton>
         </div>
       </div>
 

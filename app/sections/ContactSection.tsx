@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+import Image from "next/image";
 import ContactForm from "../components/ContactForm";
 
 export default function ContactSection() {
@@ -24,7 +25,7 @@ export default function ContactSection() {
                   className="leading-tight font-light text-gray-300"
                   sx={{ fontSize: { xs: "14px", md: "16px" }, opacity: 0.9 }}
                 >
-                  We're here to answer all questions
+                  We&apos;re here to answer all questions
                 </Typography>
 
                 <Typography
@@ -61,10 +62,12 @@ export default function ContactSection() {
                 <div className="flex flex-col gap-6 mt-6">
                   {/* BLOCK 1 */}
                   <div className="flex items-start gap-4">
-                    <img
+                    <Image
                       src="/Icon.png"
-                      alt="icon"
-                      className="w-8 h-8 object-contain"
+                      alt="Envision icon"
+                      width={32}
+                      height={32}
+                      className="object-contain"
                     />
 
                     <div>
@@ -81,10 +84,12 @@ export default function ContactSection() {
 
                   {/* BLOCK 2 */}
                   <div className="flex items-start gap-4">
-                    <img
+                    <Image
                       src="/Icon (1).png"
-                      alt="icon"
-                      className="w-8 h-8 object-contain"
+                      alt="Creative process icon"
+                      width={32}
+                      height={32}
+                      className="object-contain"
                     />
 
                     <div>
