@@ -14,7 +14,7 @@ function HomepageContent() {
 
       <div className="mx-auto bg-white" >
        <Navbar /> 
-        <div className="sm:p-2 lg:p-4 " >
+        <div className="sm:p-2 lg:p-4 " >       
           <HeroSection />
         </div>
         <Services />
