@@ -51,12 +51,8 @@ body {
 }
 /* Gradient + shimmer animation for heading */
 .heroTitle {
-  background: linear-gradient(
-    90deg,
-    #00cfff 0%,
-    #00cfff55 50%,
-    #00cfff 100%
-  );
+  background: #ceadff;
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shine 2.5s infinite linear;

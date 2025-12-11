@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 
 export default function HeroSection() {
   return (
-    <section id="home" className="flex items-center bg-[url('/Image-bg.webp')] bg-cover h-screen text-white pt-32 pb-28 px-6 rounded-3xl">
+    <section id="home" className="flex items-center bg-[url('/bg1.jpg')] bg-cover h-screen text-white pt-32 pb-28 px-6 rounded-3xl">
       <div className="w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left md:text-left ml-10">
         {/* ADDED ml-10 (40px approx) & changed items-center → items-start */}
 <Typography
@@ -33,12 +33,13 @@ export default function HeroSection() {
             variant="outlined"
             sx={{
               color: "white",
-              borderColor: "white",
+              border: "none",
+              backgroundColor: "#692ac8",
               borderRadius: "50px",
-              paddingX: 2.2,
-              paddingY: 0.6,
+              paddingX: 5,
+              paddingY: 2.5,
               textTransform: "none",
-              fontSize: "14px",
+              fontSize: "16px",
             }}
             onClick={() => {
               document
