@@ -31,7 +31,7 @@ export default function MediaCardServices({ data }: MediaCardProps) {
                 <Card
                     className=""
                     sx={{
-                        minHeight:400,
+                        minHeight:450,
                         maxWidth: 400,
                         bgcolor: "#F7F6FF",
                         color: "black",

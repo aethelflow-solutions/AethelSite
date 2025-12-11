@@ -78,8 +78,8 @@ export function MediaCardMission1({ data }: MediaCardProps) {
                 
                 maxWidth: 520,
                 minHeight: { md: 250 },
-                bgcolor: "rgba(101, 101, 101, 0.472)",
-                border: "1px solid rgba(255,255,255,0.12)", 
+                bgcolor: "rgba(101, 101, 101, 0.66)",
+                border: "1px solid rgba(255, 255, 255, 0.188)", 
                 color: "white",
                 borderRadius: "32px",
                 padding: "12px",
