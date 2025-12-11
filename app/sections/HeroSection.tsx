@@ -1,17 +1,29 @@
 "use client";
 
-import AButton from "../components/AButton";
+import { useCallback } from "react";
 import { Typography } from "@mui/material";
+import AButton from "../components/AButton";
+
+function scrollToSection(sectionId: string): void {
+  const element = document.getElementById(sectionId);
+  element?.scrollIntoView({ behavior: "smooth" });
+}
 
 export default function HeroSection() {
+  const handleContactClick = useCallback(() => {
+    scrollToSection("contact");
+  }, []);
+
   return (
     <section
       id="home"
-      className="flex items-center bg-[url('/bg1.jpg')] bg-cover h-screen text-white pt-32 pb-28 px-6 rounded-3xl"
+      className="relative flex items-center min-h-screen text-white pt-32 pb-28 px-6 rounded-3xl overflow-hidden bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/bg1.jpg')" }}
+      aria-label="Hero section"
     >
-      <div className="w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left md:text-left ml-10">
-        {/* ADDED ml-10 (40px approx) & changed items-center → items-start */}
+      <div className="w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left ml-10">
         <Typography
+          component="h1"
           variant="h3"
           className="font-bold leading-tight heroTitle"
           sx={{ fontSize: { xs: "26px", md: "34px" } }}
@@ -20,8 +32,9 @@ export default function HeroSection() {
         </Typography>
 
         <Typography
+          component="p"
           variant="body1"
-          className="leading-tight heroText animate-fadeIn delay-500"
+          className="leading-relaxed animate-fadeIn"
           sx={{ fontSize: { xs: "14px", md: "17px" } }}
         >
           At Aethel Flow, we harness AI and automation to streamline workflows,
@@ -32,6 +45,7 @@ export default function HeroSection() {
         <div className="mt-4">
           <AButton
             variant="outlined"
+            onClick={handleContactClick}
             sx={{
               color: "white",
               border: "none",
@@ -41,52 +55,15 @@ export default function HeroSection() {
               paddingY: 2.5,
               textTransform: "none",
               fontSize: "16px",
-            }}
-            onClick={() => {
-              document
-                .getElementById("contact")
-                ?.scrollIntoView({ behavior: "smooth" });
+              "&:hover": {
+                backgroundColor: "#5a24a8",
+              },
             }}
           >
             Contact Us
           </AButton>
         </div>
       </div>
-
-      {/* Animations */}
-      <style jsx>{`
-        @keyframes fadeInUp {
-          0% {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 1s forwards;
-        }
-        .animate-fadeIn {
-          animation: fadeInUp 1s forwards;
-          animation-delay: 0.5s;
-        }
-        .animate-bounce-slow {
-          animation: bounce 15s infinite alternate;
-        }
-        @keyframes bounce {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(25px);
-          }
-          100% {
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </section>
   );
 }

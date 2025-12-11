@@ -3,13 +3,13 @@ export interface CardData {
   title: string;
   description: string;
   icon: string;
-  showButton?: boolean | false;
+  showButton?: boolean;
 }
 
-export const cardsData: CardData[] = [
+export const cardsData: Readonly<CardData[]> = [
   {
     id: 1,
-    title: " AI & Automations",
+    title: "AI & Automations",
     description:
       "Design and deploy AI/ML models for automation, predictive analytics, and intelligent decision-making.",
     icon: "/Send.webp",
@@ -49,22 +49,22 @@ export const cardsData: CardData[] = [
       "Provide data strategy, governance, advanced analytics, and actionable insights for data-driven decision-making.",
     icon: "/Send.webp",
   },
-];
+] as const;
 
-export const aboutCardsData: CardData[] = [
+export const aboutCardsData: Readonly<CardData[]> = [
   {
     id: 1,
     title: "Innovation First",
     description:
       "We leverage cutting-edge technologies to build innovative solutions that drive business growth and transformation.",
-    icon: "../../static/AI.png",
+    icon: "/static/AI.png",
   },
   {
     id: 2,
     title: "Customer Focused",
     description:
       "Our commitment is to deliver exceptional value and support every step of your digital journey.",
-    icon: "../../static/AI.png",
+    icon: "/static/AI.png",
     showButton: true,
   },
   {
@@ -72,6 +72,6 @@ export const aboutCardsData: CardData[] = [
     title: "Expert Team",
     description:
       "With decades of combined experience, our team brings deep expertise across all technology domains.",
-    icon: "../../static/AI.png",
+    icon: "/static/AI.png",
   },
-];
+] as const;

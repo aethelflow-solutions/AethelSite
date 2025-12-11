@@ -1,13 +1,17 @@
-/* IMPORT GOOGLE FONTS */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap");
-
 /* TAILWIND BASE */
 @import "tailwindcss";
+
+/* 
+ * Note: Google Fonts are now loaded via next/font in layout.tsx
+ * for better performance (no render-blocking, font subsetting, self-hosting)
+ */
 
 /* Light / Dark Theme Variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-poppins: "Poppins", system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,18 +31,12 @@ body {
   padding: 0;
   background: var(--background);
   color: var(--foreground);
-
-  /* 👉 Default global text font */
-  font-family: "Inter", sans-serif !important;
-
+  font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ⛔ REMOVE GEIST FONT OVERRIDES COMPLETELY */
-/* (Do NOT include: --font-sans or --font-mono) */
-
-/* 🌟 Global Text Styling */
+/* Global Text Styling */
 body,
 p,
 span,
@@ -46,26 +44,25 @@ div,
 li,
 button,
 input {
-  font-family: "Inter", sans-serif !important;
+  font-family: var(--font-inter);
   font-weight: 400;
   line-height: 1.65;
   letter-spacing: 0.2px;
 }
 
-/* 🌟 Global Heading Styling */
+/* Global Heading Styling */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: "Poppins", sans-serif !important;
+  font-family: var(--font-poppins);
   font-weight: 600;
   letter-spacing: 0.3px;
 }
 
-/* Your existing styles ------------------------------------------------ */
-
+/* Navigation button hover */
 .navbutton-hover {
   background: none;
 }
@@ -79,20 +76,79 @@ h6 {
   );
 }
 
-/* Shimmer Title */
+/* Hero Title Shimmer */
 .heroTitle {
-  background: #ceadff;
-
+  background: linear-gradient(
+    90deg,
+    #ceadff 0%,
+    #fff 25%,
+    #ceadff 50%,
+    #fff 75%,
+    #ceadff 100%
+  );
+  background-size: 200% 100%;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine 2.5s infinite linear;
+  animation: shine 3s infinite linear;
 }
 
 @keyframes shine {
   0% {
-    background-position: -200% 0;
+    background-position: 200% 0;
   }
   100% {
-    background-position: 200% 0;
+    background-position: -200% 0;
+  }
+}
+
+/* Fade animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeSlideUp {
+  animation: fadeSlideUp 1.2s ease-out forwards;
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid #692ac8;
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
