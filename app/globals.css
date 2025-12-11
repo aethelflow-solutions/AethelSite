@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Lilex:ital,wght@0,100..700;1,100..700&display=swap');
+
+
+
+
 @import "tailwindcss";
+
 
 :root {
   --background: #ffffff;
@@ -10,7 +16,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-lilex: "Lilex", monospace;
+    
 }
+
+
 
 @media (prefers-color-scheme: dark) {
   :root {

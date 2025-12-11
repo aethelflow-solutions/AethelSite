@@ -1,104 +1,140 @@
-import { AppBar, Toolbar, Button, IconButton } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import React, { useEffect, useRef, useState } from "react";
+
+// GlassyPurpleNavbar.jsx
+// Single-file React component (TailwindCSS required)
+// Default export: GlassyPurpleNavbar
 
 export default function Navbar() {
-    return (
-        <AppBar
-            position="absolute"
-            elevation={0}
-            sx={{
-                backgroundColor: "transparent",
-                boxShadow: "none",
-                paddingY: 1,
-                top: 0,
-                left: 0,
-                right: 0,
-                marginTop: "18px",  // DO NOT CHANGE POSITION
-            }}
-        >
-            <Toolbar className="flex items-center justify-between">
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const moreRef = useRef(null);
 
-                {/* LOGO */}
-                <div className="flex items-center bg-white/5 backdrop-blur-sm px-4 py-1.5 rounded-xl">
-                    <img
-                        src="/aethel-logo.webp"
-                        alt="Aethel Logo"
-                        className="h-10 w-auto object-contain"
-                    />
-                </div>
+  useEffect(() => {
+    function onDocClick(e) {
+      if (moreRef.current && !moreRef.current.contains(e.target)) {
+        setMoreOpen(false);
+      }
+    }
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, []);
 
-                {/* MENU */}
-                <div className="hidden md:flex gap-7 items-center mx-auto">
-                    {["Home", "Services", "Contact"].map((item) => (
-                        <Button
-                            key={item}
-                            sx={{
-                                color: "#fff",
-                                textTransform: "none",
-                                fontSize: "16px",
-                                borderRadius: "22px",
-                                paddingX: 0.55,         
-                                paddingY: 0.15,         
-                                border: "1px solid rgba(135,206,250,0.45)", 
-                                transition: "0.25s ease",
+  return (
+    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 w-full max-w-5xl z-50">
+      <nav
+        className={"rounded-3xl px-5 py-3 flex items-center justify-between gap-4 shadow-2xl"}
+        style={{
+          // ensure backdrop-filter works cross-browser
+          WebkitBackdropFilter: "blur(14px) saturate(150%)",
+          backdropFilter: "blur(14px) saturate(150%)",
+        }}
+      >
+        {/* Background visual: gradient purple that is mostly opaque but keeps blur working */}
+        <div
+          aria-hidden
+          className="absolute inset-0 rounded-3xl -z-10 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(89, 28, 135, 0.746), rgba(124, 58, 237, 0.689) 45%, rgba(78, 70, 229, 0.575))",
+            border: "1px solid rgba(255, 255, 255, 0.154)",
+            boxShadow: "0 10px 30px rgba(2,6,23,0.5)",
+            WebkitBackdropFilter: "blur(14px) saturate(150%)",
+            backdropFilter: "blur(14px) saturate(150%)",
+          }}
+        />
 
-                                "&:hover": {
-                                    backgroundColor: "rgba(135,206,250,0.18)", 
-                                    borderColor: "rgba(135,206,250,0.90)",     
-                                    boxShadow: "0 0 12px rgba(135,206,250,0.45)",
-                                    transform: "translateY(-2px)",
-                                },
+        {/* Left: Logo */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-rose-400 flex items-center justify-center text-white font-semibold shadow">G</div>
+          <div onClick={() => {
+              document
+                .getElementById("home")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}>
+            <a href="" className="font-lilex text-white font-semibold text-lg">Aethel Flow</a>
+          </div>
+        </div>
 
-                                "&:active": {
-                                    transform: "scale(0.97)",
-                                },
-                            }}
-                        >
-                            {item}
-                        </Button>
-                    ))}
-                </div>
+        {/* Middle: Nav Links (desktop) */}
+        <ul className="hidden md:flex items-center gap-2">
+          <li onClick={() => {
+              document
+                .getElementById("home")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }} className="cursor-pointer px-3 py-2 rounded-xl text-white/90 hover:bg-white/6 transition-pop">Home</li>
+          <li onClick={() => {
+              document
+                .getElementById("services")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }} className="cursor-pointer px-3 py-2 rounded-xl text-white/90 hover:bg-white/6 transition-pop">Services</li>
+          <li onClick={() => {
+              document
+                .getElementById("mission")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }} className="cursor-pointer px-3 py-2 rounded-xl text-white/90 hover:bg-white/6 transition-pop">Our Mission</li>
 
-                {/* ENQUIRE NOW BUTTON */}
-                <div className="hidden md:flex">
-                    <Button
-                        variant="outlined"
-                        sx={{
-                            borderColor: "rgba(135,206,250,0.45)",
-                            color: "white",
-                            paddingX: 2,
-                            paddingY: 0.45,
-                            fontSize: "15px",
-                            borderRadius: "22px",  
-                            marginRight: "12px",
-                            textTransform: "none",
-                            backgroundColor: "transparent",
-                            transition: "0.3s ease",
+          {/* More popup */}
+          
+        </ul>
 
-                            "&:hover": {
-                                backgroundColor: "rgba(135,206,250,0.18)",
-                                borderColor: "rgba(135,206,250,0.90)",
-                                boxShadow: "0 0 18px rgba(135,206,250,0.55)",
-                                transform: "translateY(-2px)",
-                            },
+        {/* Right: actions + mobile button */}
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-3">
+            {/* <button className="px-3 py-2 rounded-lg text-white/90 hover:bg-white/6">Sign in</button> */}
+            <button onClick={() => {
+              document
+                .getElementById("contact")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }} className="px-3 py-2 rounded-full bg-white/8 text-white font-medium cursor-pointer">Enquire here</button>
+          </div>
 
-                            "&:active": {
-                                transform: "scale(0.96)",
-                            },
-                        }}
-                    >
-                        Enquire Now
-                    </Button>
-                </div>
+          <button
+            className="sm:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/6 text-white"
+            aria-expanded={mobileOpen}
+            aria-label="Open mobile menu"
+            onClick={() => setMobileOpen((s) => !s)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
 
-                {/* MOBILE MENU */}
-                <div className="md:hidden">
-                    <IconButton sx={{ color: "#fff" }}>
-                        <MenuIcon />
-                    </IconButton>
-                </div>
+        {/* Mobile panel */}
+        <div className={`w-full mt-4 ${mobileOpen ? "block" : "hidden"}`}>
+          <div className="rounded-2xl p-4 bg-gradient-to-b from-white/6 to-white/3 border border-white/6">
+            <a onClick={() => {
+              document
+                .getElementById("home")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }} href="" className="block py-2 px-3 rounded-lg text-white/90 hover:bg-white/4">Home</a>
+            <a onClick={() => {
+              document
+                .getElementById("services")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }} href="" className="block py-2 px-3 rounded-lg text-white/90 hover:bg-white/4">Services</a>
+            <a onClick={() => {
+              document
+                .getElementById("mission")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }} href="" className="block py-2 px-3 rounded-lg text-white/90 hover:bg-white/4">Our Mission</a>
+            <a onClick={() => {
+              document
+                .getElementById("contact")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }} href="" className="block py-2 px-3 rounded-lg text-white/90 hover:bg-white/4">Contact Us</a>
+            
+          </div>
+        </div>
 
-            </Toolbar>
-        </AppBar>
-    );
+      </nav>
+
+      {/* Extra local styles for subtle pop animation */}
+      <style>{`
+        .transition-pop { transition: transform 180ms cubic-bezier(.2,.9,.3,1), box-shadow 180ms; }
+        .transition-pop:hover { transform: translateY(-6px) scale(1.02); }
+      `}</style>
+    </header>
+  );
 }
+
