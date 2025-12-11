@@ -1,63 +1,115 @@
-// ContactForm.tsx
-import React, { JSX, useState } from "react";
-import {
-    TextField,
-    MenuItem,
-    Button,
-    Card,
-} from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { SelectChangeEvent } from "@mui/material/Select";
+"use client";
 
-type FormData = {
-    name: string;
-    email: string;
-    company: string;
-    phone: string;
-    service: string;
-    message: string;
-};
+import React, { useState, useCallback } from "react";
+import { TextField, MenuItem, Button, Card } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
+interface FormData {
+  name: string;
+  email: string;
+  company: string;
+  phone: string;
+  service: string;
+  message: string;
+}
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  phone?: string;
+  message?: string;
+}
 
 const SERVICES = [
-    "AI Integration solutions",
-    "Custom Software Development",
-    "Automation & RPA",
-    "Data & Analytics",
-];
+  "AI Integration solutions",
+  "Custom Software Development",
+  "Automation & RPA",
+  "Data & Analytics",
+] as const;
 
-export default function ContactForm(): JSX.Element {
-    const [form, setForm] = useState<FormData>({
-        name: "",
-        email: "",
-        company: "",
-        phone: "",
-        service: "",
-        message: "",
-    });
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_REGEX = /^[+]?[\d\s-]{10,}$/;
 
-    const [submitting, setSubmitting] = useState(false);
+const initialFormState: FormData = {
+  name: "",
+  email: "",
+  company: "",
+  phone: "",
+  service: "",
+  message: "",
+};
 
-    const handleTextChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value } = e.target;
-        setForm((s) => ({ ...s, [name]: value }));
-    };
+export default function ContactForm(): React.JSX.Element {
+  const [form, setForm] = useState<FormData>(initialFormState);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-    const handleSelectChange = (e: SelectChangeEvent<string>) => {
-        const value = e.target.value;
-        setForm((s) => ({ ...s, service: value }));
-    };
+  const validateForm = useCallback((): boolean => {
+    const newErrors: FormErrors = {};
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setSubmitting(true);
+    if (!form.name.trim()) {
+      newErrors.name = "Name is required";
+    }
 
-        console.log("Submitting", form);
-        await new Promise((r) => setTimeout(r, 700));
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!EMAIL_REGEX.test(form.email)) {
+      newErrors.email = "Please enter a valid email";
+    }
 
-        setSubmitting(false);
-    };
+    if (form.phone && !PHONE_REGEX.test(form.phone)) {
+      newErrors.phone = "Please enter a valid phone number";
+    }
+
+    if (!form.message.trim()) {
+      newErrors.message = "Message is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [form]);
+
+  const handleTextChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setForm((prev) => ({ ...prev, [name]: value }));
+      // Clear error when user starts typing
+      if (errors[name as keyof FormErrors]) {
+        setErrors((prev) => ({ ...prev, [name]: undefined }));
+      }
+    },
+    [errors]
+  );
+
+  const handleServiceChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setForm((prev) => ({ ...prev, service: e.target.value }));
+    },
+    []
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      // TODO: Replace with actual API call
+      console.log("Submitting", form);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setSubmitted(true);
+      setForm(initialFormState);
+    } catch (error) {
+      console.error("Submission error:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
     // Smaller height input style
     const textFieldSx = {
@@ -79,127 +131,149 @@ export default function ContactForm(): JSX.Element {
         },
     };
 
-    return (
-        <Card
-            elevation={0}
-           className="mx-auto bg-white rounded-[40px] p-6 md:p-8 shadow-md w-full max-w-md"
+  return (
+    <Card
+      elevation={0}
+      className="mx-auto bg-white rounded-[40px] p-6 md:p-8 shadow-md w-full max-w-md"
+    >
+      <header className="mb-4">
+        <h2 className="text-xl font-semibold mb-1">Get in touch</h2>
+        <p className="text-sm text-gray-600 leading-tight">
+          {submitted
+            ? "Thank you! We'll contact you soon."
+            : "Just fill out the form and we will contact you instantly!"}
+        </p>
+      </header>
 
-              // increased width, reduced padding
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
+        {/* Row 1: Name & Email */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <TextField
+            id="contact-name"
+            name="name"
+            value={form.name}
+            onChange={handleTextChange}
+            placeholder="Your Name"
+            fullWidth
+            required
+            variant="outlined"
+            error={!!errors.name}
+            helperText={errors.name}
+            sx={textFieldSx}
+            slotProps={{ htmlInput: { "aria-label": "Your name" } }}
+          />
+
+          <TextField
+            id="contact-email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleTextChange}
+            placeholder="Email Address"
+            fullWidth
+            required
+            variant="outlined"
+            error={!!errors.email}
+            helperText={errors.email}
+            sx={textFieldSx}
+            slotProps={{ htmlInput: { "aria-label": "Email address" } }}
+          />
+        </div>
+
+        {/* Row 2: Company & Phone */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <TextField
+            id="contact-company"
+            name="company"
+            value={form.company}
+            onChange={handleTextChange}
+            placeholder="Company Name"
+            fullWidth
+            variant="outlined"
+            sx={textFieldSx}
+            slotProps={{ htmlInput: { "aria-label": "Company name" } }}
+          />
+
+          <TextField
+            id="contact-phone"
+            name="phone"
+            type="tel"
+            value={form.phone}
+            onChange={handleTextChange}
+            placeholder="Phone Number"
+            fullWidth
+            variant="outlined"
+            error={!!errors.phone}
+            helperText={errors.phone}
+            sx={textFieldSx}
+            slotProps={{ htmlInput: { "aria-label": "Phone number" } }}
+          />
+        </div>
+
+        {/* Service Select */}
+        <TextField
+          id="contact-service"
+          select
+          name="service"
+          value={form.service}
+          onChange={handleServiceChange}
+          placeholder="Select a service"
+          fullWidth
+          variant="outlined"
+          sx={textFieldSx}
+          slotProps={{ htmlInput: { "aria-label": "Select a service" } }}
         >
-            <header className="mb-4">
-                <h2 className="text-xl font-semibold mb-1">Get in touch</h2>
-                <p className="text-sm text-gray-600 leading-tight">
-                    Just fill out the form and we will contact you instantly!
-                </p>
-            </header>
+          <MenuItem value="">
+            <em>Select a service</em>
+          </MenuItem>
+          {SERVICES.map((service) => (
+            <MenuItem key={service} value={service}>
+              {service}
+            </MenuItem>
+          ))}
+        </TextField>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                {/* Row 1 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <TextField
-                        name="name"
-                        value={form.name}
-                        onChange={handleTextChange}
-                        placeholder="Your Name"
-                        fullWidth
-                        variant="outlined"
-                        sx={textFieldSx}
-                        InputLabelProps={{ shrink: false }}
-                    />
+        {/* Message */}
+        <TextField
+          id="contact-message"
+          name="message"
+          value={form.message}
+          onChange={handleTextChange}
+          placeholder="Write your message..."
+          fullWidth
+          required
+          variant="outlined"
+          multiline
+          rows={3}
+          error={!!errors.message}
+          helperText={errors.message}
+          sx={textFieldSx}
+          slotProps={{ htmlInput: { "aria-label": "Your message" } }}
+        />
 
-                    <TextField
-                        name="email"
-                        value={form.email}
-                        onChange={handleTextChange}
-                        placeholder="Email Address"
-                        fullWidth
-                        variant="outlined"
-                        sx={textFieldSx}
-                        InputLabelProps={{ shrink: false }}
-                    />
-                </div>
-
-                {/* Row 2 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <TextField
-                        name="company"
-                        value={form.company}
-                        onChange={handleTextChange}
-                        placeholder="Company Name"
-                        fullWidth
-                        variant="outlined"
-                        sx={textFieldSx}
-                        InputLabelProps={{ shrink: false }}
-                    />
-
-                    <TextField
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleTextChange}
-                        placeholder="Phone Number"
-                        fullWidth
-                        variant="outlined"
-                        sx={textFieldSx}
-                        InputLabelProps={{ shrink: false }}
-                    />
-                </div>
-
-                {/* Select */}
-               <TextField
-    select
-    name="service"
-    value={form.service}
-    onChange={(e) => setForm((s) => ({ ...s, service: e.target.value }))}
-    placeholder="Select a service"
-    fullWidth
-    variant="outlined"
-    sx={textFieldSx}
-    InputLabelProps={{ shrink: false }}
->
-    <MenuItem value="">
-        <em>Select a service</em>
-    </MenuItem>
-    {SERVICES.map((s) => (
-        <MenuItem key={s} value={s}>
-            {s}
-        </MenuItem>
-    ))}
-</TextField>
-
-
-                {/* Message */}
-                <TextField
-                    name="message"
-                    value={form.message}
-                    onChange={handleTextChange}
-                    placeholder="Write your message..."
-                    fullWidth
-                    variant="outlined"
-                    multiline
-                    rows={3}  
-                    sx={textFieldSx}
-                />
-
-                {/* Submit */}
-                <div className="pt-2">
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        disableElevation
-                        endIcon={<ArrowForwardIcon />}
-                        className="rounded-full px-6 py-2 normal-case shadow-none"
-                        sx={{
-                            backgroundColor: "#161616",
-                            color: "#fff",
-                            "&:hover": { backgroundColor: "#0f0f0f" },
-                            textTransform: "none",
-                        }}
-                        disabled={submitting}
-                    >
-                        {submitting ? "Submitting..." : "Submit Request"}
-                    </Button>
-                </div>
-            </form>
-        </Card>
-    );
+        {/* Submit Button */}
+        <div className="pt-2">
+          <Button
+            type="submit"
+            variant="contained"
+            disableElevation
+            endIcon={<ArrowForwardIcon />}
+            disabled={submitting}
+            sx={{
+              backgroundColor: "#161616",
+              color: "#fff",
+              borderRadius: "50px",
+              px: 3,
+              py: 1.5,
+              textTransform: "none",
+              "&:hover": { backgroundColor: "#0f0f0f" },
+              "&:disabled": { backgroundColor: "#666", color: "#ccc" },
+            }}
+          >
+            {submitting ? "Submitting..." : "Submit Request"}
+          </Button>
+        </div>
+      </form>
+    </Card>
+  );
 }
