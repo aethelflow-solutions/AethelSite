@@ -9,7 +9,7 @@ export default function Services() {
     return (
         <section id='services' className="py-24 bg-white ">
             <div className="text-center text-black mb-12 pb-12">
-                <h2 className="text-5xl font-medium ">
+                <h2 className="text-4xl font-medium ">
                     Our Services
                 </h2>
                 <h4 className="text-xl font-normal mt-5" >
