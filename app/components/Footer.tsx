@@ -8,72 +8,69 @@ interface SocialLink {
 }
 
 const SOCIAL_LINKS: SocialLink[] = [
-  {
-    href: "https://linkedin.com",
-    label: "LinkedIn",
-    icon: <FaLinkedin />,
-  },
-  {
-    href: "https://twitter.com",
-    label: "Twitter",
-    icon: <FaTwitter />,
-  },
-  {
-    href: "https://facebook.com",
-    label: "Facebook",
-    icon: <FaFacebook />,
-  },
+  { href: "https://linkedin.com", label: "LinkedIn", icon: <FaLinkedin /> },
+  { href: "https://twitter.com", label: "Twitter", icon: <FaTwitter /> },
+  { href: "https://facebook.com", label: "Facebook", icon: <FaFacebook /> },
 ];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer
-      className="w-full bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)]"
-      role="contentinfo"
-    >
-      <div className="text-black py-10 px-6 max-w-4xl mx-auto">
-        {/* Divider Line */}
-        <hr className="w-full border-t border-gray-300 mb-6" />
+    <footer className="w-full mt-24">
+      {/* Full width ultra-glass container */}
+      <div
+        className="w-full rounded-none p-12 text-white relative overflow-hidden"
+        style={{
+          WebkitBackdropFilter: "blur(22px) saturate(200%)",
+          backdropFilter: "blur(22px) saturate(200%)",
+        }}
+      >
+        {/* Full-width glass gradient background */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(20, 14, 24, 0.70), rgba(64, 59, 73, 0.60), rgba(15, 15, 20, 0.65))",
+            borderTop: "1px solid rgba(255, 255, 255, 0.18)",
+            boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.7) inset",
+          }}
+        />
 
-        <div className="text-center space-y-4">
-          {/* Company Name + Rights */}
-          <p className="text-sm font-medium">
+        {/* Content center */}
+        <div className="max-w-6xl mx-auto text-center space-y-6">
+          {/* Company Name */}
+          <p className="text-sm font-medium tracking-wide">
             © {currentYear} Aethel Flow Solutions Pvt. Ltd. All Rights Reserved.
           </p>
 
           {/* Address */}
-          <address className="text-sm text-gray-600 not-italic">
-            9-4-136/19,20 &amp; 21/A, Shareef Residency 3rd floor, 7 tombs Road,
-            <br />
-            Tolichowki, Hyderabad, Telangana
+          <address className="text-sm text-gray-300 not-italic leading-normal">
+            9-4-136/19,20 &amp; 21/A, Shareef Residency 3rd Floor, 7 Tombs Road,
+            Tolichowki, <br />
+            Hyderabad, Telangana
           </address>
 
           {/* Contact Info */}
-          <div className="text-sm text-gray-600 space-y-1">
+          <div className="text-sm text-gray-300 space-y-1">
             <p>
               Email:{" "}
               <a
                 href="mailto:contact@aethelflow.com"
-                className="hover:text-blue-600 transition-colors underline-offset-2 hover:underline"
+                className="hover:text-blue-400 transition-colors underline-offset-2 hover:underline"
               >
                 contact@aethelflow.com
               </a>
             </p>
+
             <p>
               Phone:{" "}
-              <a
-                href="tel:+919022511316"
-                className="hover:text-blue-600 transition-colors"
-              >
+              <a href="tel:+919022511316" className="hover:text-blue-400">
                 +91 9022511316
-              </a>
-              {" / "}
-              <a
-                href="tel:+918328901076"
-                className="hover:text-blue-600 transition-colors"
-              >
+              </a>{" "}
+              /{" "}
+              <a href="tel:+918328901076" className="hover:text-blue-400">
                 +91 8328901076
               </a>
             </p>
@@ -89,7 +86,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Follow us on ${link.label}`}
-                    className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
+                    className="text-gray-300 hover:text-blue-400 transition-colors duration-200"
                   >
                     {link.icon}
                   </Link>
