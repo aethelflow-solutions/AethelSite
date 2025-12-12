@@ -77,8 +77,7 @@ export default function Navbar() {
           aria-hidden="true"
           className="absolute inset-0 rounded-3xl -z-10 pointer-events-none"
           style={{
-            background:
-              "linear-gradient(90deg, rgba(89, 28, 135, 0.746), rgba(124, 58, 237, 0.689) 45%, rgba(78, 70, 229, 0.575))",
+            background: "linear-gradient(90deg, rgb(20 14 24 / 75%), rgb(64 59 73 / 69%) 45%, rgb(15 15 20 / 57%));",
             border: "1px solid rgba(255, 255, 255, 0.154)",
             boxShadow: "0 10px 30px rgba(2, 6, 23, 0.5)",
           }}
