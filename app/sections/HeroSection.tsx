@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { Typography } from "@mui/material";
 import AButton from "../components/AButton";
-import TextType from "../components/TextType";
+import TextType from "../components/react-bits/TextType";
 
 function scrollToSection(sectionId: string): void {
   const element = document.getElementById(sectionId);
