@@ -99,8 +99,7 @@ export default function ContactForm() {
 
     setSubmitting(true);
     try {
-      // Prepare template params
-      const templateParams = {
+      const contactTemplateParams = {
         from_name: form.name,
         from_email: form.email,
         company: form.company || "N/A",
@@ -113,13 +112,26 @@ export default function ContactForm() {
 
       const response = await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID!,
+        contactTemplateParams,
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
       );
-      console.log(response);
       if (response.status === 200) {
         setForm(initialFormState);
+
+        const welcomeTemplateParams = {
+          from_name: form.name,
+          from_email: form.email,
+          date: form.date ? form.date.format("MMMM DD, YYYY") : "N/A",
+          service: form.service,
+        };
+
+        await emailjs.send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+          process.env.NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID!,
+          welcomeTemplateParams,
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        );
       }
     } catch (err) {
       console.error("Failed to send email:", err);
