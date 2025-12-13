@@ -12,7 +12,7 @@ export default function ContactSection() {
   const [inView, setInView] = useState(false);
   const sectionRef = useRef(null);
 
-  // run typing animation every time section appears
+
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
@@ -166,19 +166,14 @@ export default function ContactSection() {
 
 {/* RIGHT SECTION — FORM */}
 <div className="flex items-center justify-center py-4 px-4 md:px-6 lg:px-6">
-
   <div
-    className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-3 animate-slideUp opacity-0"
-    style={{
-      minHeight: "200px",    // Smaller height (was 320px)
-    }}
+    className="w-full max-w-sm md:max-w-sm lg:max-w-md
+               bg-white rounded-2xl shadow-xl
+               p-4 md:p-5 animate-slideUp opacity-0"
   >
     <ContactForm />
   </div>
-
 </div>
-
-
 
           </div>
         </div>
