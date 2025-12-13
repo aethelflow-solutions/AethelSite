@@ -7,6 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Dayjs } from "dayjs";
+import emailjs from "@emailjs/browser";
 
 interface FormData {
   name: string;
@@ -67,16 +68,22 @@ export default function ContactForm() {
     return () => obs.disconnect();
   }, []);
 
-  const validateForm = useCallback(() => {
-    const e: FormErrors = {};
-    if (!form.name.trim()) e.name = "Name is required";
-    if (!form.email.trim()) e.email = "Email is required";
-    else if (!EMAIL_REGEX.test(form.email)) e.email = "Invalid email";
-    if (!form.phone.trim()) e.phone = "Phone is required";
-    else if (!PHONE_REGEX.test(form.phone)) e.phone = "Invalid phone";
-    if (!form.message.trim()) e.message = "Message is required";
-    setErrors(e);
-    return Object.keys(e).length === 0;
+  const validateForm = useCallback((): boolean => {
+    const newErrors: FormErrors = {};
+
+    if (!form.name.trim()) newErrors.name = "Name is required";
+    if (!form.email.trim()) newErrors.email = "Email is required";
+    if (!form.phone.trim()) newErrors.phone = "Phone is required";
+    else if (!EMAIL_REGEX.test(form.email))
+      newErrors.email = "Please enter a valid email";
+
+    if (form.phone && !PHONE_REGEX.test(form.phone))
+      newErrors.phone = "Please enter a valid phone number";
+
+    if (!form.message.trim()) newErrors.message = "Message is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }, [form]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,13 +91,41 @@ export default function ContactForm() {
     setForm((p) => ({ ...p, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
     if (!validateForm()) return;
+
+    console.log(form);
+
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setForm(initialFormState);
-    setSubmitting(false);
+    try {
+      // Prepare template params
+      const templateParams = {
+        from_name: form.name,
+        from_email: form.email,
+        company: form.company || "N/A",
+        phone: form.phone || "N/A",
+        date: form.date ? form.date.format("MMMM DD, YYYY") : "N/A",
+        service: form.service,
+        message: form.message,
+        reply_to_email: "baimomeen@gmail.com",
+      };
+
+      const response = await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      );
+      console.log(response);
+      if (response.status === 200) {
+        setForm(initialFormState);
+      }
+    } catch (err) {
+      console.error("Failed to send email:", err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const textFieldSx = {
