@@ -101,7 +101,7 @@ export default function Navbar() {
               className="w-full h-full object-cover"
             />
           </div>
-          <span className="text-white font-semibold text-lg">
+          <span className="hidden min-[320px]:inline text-white font-semibold text-lg">
             AETHEL <span className="italic">FLOW</span>
           </span>
         </Link>

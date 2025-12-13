@@ -1,149 +1,17 @@
-// "use client";
-
-// import { useState } from "react";
-// import {
-//   Fab,
-//   Paper,
-//   Typography,
-//   IconButton,
-//   Stack,
-//   ClickAwayListener,
-// } from "@mui/material";
-// import PhoneIcon from "@mui/icons-material/Phone";
-// import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-// import CallIcon from "@mui/icons-material/Call";
-
-// export default function StickyContact() {
-//   const [open, setOpen] = useState(false);
-//   const [closing, setClosing] = useState(false);
-
-//   const closeWithAnimation = () => {
-//     setClosing(true);
-//     setTimeout(() => {
-//       setOpen(false);
-//       setClosing(false);
-//     }, 200);
-//   };
-
-//   return (
-//     <>
-//       {open && (
-//         <ClickAwayListener onClickAway={closeWithAnimation}>
-//           <Paper
-//             elevation={6}
-//             sx={{
-//               position: "fixed",
-//               bottom: 90,
-//               right: 24,
-//               width: 220,
-//               borderRadius: "16px",
-//               p: 2,
-//               zIndex: 1500,
-//               animation: closing
-//                 ? "containerOut 200ms ease-in"
-//                 : "containerIn 220ms ease-out",
-//             }}
-//           >
-//             <Typography fontWeight={600} mb={1}>
-//               Contact Us
-//             </Typography>
-
-//             <Stack spacing={1}>
-//               <IconButton
-//                 component="a"
-//                 href="https://wa.me/919999999999"
-//                 target="_blank"
-//                 sx={{
-//                   justifyContent: "flex-start",
-//                   gap: 1,
-//                   width: "100%",
-//                   borderRadius: "10px",
-//                   color: "#25D366",
-//                 }}
-//               >
-//                 <WhatsAppIcon />
-//                 <Typography fontSize="14px">WhatsApp</Typography>
-//               </IconButton>
-
-//               <IconButton
-//                 component="a"
-//                 href="tel:+919999999999"
-//                 sx={{
-//                   justifyContent: "flex-start",
-//                   gap: 1,
-//                   width: "100%",
-//                   borderRadius: "10px",
-//                   color: "#692ac8",
-//                 }}
-//               >
-//                 <CallIcon />
-//                 <Typography fontSize="14px">Call Now</Typography>
-//               </IconButton>
-//             </Stack>
-//           </Paper>
-//         </ClickAwayListener>
-//       )}
-
-//       <Fab
-//         onClick={() => {
-//           if (open) closeWithAnimation();
-//           else setOpen(true);
-//         }}
-//         sx={{
-//           position: "fixed",
-//           bottom: 24,
-//           right: 24,
-//           zIndex: 1600,
-//           backgroundColor: "#692ac8",
-//           color: "#fff",
-//           "&:hover": { backgroundColor: "#5a24a8" },
-//         }}
-//       >
-//         <PhoneIcon />
-//       </Fab>
-
-//       {/* Animations */}
-//       <style jsx global>{`
-//         @keyframes containerIn {
-//           from {
-//             opacity: 0;
-//             transform: translateY(12px) scale(0.95);
-//           }
-//           to {
-//             opacity: 1;
-//             transform: translateY(0) scale(1);
-//           }
-//         }
-
-//         @keyframes containerOut {
-//           from {
-//             opacity: 1;
-//             transform: translateY(0) scale(1);
-//           }
-//           to {
-//             opacity: 0;
-//             transform: translateY(12px) scale(0.95);
-//           }
-//         }
-//       `}</style>
-//     </>
-//   );
-// }
-
-
-
 "use client";
 
 import { useState } from "react";
-import {
-  Fab,
-  IconButton,
-  ClickAwayListener,
-} from "@mui/material";
+import { Fab, IconButton, ClickAwayListener } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import CallIcon from "@mui/icons-material/Call";
 import EmailIcon from "@mui/icons-material/Email";
+
+/* ================= ENV VARIABLES ================= */
+const PHONE = process.env.NEXT_PUBLIC_CONTACT_PHONE!;
+const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER!;
+const EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL!;
+/* ================================================= */
 
 export default function StickyContact() {
   const [open, setOpen] = useState(false);
@@ -160,35 +28,36 @@ export default function StickyContact() {
   const icons = [
     {
       icon: <WhatsAppIcon fontSize="large" />,
-      href: "https://wa.me/919999999999",
+      href: `https://wa.me/${WHATSAPP}`,
       bg: "#25D366",
-      backgroundColor: "#21b256",
+      hoverBg: "#21b256",
       delayIn: "0ms",
       delayOut: "160ms",
-      translate: "translate(-40px, -120px)", // ⬅️ farther + higher
+      translate: "translate(-40px, -120px)",
     },
     {
       icon: <CallIcon fontSize="large" />,
-      href: "tel:+919999999999",
+      href: `tel:+${PHONE}`,
       bg: "#692ac8",
-      backgroundColor: "#5a24a8",
+      hoverBg: "#5a24a8",
       delayIn: "90ms",
       delayOut: "80ms",
-      translate: "translate(-90px, -70px)", // ⬅️ more gap
+      translate: "translate(-90px, -70px)",
     },
     {
       icon: <EmailIcon fontSize="large" />,
-      href: "mailto:contact@company.com",
+      href: `mailto:${EMAIL}`,
       bg: "#1976d2",
-      backgroundColor: "#1a6abb",
+      hoverBg: "#1a6abb",
       delayIn: "180ms",
       delayOut: "0ms",
-      translate: "translate(-120px, -10px)", // ⬅️ spaced out
+      translate: "translate(-120px, -10px)",
     },
   ];
 
   return (
     <>
+      {/* Floating Options */}
       {open && (
         <ClickAwayListener onClickAway={closeWithAnimation}>
           <div>
@@ -217,7 +86,7 @@ export default function StickyContact() {
                   "--fab-translate": item.translate,
                   "&:hover": {
                     transform: "scale(1.12)",
-                    backgroundColor: item.backgroundColor,
+                    backgroundColor: item.hoverBg,
                   },
                 }}
               >
@@ -243,6 +112,7 @@ export default function StickyContact() {
           color: "#fff",
           "&:hover": { backgroundColor: "#5a24a8" },
         }}
+        aria-label="Contact options"
       >
         <PhoneIcon />
       </Fab>
@@ -274,5 +144,3 @@ export default function StickyContact() {
     </>
   );
 }
-
-
