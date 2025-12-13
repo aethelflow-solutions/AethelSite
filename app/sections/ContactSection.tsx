@@ -46,7 +46,7 @@ export default function ContactSection() {
     <section ref={sectionRef} id="contact" className="flex flex-col">
       <div>
         <div className="lg:py-10 py-6 flex justify-center">
-          <h2 className="text-black font-semibold text-3xl">Our Partners</h2>
+          <h2 className="text-black font-semibold text-3xl">Contact Us</h2>
         </div>
 
         <div className="px-3 sm:px-4 lg:px-6">
