@@ -7,6 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import emailjs from "@emailjs/browser";
 
 interface FormData {
   name: string;
@@ -77,6 +78,7 @@ export default function ContactForm(): React.JSX.Element {
 
     if (!form.name.trim()) newErrors.name = "Name is required";
     if (!form.email.trim()) newErrors.email = "Email is required";
+    if (!form.phone.trim()) newErrors.phone = "Phone is required";
     else if (!EMAIL_REGEX.test(form.email))
       newErrors.email = "Please enter a valid email";
 
@@ -102,15 +104,42 @@ export default function ContactForm(): React.JSX.Element {
     setForm((prev) => ({ ...prev, date: value }));
   }, []);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
     if (!validateForm()) return;
 
+    console.log(form);
+
     setSubmitting(true);
-    await new Promise((res) => setTimeout(res, 900));
-    setSubmitted(true);
-    setForm(initialFormState);
-    setSubmitting(false);
+    try {
+      // Prepare template params
+      const templateParams = {
+        from_name: form.name,
+        from_email: form.email,
+        company: form.company || "N/A",
+        phone: form.phone || "N/A",
+        date: form.date ? form.date.format("MMMM DD, YYYY") : "N/A",
+        service: form.service,
+        message: form.message,
+        reply_to_email: "baimomeen@gmail.com",
+      };
+
+      const response = await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      );
+      console.log(response);
+      if (response.status === 200) {
+        setSubmitted(true);
+        setForm(initialFormState);
+      }
+    } catch (err) {
+      console.error("Failed to send email:", err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   // Better input style
@@ -136,156 +165,155 @@ export default function ContactForm(): React.JSX.Element {
     },
   };
 
- return (
-  <Card
-    elevation={0}
-    ref={ref}
-    className={`mx-auto rounded-[20px] p-4 md:p-5 w-full transform transition-all duration-700 ${
-      visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-    }`}
-    style={{
-      background: "#ffffff",
-      color: "#000",
-      border: "none",
-    }}
-  >
-    <h2 className="text-xl md:text-2xl font-semibold text-black mb-1">
-      Get in touch
-    </h2>
+  return (
+    <Card
+      elevation={0}
+      ref={ref}
+      className={`mx-auto rounded-[20px] p-4 md:p-5 w-full transform transition-all duration-700 ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+      }`}
+      style={{
+        background: "#ffffff",
+        color: "#000",
+        border: "none",
+      }}
+    >
+      <h2 className="text-xl md:text-2xl font-semibold text-black mb-1">
+        Get in touch
+      </h2>
 
-    <p className="text-xs text-gray-700 mb-3">
-      {submitted
-        ? "Thank you! We'll contact you soon."
-        : "Fill out the form and we will contact you instantly!"}
-    </p>
+      <p className="text-xs text-gray-700 mb-3">
+        {submitted
+          ? "Thank you! We'll contact you soon."
+          : "Fill out the form and we will contact you instantly!"}
+      </p>
 
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
+        {/* NAME + EMAIL */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <TextField
+            name="name"
+            value={form.name}
+            onChange={handleTextChange}
+            placeholder="Your Name"
+            required
+            variant="outlined"
+            fullWidth
+            error={!!errors.name}
+            helperText={errors.name}
+            sx={textFieldSx}
+          />
 
-      {/* NAME + EMAIL */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <TextField
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleTextChange}
+            placeholder="Email Address"
+            required
+            variant="outlined"
+            fullWidth
+            error={!!errors.email}
+            helperText={errors.email}
+            sx={textFieldSx}
+          />
+        </div>
+
+        {/* COMPANY + PHONE */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <TextField
+            name="company"
+            value={form.company}
+            onChange={handleTextChange}
+            placeholder="Company Name"
+            variant="outlined"
+            fullWidth
+            sx={textFieldSx}
+          />
+
+          <TextField
+            name="phone"
+            type="tel"
+            value={form.phone}
+            onChange={handleTextChange}
+            placeholder="Phone Number"
+            variant="outlined"
+            fullWidth
+            error={!!errors.phone}
+            helperText={errors.phone}
+            sx={textFieldSx}
+          />
+        </div>
+
+        {/* DATE PICKER */}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            value={form.date ?? null}
+            onChange={handleDateChange}
+            slotProps={{
+              textField: {
+                placeholder: "Select a Date",
+                fullWidth: true,
+                variant: "outlined",
+                sx: textFieldSx,
+              },
+            }}
+          />
+        </LocalizationProvider>
+
+        {/* SERVICE DROPDOWN */}
         <TextField
-          name="name"
-          value={form.name}
+          select
+          name="service"
+          value={form.service}
+          onChange={handleServiceChange}
+          fullWidth
+          variant="outlined"
+          sx={textFieldSx}
+        >
+          {SERVICES.map((service) => (
+            <MenuItem key={service} value={service}>
+              {service}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        {/* MESSAGE */}
+        <TextField
+          name="message"
+          value={form.message}
           onChange={handleTextChange}
-          placeholder="Your Name"
+          placeholder="Write your message..."
           required
-          variant="outlined"
           fullWidth
-          error={!!errors.name}
-          helperText={errors.name}
+          variant="outlined"
+          multiline
+          rows={2}
+          error={!!errors.message}
+          helperText={errors.message}
           sx={textFieldSx}
         />
 
-        <TextField
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={handleTextChange}
-          placeholder="Email Address"
-          required
-          variant="outlined"
-          fullWidth
-          error={!!errors.email}
-          helperText={errors.email}
-          sx={textFieldSx}
-        />
-      </div>
-
-      {/* COMPANY + PHONE */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <TextField
-          name="company"
-          value={form.company}
-          onChange={handleTextChange}
-          placeholder="Company Name"
-          variant="outlined"
-          fullWidth
-          sx={textFieldSx}
-        />
-
-        <TextField
-          name="phone"
-          type="tel"
-          value={form.phone}
-          onChange={handleTextChange}
-          placeholder="Phone Number"
-          variant="outlined"
-          fullWidth
-          error={!!errors.phone}
-          helperText={errors.phone}
-          sx={textFieldSx}
-        />
-      </div>
-
-      {/* DATE PICKER */}
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          value={form.date ?? null}
-          onChange={handleDateChange}
-          slotProps={{
-            textField: {
-              placeholder: "Select a Date",
-              fullWidth: true,
-              variant: "outlined",
-              sx: textFieldSx,
-            },
+        <Button
+          type="submit"
+          variant="contained"
+          disableElevation
+          endIcon={<ArrowForwardIcon />}
+          disabled={submitting}
+          sx={{
+            backgroundColor: "#6d28d9",
+            color: "#fff",
+            borderRadius: "999px",
+            px: 4,
+            py: 1,
+            height: "36px",
+            textTransform: "none",
+            fontSize: ".9rem",
           }}
-        />
-      </LocalizationProvider>
-
-      {/* SERVICE DROPDOWN */}
-      <TextField
-        select
-        name="service"
-        value={form.service}
-        onChange={handleServiceChange}
-        fullWidth
-        variant="outlined"
-        sx={textFieldSx}
-      >
-        {SERVICES.map((service) => (
-          <MenuItem key={service} value={service}>
-            {service}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      {/* MESSAGE */}
-      <TextField
-        name="message"
-        value={form.message}
-        onChange={handleTextChange}
-        placeholder="Write your message..."
-        required
-        fullWidth
-        variant="outlined"
-        multiline
-        rows={2}
-        error={!!errors.message}
-        helperText={errors.message}
-        sx={textFieldSx}
-      />
-
-      <Button
-        type="submit"
-        variant="contained"
-        disableElevation
-        endIcon={<ArrowForwardIcon />}
-        disabled={submitting}
-        sx={{
-          backgroundColor: "#6d28d9",
-          color: "#fff",
-          borderRadius: "999px",
-          px: 4,
-          py: 1,
-          height: "36px",
-          textTransform: "none",
-          fontSize: ".9rem",
-        }}
-      >
-        {submitting ? "Submitting..." : "Submit Request"}
-      </Button>
-    </form>
-  </Card>
-);
+        >
+          {submitting ? "Submitting..." : "Submit Request"}
+        </Button>
+      </form>
+    </Card>
+  );
 }
