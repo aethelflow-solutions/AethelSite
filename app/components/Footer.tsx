@@ -32,7 +32,7 @@ export default function Footer() {
           className="absolute inset-0 -z-10 pointer-events-none"
           style={{
             background:
-              "linear-gradient(90deg, rgba(20, 14, 24, 0.70), rgba(64, 59, 73, 0.60), rgba(15, 15, 20, 0.65))",
+              "black",
             borderTop: "1px solid rgba(255, 255, 255, 0.18)",
             boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.7) inset",
           }}
