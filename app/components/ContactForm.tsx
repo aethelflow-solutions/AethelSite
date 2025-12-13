@@ -107,7 +107,7 @@ export default function ContactForm() {
         date: form.date ? form.date.format("MMMM DD, YYYY") : "N/A",
         service: form.service,
         message: form.message,
-        reply_to_email: "baimomeen@gmail.com",
+        reply_to_email: process.env.NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL!,
       };
 
       const response = await emailjs.send(
@@ -179,6 +179,7 @@ export default function ContactForm() {
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <div className="grid md:grid-cols-2 gap-3">
           <TextField
+            id="contact-name"
             size="small"
             name="name"
             placeholder="Your Name"
@@ -190,6 +191,7 @@ export default function ContactForm() {
             sx={textFieldSx}
           />
           <TextField
+            id="contact-email"
             size="small"
             name="email"
             placeholder="Email Address"
@@ -204,6 +206,7 @@ export default function ContactForm() {
 
         <div className="grid md:grid-cols-2 gap-3">
           <TextField
+            id="contact-company"
             size="small"
             name="company"
             placeholder="Company Name"
@@ -213,6 +216,7 @@ export default function ContactForm() {
             sx={textFieldSx}
           />
           <TextField
+            id="contact-phone"
             size="small"
             name="phone"
             placeholder="Phone Number"
@@ -232,6 +236,7 @@ export default function ContactForm() {
             onChange={(v) => setForm((p) => ({ ...p, date: v }))}
             slotProps={{
               textField: {
+                id: "contact-date",
                 size: "small",
                 fullWidth: true,
                 sx: {
@@ -273,6 +278,7 @@ export default function ContactForm() {
         </LocalizationProvider>
 
         <TextField
+          id="contact-service"
           size="small"
           select
           name="service"
@@ -289,6 +295,7 @@ export default function ContactForm() {
         </TextField>
 
         <TextField
+          id="contact-message"
           size="small"
           name="message"
           placeholder="Write your message..."
