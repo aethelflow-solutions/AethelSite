@@ -33,7 +33,7 @@ export default function HeroSection() {
       </video>
 
       {/* DARK OVERLAY (for text readability) */}
-      <div className="absolute inset-0 bg-black/45"></div>
+      <div className="absolute inset-0 bg-[#00000098]"></div>
 
       {/* CONTENT */}
       <div className="relative w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left ml-10">

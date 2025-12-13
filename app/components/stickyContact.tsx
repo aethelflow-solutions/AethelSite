@@ -25,7 +25,7 @@ export default function StickyContact() {
             sx={{
               position: "fixed",
               bottom: 90,
-              left: 24,
+              right: 24,   // 👉 RIGHT
               width: 220,
               borderRadius: "16px",
               p: 2,
@@ -46,7 +46,7 @@ export default function StickyContact() {
                   gap: 1,
                   width: "100%",
                   borderRadius: "10px",
-                  color: "#25D366"
+                  color: "#25D366",
                 }}
               >
                 <WhatsAppIcon />
@@ -61,7 +61,7 @@ export default function StickyContact() {
                   gap: 1,
                   width: "100%",
                   borderRadius: "10px",
-                  color: "#692ac8"
+                  color: "#692ac8",
                 }}
               >
                 <CallIcon />
@@ -77,7 +77,7 @@ export default function StickyContact() {
         sx={{
           position: "fixed",
           bottom: 24,
-          left: 24,
+          right: 24,   // 👉 RIGHT
           zIndex: 1600,
           backgroundColor: "#692ac8",
           color: "#fff",
