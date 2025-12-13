@@ -69,7 +69,6 @@ export default function HeroSection() {
           spark innovation, and empower businesses to move faster with seamless,
           intelligent solutions for a future that flows effortlessly.
         </Typography>
-
         <div className="mt-4">
           <AButton
             variant="outlined"

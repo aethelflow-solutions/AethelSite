@@ -6,7 +6,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 interface FormData {
   name: string;
@@ -14,7 +14,7 @@ interface FormData {
   company: string;
   phone: string;
   service: string;
-  date?: Dayjs | null;
+  date: Dayjs | null;
   message: string;
 }
 
@@ -30,7 +30,7 @@ const SERVICES = [
   "Custom Software Development",
   "Automation & RPA",
   "Data & Analytics",
-] as const;
+];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^[+]?[\d\s-]{10,}$/;
@@ -40,252 +40,241 @@ const initialFormState: FormData = {
   email: "",
   company: "",
   phone: "",
-  service: "AI Integration solutions",
+  service: SERVICES[0],
   date: null,
   message: "",
 };
 
-export default function ContactForm(): React.JSX.Element {
+export default function ContactForm() {
   const [form, setForm] = useState<FormData>(initialFormState);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
   const ref = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    if (!ref.current) return;
     const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            obs.disconnect();
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
       },
       { threshold: 0.15 }
     );
-    obs.observe(el);
+    obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
 
-  const validateForm = useCallback((): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!form.name.trim()) newErrors.name = "Name is required";
-    if (!form.email.trim()) newErrors.email = "Email is required";
-    else if (!EMAIL_REGEX.test(form.email))
-      newErrors.email = "Please enter a valid email";
-
-    if (form.phone && !PHONE_REGEX.test(form.phone))
-      newErrors.phone = "Please enter a valid phone number";
-
-    if (!form.message.trim()) newErrors.message = "Message is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const validateForm = useCallback(() => {
+    const e: FormErrors = {};
+    if (!form.name.trim()) e.name = "Name is required";
+    if (!form.email.trim()) e.email = "Email is required";
+    else if (!EMAIL_REGEX.test(form.email)) e.email = "Invalid email";
+    if (!form.phone.trim()) e.phone = "Phone is required";
+    else if (!PHONE_REGEX.test(form.phone)) e.phone = "Invalid phone";
+    if (!form.message.trim()) e.message = "Message is required";
+    setErrors(e);
+    return Object.keys(e).length === 0;
   }, [form]);
 
-  const handleTextChange = useCallback((e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }, []);
+    setForm((p) => ({ ...p, [name]: value }));
+  };
 
-  const handleServiceChange = useCallback((e: any) => {
-    setForm((prev) => ({ ...prev, service: e.target.value }));
-  }, []);
-
-  const handleDateChange = useCallback((value: Dayjs | null) => {
-    setForm((prev) => ({ ...prev, date: value }));
-  }, []);
-
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-
     setSubmitting(true);
-    await new Promise((res) => setTimeout(res, 900));
-    setSubmitted(true);
+    await new Promise((r) => setTimeout(r, 800));
     setForm(initialFormState);
     setSubmitting(false);
   };
 
-  // Better input style
   const textFieldSx = {
     backgroundColor: "#fff",
-    borderRadius: "14px",
-    width: "100%",
-    "& .MuiInputBase-input": {
-      padding: "10px 12px",
+    borderRadius: "12px",
+    "& .MuiInputBase-root": {
+      height: 44,
       fontSize: "0.85rem",
-      height: "20px",
-      color: "#000",
+    },
+    "& .MuiInputBase-input": {
+      padding: "0 12px",
     },
     "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#e1e1e1",
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#999",
+      borderColor: "#e2e2e2",
     },
     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
       borderColor: "#6d28d9",
-      borderWidth: 2,
+      borderWidth: 1.5,
+    },
+    "& .MuiFormHelperText-root": {
+      fontSize: "0.7rem",
+      marginLeft: "4px",
     },
   };
 
- return (
-  <Card
-    elevation={0}
-    ref={ref}
-    className={`mx-auto rounded-[20px] p-4 md:p-5 w-full transform transition-all duration-700 ${
-      visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-    }`}
-    style={{
-      background: "#ffffff",
-      color: "#000",
-      border: "none",
-    }}
-  >
-    <h2 className="text-xl md:text-2xl font-semibold text-black mb-1">
-      Get in touch
-    </h2>
+  return (
+    <Card
+      ref={ref}
+      elevation={0}
+      className={`mx-auto rounded-[22px] p-6 w-full max-w-5xl transition-all duration-700 ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+      }`}
+    >
+      <h2 className="text-2xl font-semibold mb-1">Get in touch</h2>
+      <p className="text-sm text-gray-600 mb-4">
+        Share your requirements and we’ll reach out shortly.
+      </p>
 
-    <p className="text-xs text-gray-700 mb-3">
-      {submitted
-        ? "Thank you! We'll contact you soon."
-        : "Fill out the form and we will contact you instantly!"}
-    </p>
+      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+        <div className="grid md:grid-cols-2 gap-3">
+          <TextField
+            size="small"
+            name="name"
+            placeholder="Your Name"
+            value={form.name}
+            onChange={handleChange}
+            error={!!errors.name}
+            helperText={errors.name}
+            fullWidth
+            sx={textFieldSx}
+          />
+          <TextField
+            size="small"
+            name="email"
+            placeholder="Email Address"
+            value={form.email}
+            onChange={handleChange}
+            error={!!errors.email}
+            helperText={errors.email}
+            fullWidth
+            sx={textFieldSx}
+          />
+        </div>
 
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
+        <div className="grid md:grid-cols-2 gap-3">
+          <TextField
+            size="small"
+            name="company"
+            placeholder="Company Name"
+            value={form.company}
+            onChange={handleChange}
+            fullWidth
+            sx={textFieldSx}
+          />
+          <TextField
+            size="small"
+            name="phone"
+            placeholder="Phone Number"
+            value={form.phone}
+            onChange={handleChange}
+            error={!!errors.phone}
+            helperText={errors.phone}
+            fullWidth
+            sx={textFieldSx}
+          />
+        </div>
 
-      {/* NAME + EMAIL */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* ✅ SMALLER ICON + LESS PADDING */}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            value={form.date}
+            onChange={(v) => setForm((p) => ({ ...p, date: v }))}
+            slotProps={{
+              textField: {
+                size: "small",
+                fullWidth: true,
+                sx: {
+                  ...textFieldSx,
+                  "& .MuiInputAdornment-root svg": {
+                    fontSize: "1rem", // 👈 smaller calendar icon
+                  },
+                },
+                InputProps: { sx: { height: 44 } },
+              },
+              popper: {
+                sx: {
+                  "& .MuiPaper-root": {
+                    minWidth: 210,
+                    padding: "2px", // 👈 reduced padding
+                    transform: "scale(0.85)",
+                    transformOrigin: "top left",
+                  },
+                  "& .MuiPickersDay-root": {
+                    width: 26,
+                    height: 26,
+                    fontSize: "0.7rem",
+                    margin: "1px",
+                  },
+                  "& .MuiDayCalendar-weekDayLabel": {
+                    width: 26,
+                    fontSize: "0.65rem",
+                  },
+                  "& .MuiPickersFadeTransitionGroup-root": {
+                    minHeight: 165,
+                  },
+                  "& .MuiPickersCalendarHeader-label": {
+                    fontSize: "0.72rem",
+                  },
+                },
+              },
+            }}
+          />
+        </LocalizationProvider>
+
         <TextField
-          name="name"
-          value={form.name}
-          onChange={handleTextChange}
-          placeholder="Your Name"
-          required
-          variant="outlined"
+          size="small"
+          select
+          name="service"
+          value={form.service}
+          onChange={handleChange}
           fullWidth
-          error={!!errors.name}
-          helperText={errors.name}
           sx={textFieldSx}
-        />
+        >
+          {SERVICES.map((s) => (
+            <MenuItem key={s} value={s} sx={{ fontSize: "0.85rem" }}>
+              {s}
+            </MenuItem>
+          ))}
+        </TextField>
 
         <TextField
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={handleTextChange}
-          placeholder="Email Address"
-          required
-          variant="outlined"
+          size="small"
+          name="message"
+          placeholder="Write your message..."
+          value={form.message}
+          onChange={handleChange}
+          multiline
+          rows={3}
+          error={!!errors.message}
+          helperText={errors.message}
           fullWidth
-          error={!!errors.email}
-          helperText={errors.email}
-          sx={textFieldSx}
-        />
-      </div>
-
-      {/* COMPANY + PHONE */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <TextField
-          name="company"
-          value={form.company}
-          onChange={handleTextChange}
-          placeholder="Company Name"
-          variant="outlined"
-          fullWidth
-          sx={textFieldSx}
-        />
-
-        <TextField
-          name="phone"
-          type="tel"
-          value={form.phone}
-          onChange={handleTextChange}
-          placeholder="Phone Number"
-          variant="outlined"
-          fullWidth
-          error={!!errors.phone}
-          helperText={errors.phone}
-          sx={textFieldSx}
-        />
-      </div>
-
-      {/* DATE PICKER */}
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          value={form.date ?? null}
-          onChange={handleDateChange}
-          slotProps={{
-            textField: {
-              placeholder: "Select a Date",
-              fullWidth: true,
-              variant: "outlined",
-              sx: textFieldSx,
-            },
+          sx={{
+            ...textFieldSx,
+            "& .MuiInputBase-root": { minHeight: 44, fontSize: "0.85rem" },
           }}
         />
-      </LocalizationProvider>
 
-      {/* SERVICE DROPDOWN */}
-      <TextField
-        select
-        name="service"
-        value={form.service}
-        onChange={handleServiceChange}
-        fullWidth
-        variant="outlined"
-        sx={textFieldSx}
-      >
-        {SERVICES.map((service) => (
-          <MenuItem key={service} value={service}>
-            {service}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      {/* MESSAGE */}
-      <TextField
-        name="message"
-        value={form.message}
-        onChange={handleTextChange}
-        placeholder="Write your message..."
-        required
-        fullWidth
-        variant="outlined"
-        multiline
-        rows={2}
-        error={!!errors.message}
-        helperText={errors.message}
-        sx={textFieldSx}
-      />
-
-      <Button
-        type="submit"
-        variant="contained"
-        disableElevation
-        endIcon={<ArrowForwardIcon />}
-        disabled={submitting}
-        sx={{
-          backgroundColor: "#6d28d9",
-          color: "#fff",
-          borderRadius: "999px",
-          px: 4,
-          py: 1,
-          height: "36px",
-          textTransform: "none",
-          fontSize: ".9rem",
-        }}
-      >
-        {submitting ? "Submitting..." : "Submit Request"}
-      </Button>
-    </form>
-  </Card>
-);
+        <Button
+          type="submit"
+          disabled={submitting}
+          variant="contained"
+          endIcon={<ArrowForwardIcon />}
+          sx={{
+            mt: 1,
+            backgroundColor: "black",
+            borderRadius: "999px",
+            height: "38px",
+            fontSize: "0.9rem",
+            textTransform: "none",
+          }}
+        >
+          {submitting ? "Submitting..." : "Submit Request"}
+        </Button>
+      </form>
+    </Card>
+  );
 }

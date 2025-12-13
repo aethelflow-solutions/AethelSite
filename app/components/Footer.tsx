@@ -17,48 +17,40 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full mt-24">
-      {/* Full width ultra-glass container */}
+    <footer className="w-full mt-24 px-4 md:px-6">
+      {/* Same container logic as Mission Section */}
       <div
-        className="w-full rounded-none p-12 text-white relative overflow-hidden"
+        className="relative overflow-hidden rounded-[30px] py-12 px-6 md:px-10 text-white max-w-11xl mx-auto"
         style={{
-          WebkitBackdropFilter: "blur(22px) saturate(200%)",
-          backdropFilter: "blur(22px) saturate(200%)",
+          backgroundColor: "#1B1A1A",
         }}
       >
-        {/* Full-width glass gradient background */}
+        {/* Soft overlay (same feel as mission) */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 pointer-events-none"
-          style={{
-            background:
-              "black",
-            borderTop: "1px solid rgba(255, 255, 255, 0.18)",
-            boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.7) inset",
-          }}
+          className="absolute inset-0 bg-black/30 backdrop-blur-[1.5px] rounded-[30px]"
         />
 
-        {/* Content center */}
-        <div className="max-w-6xl mx-auto text-center space-y-6">
-          {/* Company Name */}
-          <p className="text-sm font-medium tracking-wide">
+        {/* Content */}
+        <div className="relative z-10 text-center space-y-6">
+          {/* Company */}
+          <p className="text-sm font-large tracking-wide">
             © {currentYear} Aethel Flow Solutions Pvt. Ltd. All Rights Reserved.
           </p>
 
           {/* Address */}
-          <address className="text-sm text-gray-300 not-italic leading-normal">
-            9-4-136/19,20 &amp; 21/A, Shareef Residency 3rd Floor, 7 Tombs Road,
-            Tolichowki, <br />
-            Hyderabad, Telangana
+          <address className="text-sm text-gray-300 not-italic leading-relaxed">
+            9-4-136/19,20 &amp; 21/A, Shareef Residency 3rd Floor,
+            <br />7 Tombs Road, Tolichowki, Hyderabad, Telangana
           </address>
 
-          {/* Contact Info */}
+          {/* Contact */}
           <div className="text-sm text-gray-300 space-y-1">
             <p>
               Email:{" "}
               <a
                 href="mailto:contact@aethelflow.com"
-                className="hover:text-blue-400 transition-colors underline-offset-2 hover:underline"
+                className="hover:text-white transition underline-offset-4 hover:underline"
               >
                 contact@aethelflow.com
               </a>
@@ -66,18 +58,18 @@ export default function Footer() {
 
             <p>
               Phone:{" "}
-              <a href="tel:+919022511316" className="hover:text-blue-400">
+              <a href="tel:+919022511316" className="hover:text-white">
                 +91 9022511316
               </a>{" "}
               /{" "}
-              <a href="tel:+918328901076" className="hover:text-blue-400">
+              <a href="tel:+918328901076" className="hover:text-white">
                 +91 8328901076
               </a>
             </p>
           </div>
 
           {/* Social Icons */}
-          <nav aria-label="Social media links" className="pt-2">
+          <nav aria-label="Social media links" className="pt-4">
             <ul className="flex justify-center gap-8 text-2xl">
               {SOCIAL_LINKS.map((link) => (
                 <li key={link.label}>
@@ -86,7 +78,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Follow us on ${link.label}`}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-200"
+                    className="text-white/80 hover:text-white transition-colors"
                   >
                     {link.icon}
                   </Link>
