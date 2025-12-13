@@ -93,10 +93,14 @@ export default function Navbar() {
           }}
           aria-label="Aethel Flow - Go to homepage"
         >
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-rose-400 flex items-center justify-center text-white font-semibold shadow transition-transform group-hover:scale-105">
-            A
-          </div>
-          <span className="text-white font-semibold text-lg">Aethel Flow</span>
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-rose-400 flex items-center justify-center shadow transition-transform group-hover:scale-105 overflow-hidden">
+  <img
+    src="/logo.png"
+    alt="Company Logo"
+    className="w-full h-full object-cover"
+  />
+</div>
+          <span className="text-white font-semibold text-lg">AETHEL <span className="italic">FLOW</span></span>
         </Link>
 
         {/* Desktop Navigation */}
