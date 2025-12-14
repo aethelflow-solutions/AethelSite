@@ -89,6 +89,17 @@ jobs:
         env:
           NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }}
           NEXT_PUBLIC_EMAILJS_SERVICE_ID: ${{ secrets.NEXT_PUBLIC_EMAILJS_SERVICE_ID }}
+      - name: Create .env.production file
+        run: |
+          echo "NEXT_PUBLIC_EMAILJS_SERVICE_ID=${{ secrets.NEXT_PUBLIC_EMAILJS_SERVICE_ID }}" >> .env.production
+          echo "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }}" >> .env.production
+          echo "NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID=${{ secrets.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID }}" >> .env.production
+          echo "NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID=${{ secrets.NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID }}" >> .env.production
+          echo "NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL=${{ secrets.NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL }}" >> .env.production
+          echo "NEXT_PUBLIC_CONTACT_EMAIL=${{ secrets.NEXT_PUBLIC_CONTACT_EMAIL }}" >> .env.production
+          echo "NEXT_PUBLIC_CONTACT_PHONE=${{ secrets.NEXT_PUBLIC_CONTACT_PHONE }}" >> .env.production
+          echo "NEXT_PUBLIC_WHATSAPP_NUMBER=${{ secrets.NEXT_PUBLIC_WHATSAPP_NUMBER }}" >> .env.production
+          echo "Created .env.production with secrets"
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         env:
