@@ -74,6 +74,21 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Debug - Check env vars
+        run: |
+          if [ -n "$NEXT_PUBLIC_EMAILJS_PUBLIC_KEY" ]; then
+            echo "✅ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY is set (length: ${#NEXT_PUBLIC_EMAILJS_PUBLIC_KEY})"
+          else
+            echo "❌ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY is NOT set"
+          fi
+          if [ -n "$NEXT_PUBLIC_EMAILJS_SERVICE_ID" ]; then
+            echo "✅ NEXT_PUBLIC_EMAILJS_SERVICE_ID is set (length: ${#NEXT_PUBLIC_EMAILJS_SERVICE_ID})"
+          else
+            echo "❌ NEXT_PUBLIC_EMAILJS_SERVICE_ID is NOT set"
+          fi
+        env:
+          NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }}
+          NEXT_PUBLIC_EMAILJS_SERVICE_ID: ${{ secrets.NEXT_PUBLIC_EMAILJS_SERVICE_ID }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         env:
