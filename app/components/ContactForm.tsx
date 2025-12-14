@@ -46,13 +46,6 @@ const initialFormState: FormData = {
   message: "",
 };
 
-// Debug: Log env vars at module load time
-console.log("EmailJS Config:", {
-  serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ? "SET" : "NOT SET",
-  publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ? "SET" : "NOT SET",
-  templateId: process.env.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID ? "SET" : "NOT SET",
-});
-
 export default function ContactForm() {
   const [form, setForm] = useState<FormData>(initialFormState);
   const [errors, setErrors] = useState<FormErrors>({});
