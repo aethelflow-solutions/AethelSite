@@ -299,7 +299,8 @@ export default function FloatingLines({
     const bottomLineDistance = enabledWaves.includes('bottom') ? getLineDistance('bottom') * 0.01 : 0.01;
 
     useEffect(() => {
-        if (!containerRef.current) return;
+        const currentContainer = containerRef.current;
+        if (!currentContainer) return;
 
         const scene = new Scene();
 
@@ -310,7 +311,7 @@ export default function FloatingLines({
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         renderer.domElement.style.width = '100%';
         renderer.domElement.style.height = '100%';
-        containerRef.current.appendChild(renderer.domElement);
+        currentContainer.appendChild(renderer.domElement);
 
         const uniforms = {
             iTime: { value: 0 },
@@ -456,7 +457,7 @@ export default function FloatingLines({
 
         return () => {
             cancelAnimationFrame(raf);
-            if (ro && containerRef.current) {
+            if (ro && currentContainer) {
                 ro.disconnect();
             }
 
@@ -486,7 +487,13 @@ export default function FloatingLines({
         bendStrength,
         mouseDamping,
         parallax,
-        parallaxStrength
+        parallaxStrength,
+        topLineCount,
+        middleLineCount,
+        bottomLineCount,
+        topLineDistance,
+        middleLineDistance,
+        bottomLineDistance,
     ]);
 
     return (

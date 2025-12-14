@@ -1,46 +1,96 @@
-import AButton from "../components/AButton"
-import Navbar from "../components/Navbar"
-import { Button, Typography } from "@mui/material"
+"use client";
+
+import { useCallback } from "react";
+import { Typography } from "@mui/material";
+import AButton from "../components/AButton";
+import TextType from "../components/react-bits/TextType";
+
+function scrollToSection(sectionId: string): void {
+  const element = document.getElementById(sectionId);
+  element?.scrollIntoView({ behavior: "smooth" });
+}
 
 export default function HeroSection() {
-    return (
-        <section className="flex items-center bg-[url('/HeroSection-bg.jpg')] bg-cover h-screen text-white pt-32 pb-28 px-12 rounded-3xl ">
-            <div className="w-full flex flex-col-2 items-center justify-between gap-6">
-                <div className="flex flex-col justify-center px-36">
-                    <Typography
-                        variant="h3"
-                        className="font-bold leading-tight"
-                        sx={{ fontSize: { xs: "16px", md: "24px" } }}
-                    >
-                        Who we Are ?
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                        className="leading-tight py-4"
-                        sx={{ fontSize: { xs: "12px", md: "16px" } }}
-                    >
-                        Empowering businesses through cutting-edge technology solutions.
-                        We transform your digital vision into reality with AI-driven automation,
-                        development, and strategic consulting.
-                    </Typography>
-                    <AButton  
-                        children="Learn More"
-                        className="flex gap-4 mt-4"
-                        variant="outlined"
-                        sx={{
-                                color: "white",
-                                borderColor: "blue",
-                                borderRadius: "50px",
-                                paddingX: 4,
-                                paddingY: 1.5,
-                                textTransform: "none",
-                                fontSize: "16px",
-                        }}
-                    />
-                </div>
-                {/* <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis eos nemo enim magni reiciendis! Accusamus suscipit eveniet sequi amet veritatis, id odit quia iste, velit nulla accusantium dolorum magni enim?</div> */}
-            </div>
-        </section>
-    )
+  const handleContactClick = useCallback(() => {
+    scrollToSection("contact");
+  }, []);
 
+  return (
+    <section
+      id="home"
+      className="relative flex items-center min-h-screen text-white pt-32 pb-28 px-6 rounded-3xl overflow-hidden"
+      aria-label="Hero section"
+    >
+      {/* VIDEO BACKGROUND */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/bg3.mp4" type="video/mp4" />
+      </video>
+
+      {/* DARK OVERLAY (for text readability) */}
+      <div className="absolute inset-0 bg-[#00000098]"></div>
+
+      {/* CONTENT */}
+      <div className="relative w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left ml-10">
+        <TextType
+          text={[
+            "Supercharge your Operations with AI that delivers seamless Automation",
+            "Transform workflows with AI-powered automation that works",
+            "Elevate your business with intelligent automation solutions",
+            "Automate smarter, scale faster with AI-driven innovation",
+            "Streamline operations with AI that adapts to your needs",
+            "Unlock efficiency through intelligent automation and AI",
+            "Power your business with seamless AI automation",
+            "Accelerate growth with intelligent workflow automation",
+            "Empower your team with AI that automates complexity",
+            "Drive innovation with AI-powered operational excellence",
+          ]}
+          typingSpeed={60}
+          pauseDuration={1500}
+          showCursor={false}
+          cursorCharacter="|"
+          className="text-4xl font-extrabold heroTitle"
+          startOnVisible={true}
+          reverseMode={false}
+        />
+
+        <Typography
+          component="p"
+          variant="body1"
+          className="leading-relaxed animate-fadeIn"
+          sx={{ fontSize: { xs: "14px", md: "17px" } }}
+        >
+          At Aethel Flow, we harness AI and automation to streamline workflows,
+          spark innovation, and empower businesses to move faster with seamless,
+          intelligent solutions for a future that flows effortlessly.
+        </Typography>
+        <div className="mt-4">
+          <AButton
+            variant="outlined"
+            onClick={handleContactClick}
+            sx={{
+              color: "white",
+              border: "none",
+              backgroundColor: "#692ac8",
+              borderRadius: "50px",
+              paddingX: 5,
+              paddingY: 2.5,
+              textTransform: "none",
+              fontSize: "16px",
+              "&:hover": {
+                backgroundColor: "#5a24a8",
+              },
+            }}
+          >
+            Contact Us
+          </AButton>
+        </div>
+      </div>
+    </section>
+  );
 }

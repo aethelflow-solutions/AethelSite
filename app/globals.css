@@ -1,15 +1,17 @@
+/* TAILWIND BASE */
 @import "tailwindcss";
 
+/* 
+ * Note: Google Fonts are now loaded via next/font in layout.tsx
+ * for better performance (no render-blocking, font subsetting, self-hosting)
+ */
+
+/* Light / Dark Theme Variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-poppins: "Poppins", system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +21,150 @@
   }
 }
 
+/* Global Styles */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
+  margin: 0;
+  padding: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Global Text Styling */
+body,
+p,
+span,
+div,
+li,
+button,
+input {
+  font-family: var(--font-inter);
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0.2px;
+}
+
+/* Global Heading Styling */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-poppins);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Navigation button hover */
+.navbutton-hover {
+  background: none;
+}
+
+.navbutton-hover:hover {
+  background: linear-gradient(
+    125deg,
+    rgba(204, 204, 204, 0.344) 0%,
+    rgba(56, 56, 56, 0.74) 20%,
+    rgba(0, 0, 0, 0.548) 100%
+  );
+}
+
+/* Hero Title Shimmer */
+.heroTitle {
+  background: linear-gradient(
+    90deg,
+    #ceadff 0%,
+    #fff 25%,
+    #ceadff 50%,
+    #fff 75%,
+    #ceadff 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s infinite linear;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Fade animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeSlideUp {
+  animation: fadeSlideUp 1.2s ease-out forwards;
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid #692ac8;
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
