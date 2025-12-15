@@ -41,7 +41,7 @@ const initialFormState: FormData = {
   email: "",
   company: "",
   phone: "",
-  service: SERVICES[0],
+  service: "",
   date: null,
   message: "",
 };
@@ -285,10 +285,20 @@ export default function ContactForm() {
           value={form.service}
           onChange={handleChange}
           fullWidth
-          sx={textFieldSx}
+          sx={{
+            ...textFieldSx,
+            "& .MuiSelect-select": {
+              color: form.service === "" ? "#9ca3af" : "#111827", // gray vs dark
+            },
+          }}
+          SelectProps={{ displayEmpty: true }}
         >
+          <MenuItem value="" disabled>
+            Choose Category
+          </MenuItem>
+
           {SERVICES.map((s) => (
-            <MenuItem key={s} value={s} sx={{ fontSize: "0.85rem" }}>
+            <MenuItem key={s} value={s}>
               {s}
             </MenuItem>
           ))}

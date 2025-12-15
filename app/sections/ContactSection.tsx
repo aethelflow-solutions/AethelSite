@@ -99,7 +99,7 @@ export default function ContactSection() {
                   className="leading-tight font-light animate-slideUp opacity-0"
                   sx={{ fontSize: { xs: "14px", md: "15px" }, opacity: 0.85 }}
                 >
-                  Subline for the mission statement is needed here
+                  Let’s transform your enterprise
                 </Typography>
 
                 <Typography
@@ -107,10 +107,7 @@ export default function ContactSection() {
                   className="leading-relaxed font-light pt-4 pb-2 animate-slideUp opacity-0"
                   sx={{ fontSize: { xs: "11px", md: "13px" }, opacity: 0.9 }}
                 >
-                  Let’s transform your enterprise. Partner with Aethel Flow from
-                  strategy to implementation — we help solve your business
-                  problems across multiple functions and platforms for rapid
-                  innovation and boundless growth.
+                  Partner with Aethel Flow from strategy to implementation — we help solve your business problems across multiple functions and platforms for rapid innovation and boundless growth.
                 </Typography>
 
                 {/* BLOCKS */}
