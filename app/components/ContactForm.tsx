@@ -3,10 +3,7 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { TextField, MenuItem, Button, Card } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Dayjs } from "dayjs";
+import emailjs from "@emailjs/browser";
 
 interface FormData {
   name: string;
@@ -14,7 +11,6 @@ interface FormData {
   company: string;
   phone: string;
   service: string;
-  date: Dayjs | null;
   message: string;
 }
 
@@ -40,8 +36,7 @@ const initialFormState: FormData = {
   email: "",
   company: "",
   phone: "",
-  service: SERVICES[0],
-  date: null,
+  service: "",
   message: "",
 };
 
@@ -67,16 +62,22 @@ export default function ContactForm() {
     return () => obs.disconnect();
   }, []);
 
-  const validateForm = useCallback(() => {
-    const e: FormErrors = {};
-    if (!form.name.trim()) e.name = "Name is required";
-    if (!form.email.trim()) e.email = "Email is required";
-    else if (!EMAIL_REGEX.test(form.email)) e.email = "Invalid email";
-    if (!form.phone.trim()) e.phone = "Phone is required";
-    else if (!PHONE_REGEX.test(form.phone)) e.phone = "Invalid phone";
-    if (!form.message.trim()) e.message = "Message is required";
-    setErrors(e);
-    return Object.keys(e).length === 0;
+  const validateForm = useCallback((): boolean => {
+    const newErrors: FormErrors = {};
+
+    if (!form.name.trim()) newErrors.name = "Name is required";
+    if (!form.email.trim()) newErrors.email = "Email is required";
+    else if (!EMAIL_REGEX.test(form.email))
+      newErrors.email = "Please enter a valid email";
+
+    if (!form.phone.trim()) newErrors.phone = "Phone is required";
+    else if (!PHONE_REGEX.test(form.phone))
+      newErrors.phone = "Please enter a valid phone number";
+
+    if (!form.message.trim()) newErrors.message = "Message is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }, [form]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,13 +85,50 @@ export default function ContactForm() {
     setForm((p) => ({ ...p, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
+
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setForm(initialFormState);
-    setSubmitting(false);
+    try {
+      const contactTemplateParams = {
+        from_name: form.name,
+        from_email: form.email,
+        company: form.company || "N/A",
+        phone: form.phone || "N/A",
+        service: form.service,
+        message: form.message,
+        reply_to_email: process.env.NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL!,
+      };
+
+      const response = await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID!,
+        contactTemplateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      );
+
+      if (response.status === 200) {
+        setForm(initialFormState);
+
+        const welcomeTemplateParams = {
+          from_name: form.name,
+          from_email: form.email,
+          service: form.service,
+        };
+
+        await emailjs.send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+          process.env.NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID!,
+          welcomeTemplateParams,
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        );
+      }
+    } catch (err) {
+      console.error("Failed to send email:", err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const textFieldSx = {
@@ -178,53 +216,6 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* ✅ SMALLER ICON + LESS PADDING */}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            value={form.date}
-            onChange={(v) => setForm((p) => ({ ...p, date: v }))}
-            slotProps={{
-              textField: {
-                size: "small",
-                fullWidth: true,
-                sx: {
-                  ...textFieldSx,
-                  "& .MuiInputAdornment-root svg": {
-                    fontSize: "1rem", // 👈 smaller calendar icon
-                  },
-                },
-                InputProps: { sx: { height: 44 } },
-              },
-              popper: {
-                sx: {
-                  "& .MuiPaper-root": {
-                    minWidth: 210,
-                    padding: "2px", // 👈 reduced padding
-                    transform: "scale(0.85)",
-                    transformOrigin: "top left",
-                  },
-                  "& .MuiPickersDay-root": {
-                    width: 26,
-                    height: 26,
-                    fontSize: "0.7rem",
-                    margin: "1px",
-                  },
-                  "& .MuiDayCalendar-weekDayLabel": {
-                    width: 26,
-                    fontSize: "0.65rem",
-                  },
-                  "& .MuiPickersFadeTransitionGroup-root": {
-                    minHeight: 165,
-                  },
-                  "& .MuiPickersCalendarHeader-label": {
-                    fontSize: "0.72rem",
-                  },
-                },
-              },
-            }}
-          />
-        </LocalizationProvider>
-
         <TextField
           size="small"
           select
@@ -233,7 +224,9 @@ export default function ContactForm() {
           onChange={handleChange}
           fullWidth
           sx={textFieldSx}
+          SelectProps={{ displayEmpty: true }}
         >
+          <MenuItem value="">Choose Category</MenuItem>
           {SERVICES.map((s) => (
             <MenuItem key={s} value={s} sx={{ fontSize: "0.85rem" }}>
               {s}
