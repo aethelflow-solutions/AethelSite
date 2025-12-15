@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import HeroSection from "../sections/HeroSection";
+import StickyContact from "../components/stickyContact"
 
 // Lazy load sections below the fold for better performance
 const Services = dynamic(() => import("../sections/Services"), {
@@ -33,6 +34,7 @@ export default function HomepageContent() {
         <ContactSection />
         <Footer />
       </div>
+      <StickyContact />
     </>
   );
 }

@@ -41,8 +41,7 @@ export default function Footer() {
           {/* Address */}
           <address className="text-sm text-gray-300 not-italic leading-relaxed">
             9-4-136/19,20 &amp; 21/A, Shareef Residency 3rd Floor,
-            <br />
-            7 Tombs Road, Tolichowki, Hyderabad, Telangana
+            <br />7 Tombs Road, Tolichowki, Hyderabad, Telangana
           </address>
 
           {/* Contact */}
@@ -92,4 +91,3 @@ export default function Footer() {
     </footer>
   );
 }
-

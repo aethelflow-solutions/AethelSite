@@ -18,11 +18,25 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex items-center min-h-screen text-white pt-32 pb-28 px-6 rounded-3xl overflow-hidden bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/bg1.jpg')" }}
+      className="relative flex items-center min-h-screen text-white pt-32 pb-28 px-6 rounded-3xl overflow-hidden"
       aria-label="Hero section"
     >
-      <div className="w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left ml-10">
+      {/* VIDEO BACKGROUND */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/bg3.mp4" type="video/mp4" />
+      </video>
+
+      {/* DARK OVERLAY (for text readability) */}
+      <div className="absolute inset-0 bg-[#00000098]"></div>
+
+      {/* CONTENT */}
+      <div className="relative w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left ml-10">
         <TextType
           text={[
             "Supercharge your Operations with AI that delivers seamless Automation",
@@ -40,13 +54,11 @@ export default function HeroSection() {
           pauseDuration={1500}
           showCursor={false}
           cursorCharacter="|"
-          className="text-5xl  font-extrabold heroTitle"
-          // textColors={["#e5e5e1"]}
-          // loop={false}
-          onSentenceComplete={() => console.log("Sentence completed!")}
+          className="text-4xl font-extrabold heroTitle"
           startOnVisible={true}
           reverseMode={false}
         />
+
         <Typography
           component="p"
           variant="body1"

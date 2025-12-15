@@ -77,7 +77,8 @@ export default function Navbar() {
           aria-hidden="true"
           className="absolute inset-0 rounded-3xl -z-10 pointer-events-none"
           style={{
-            background: "linear-gradient(90deg, rgb(20 14 24 / 75%), rgb(64 59 73 / 69%) 45%, rgb(15 15 20 / 57%));",
+            background:
+              "linear-gradient(90deg, rgb(20 14 24 / 75%), rgb(64 59 73 / 69%) 45%, rgb(15 15 20 / 57%));",
             border: "1px solid rgba(255, 255, 255, 0.154)",
             boxShadow: "0 10px 30px rgba(2, 6, 23, 0.5)",
           }}
@@ -93,10 +94,16 @@ export default function Navbar() {
           }}
           aria-label="Aethel Flow - Go to homepage"
         >
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-rose-400 flex items-center justify-center text-white font-semibold shadow transition-transform group-hover:scale-105">
-            A
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-400 to-rose-400 flex items-center justify-center shadow transition-transform group-hover:scale-105 overflow-hidden">
+            <img
+              src="/logo.png"
+              alt="Company Logo"
+              className="w-full h-full object-cover"
+            />
           </div>
-          <span className="text-white font-semibold text-lg">Aethel Flow</span>
+          <span className="hidden min-[320px]:inline text-white font-semibold text-lg">
+            AETHEL <span className="italic">FLOW</span>
+          </span>
         </Link>
 
         {/* Desktop Navigation */}

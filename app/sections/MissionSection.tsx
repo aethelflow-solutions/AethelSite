@@ -71,15 +71,7 @@ export default function MissionSection() {
         aria-labelledby="vision-heading"
       >
         <div className="max-w-3xl text-center space-y-5">
-          <Typography
-            id="vision-heading"
-            component="h2"
-            variant="h2"
-            className="font-bold"
-            sx={{ fontSize: { xs: "24px", md: "36px" } }}
-          >
-            Our Vision
-          </Typography>
+          <h2 className="text-black font-semibold text-3xl">Our Vision</h2>
           <Typography
             component="p"
             variant="body1"
@@ -87,8 +79,8 @@ export default function MissionSection() {
             sx={{ fontSize: { xs: "14px", md: "17px" } }}
           >
             At Aethel Flow, our vision is to redefine the future of work using
-            intelligent automation that blends efficiency with human empathy—creating
-            workflows that feel effortless and future-ready.
+            intelligent automation that blends efficiency with human
+            empathy—creating workflows that feel effortless and future-ready.
           </Typography>
         </div>
       </section>
@@ -131,10 +123,10 @@ export default function MissionSection() {
               className="leading-relaxed opacity-90"
               sx={{ fontSize: { xs: "15px", md: "18px" } }}
             >
-              Our mission at Aethel Flow is to empower organizations with intelligent
-              automation that is both seamless and human-centric. We design solutions
-              that eliminate inefficiencies, enhance decision-making, and unlock new
-              growth opportunities.
+              Our mission at Aethel Flow is to empower organizations with
+              intelligent automation that is both seamless and human-centric. We
+              design solutions that eliminate inefficiencies, enhance
+              decision-making, and unlock new growth opportunities.
             </Typography>
           </div>
 
@@ -142,7 +134,9 @@ export default function MissionSection() {
           <div
             ref={cardsRef}
             className={`grid grid-cols-1 md:grid-cols-2 gap-12 transition-all duration-700 ${
-              showCards ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              showCards
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
             }`}
           >
             {/* Left Cards */}
@@ -183,10 +177,4 @@ export default function MissionSection() {
       </section>
     </>
   );
-
-
-
-
-
-
 }

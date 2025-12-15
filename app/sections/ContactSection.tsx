@@ -12,7 +12,6 @@ export default function ContactSection() {
   const [inView, setInView] = useState(false);
   const sectionRef = useRef(null);
 
-
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
@@ -60,10 +59,9 @@ const interval = setInterval(() => {
 
   return (
     <section ref={sectionRef} id="contact" className="flex flex-col">
-
       <div>
         <div className="lg:py-10 py-6 flex justify-center">
-          <h2 className="text-black font-semibold text-3xl">Our Partners</h2>
+          <h2 className="text-black font-semibold text-3xl">Contact Us</h2>
         </div>
 
         <div className="px-3 sm:px-4 lg:px-6">
@@ -77,7 +75,6 @@ const interval = setInterval(() => {
             {/* LEFT SECTION */}
             <div className="flex items-center justify-center text-white">
               <div className="w-full px-6 md:px-10 lg:px-12 py-6 space-y-6">
-
                 <Typography
                   variant="body1"
                   className="leading-tight font-light text-gray-300 animate-slideUp opacity-0"
@@ -125,14 +122,14 @@ const interval = setInterval(() => {
                   className="leading-relaxed font-light pt-4 pb-2 animate-slideUp opacity-0"
                   sx={{ fontSize: { xs: "11px", md: "13px" }, opacity: 0.9 }}
                 >
-                  Let’s transform your enterprise. Partner with Aethel Flow from strategy to
-                  implementation — we help solve your business problems across multiple
-                  functions and platforms for rapid innovation and boundless growth.
+                  Let’s transform your enterprise. Partner with Aethel Flow from
+                  strategy to implementation — we help solve your business
+                  problems across multiple functions and platforms for rapid
+                  innovation and boundless growth.
                 </Typography>
 
                 {/* BLOCKS */}
                 <div className="flex flex-col gap-6 mt-6">
-
                   {/* BLOCK 1 */}
                   <div className="flex items-start gap-4 animate-slideUp opacity-0">
                     <Image
@@ -149,7 +146,8 @@ const interval = setInterval(() => {
                       </h3>
 
                       <p className="text-gray-300 text-sm mt-1 font-light leading-relaxed">
-                        Imagine what your business can achieve with the right technology.
+                        Imagine what your business can achieve with the right
+                        technology.
                       </p>
                     </div>
                   </div>
@@ -170,26 +168,25 @@ const interval = setInterval(() => {
                       </h3>
 
                       <p className="text-gray-300 text-sm mt-1 font-light leading-relaxed">
-                        We design and build experiences that transform businesses.
+                        We design and build experiences that transform
+                        businesses.
                       </p>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
 
-{/* RIGHT SECTION — FORM */}
-<div className="flex items-center justify-center py-4 px-4 md:px-6 lg:px-6">
-  <div
-    className="w-full max-w-sm md:max-w-sm lg:max-w-md
-               bg-white rounded-2xl shadow-xl
-               p-4 md:p-5 animate-slideUp opacity-0"
-  >
-    <ContactForm />
-  </div>
-</div>
-
+            {/* RIGHT SECTION — FORM */}
+            <div className="flex items-center justify-center py-4 px-4 md:px-6 lg:px-6">
+              <div
+                className="w-full max-w-full md:max-w-9/12
+                 bg-white rounded-2xl shadow-xl
+                 p-4 md:p-5 animate-slideUp opacity-0"
+              >
+                <ContactForm />
+              </div>
+            </div>
           </div>
         </div>
       </div>
