@@ -16,6 +16,8 @@ const EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL!;
 export default function StickyContact() {
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
+  const whatsappMessage = "Hi! I’m interested in your AI services. Please get in touch.";
+  const encodedMsg = encodeURIComponent(whatsappMessage);
 
   const closeWithAnimation = () => {
     setClosing(true);
@@ -28,7 +30,7 @@ export default function StickyContact() {
   const icons = [
     {
       icon: <WhatsAppIcon fontSize="large" />,
-      href: `https://wa.me/${WHATSAPP}`,
+      href: `https://wa.me/${WHATSAPP}?text=${encodedMsg}`,
       bg: "#25D366",
       hoverBg: "#21b256",
       delayIn: "0ms",
@@ -66,6 +68,7 @@ export default function StickyContact() {
                 key={index}
                 component="a"
                 href={item.href}
+                target="_blank"
                 sx={{
                   position: "fixed",
                   bottom: 24,
@@ -80,9 +83,7 @@ export default function StickyContact() {
                   animation: closing
                     ? "fabOut 240ms ease-in forwards"
                     : "fabIn 280ms ease-out forwards",
-                  animationDelay: closing
-                    ? item.delayOut
-                    : item.delayIn,
+                  animationDelay: closing ? item.delayOut : item.delayIn,
                   "--fab-translate": item.translate,
                   "&:hover": {
                     transform: "scale(1.12)",
