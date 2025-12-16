@@ -3,10 +3,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { TextField, MenuItem, Button, Card } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Dayjs } from "dayjs";
 import emailjs from "@emailjs/browser";
 
 interface FormData {
@@ -15,7 +11,6 @@ interface FormData {
   company: string;
   phone: string;
   service: string;
-  date: Dayjs | null;
   message: string;
 }
 
@@ -42,7 +37,6 @@ const initialFormState: FormData = {
   company: "",
   phone: "",
   service: "",
-  date: null,
   message: "",
 };
 
@@ -73,11 +67,11 @@ export default function ContactForm() {
 
     if (!form.name.trim()) newErrors.name = "Name is required";
     if (!form.email.trim()) newErrors.email = "Email is required";
-    if (!form.phone.trim()) newErrors.phone = "Phone is required";
     else if (!EMAIL_REGEX.test(form.email))
       newErrors.email = "Please enter a valid email";
 
-    if (form.phone && !PHONE_REGEX.test(form.phone))
+    if (!form.phone.trim()) newErrors.phone = "Phone is required";
+    else if (!PHONE_REGEX.test(form.phone))
       newErrors.phone = "Please enter a valid phone number";
 
     if (!form.message.trim()) newErrors.message = "Message is required";
@@ -92,10 +86,8 @@ export default function ContactForm() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e?.preventDefault();
+    e.preventDefault();
     if (!validateForm()) return;
-
-    console.log(form);
 
     setSubmitting(true);
     try {
@@ -104,7 +96,6 @@ export default function ContactForm() {
         from_email: form.email,
         company: form.company || "N/A",
         phone: form.phone || "N/A",
-        date: form.date ? form.date.format("MMMM DD, YYYY") : "N/A",
         service: form.service,
         message: form.message,
         reply_to_email: process.env.NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL!,
@@ -116,13 +107,13 @@ export default function ContactForm() {
         contactTemplateParams,
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
       );
+
       if (response.status === 200) {
         setForm(initialFormState);
 
         const welcomeTemplateParams = {
           from_name: form.name,
           from_email: form.email,
-          date: form.date ? form.date.format("MMMM DD, YYYY") : "N/A",
           service: form.service,
         };
 
@@ -179,7 +170,6 @@ export default function ContactForm() {
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <div className="grid md:grid-cols-2 gap-3">
           <TextField
-            id="contact-name"
             size="small"
             name="name"
             placeholder="Your Name"
@@ -191,7 +181,6 @@ export default function ContactForm() {
             sx={textFieldSx}
           />
           <TextField
-            id="contact-email"
             size="small"
             name="email"
             placeholder="Email Address"
@@ -206,7 +195,6 @@ export default function ContactForm() {
 
         <div className="grid md:grid-cols-2 gap-3">
           <TextField
-            id="contact-company"
             size="small"
             name="company"
             placeholder="Company Name"
@@ -216,7 +204,6 @@ export default function ContactForm() {
             sx={textFieldSx}
           />
           <TextField
-            id="contact-phone"
             size="small"
             name="phone"
             placeholder="Phone Number"
@@ -229,83 +216,25 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* ✅ SMALLER ICON + LESS PADDING */}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            value={form.date}
-            onChange={(v) => setForm((p) => ({ ...p, date: v }))}
-            slotProps={{
-              textField: {
-                id: "contact-date",
-                size: "small",
-                fullWidth: true,
-                sx: {
-                  ...textFieldSx,
-                  "& .MuiInputAdornment-root svg": {
-                    fontSize: "1rem", // 👈 smaller calendar icon
-                  },
-                },
-                InputProps: { sx: { height: 44 } },
-              },
-              popper: {
-                sx: {
-                  "& .MuiPaper-root": {
-                    minWidth: 210,
-                    padding: "2px", // 👈 reduced padding
-                    transform: "scale(0.85)",
-                    transformOrigin: "top left",
-                  },
-                  "& .MuiPickersDay-root": {
-                    width: 26,
-                    height: 26,
-                    fontSize: "0.7rem",
-                    margin: "1px",
-                  },
-                  "& .MuiDayCalendar-weekDayLabel": {
-                    width: 26,
-                    fontSize: "0.65rem",
-                  },
-                  "& .MuiPickersFadeTransitionGroup-root": {
-                    minHeight: 165,
-                  },
-                  "& .MuiPickersCalendarHeader-label": {
-                    fontSize: "0.72rem",
-                  },
-                },
-              },
-            }}
-          />
-        </LocalizationProvider>
-
         <TextField
-          id="contact-service"
           size="small"
           select
           name="service"
           value={form.service}
           onChange={handleChange}
           fullWidth
-          sx={{
-            ...textFieldSx,
-            "& .MuiSelect-select": {
-              color: form.service === "" ? "#9ca3af" : "#111827", // gray vs dark
-            },
-          }}
+          sx={textFieldSx}
           SelectProps={{ displayEmpty: true }}
         >
-          <MenuItem value="" disabled>
-            Choose Category
-          </MenuItem>
-
+          <MenuItem value="">Choose Category</MenuItem>
           {SERVICES.map((s) => (
-            <MenuItem key={s} value={s}>
+            <MenuItem key={s} value={s} sx={{ fontSize: "0.85rem" }}>
               {s}
             </MenuItem>
           ))}
         </TextField>
 
         <TextField
-          id="contact-message"
           size="small"
           name="message"
           placeholder="Write your message..."

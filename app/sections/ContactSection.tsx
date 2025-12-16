@@ -26,21 +26,36 @@ export default function ContactSection() {
     return () => obs.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!inView) return;
+ useEffect(() => {
+  if (!inView) return;
 
-    let index = 0;
-    setTyped("");
+  let index = 0;
+  let deleting = false;
 
-    const interval = setInterval(() => {
-      index++;
-      setTyped(fullHeading.slice(0, index));
+  const type = () => {
+  if (!deleting) {
+    setTyped(fullHeading.slice(0, index + 1));
+    index++;
+    if (index === fullHeading.length) {
+      setTimeout(() => { deleting = true; }, 1200);
+    }
+  } else {
+    setTyped(fullHeading.slice(0, index - 1));
+    index--;
+    if (index === 0) {
+      deleting = false;
+    }
+  }
+};
 
-      if (index >= fullHeading.length) clearInterval(interval);
-    }, 24);
+const interval = setInterval(() => {
+  type();
+}, deleting ? 20 : 30);
 
-    return () => clearInterval(interval);
-  }, [inView]);
+
+  return () => clearInterval(interval);
+}, [inView]);
+
 
   return (
     <section ref={sectionRef} id="contact" className="flex flex-col">
