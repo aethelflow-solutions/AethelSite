@@ -36,8 +36,7 @@ const initialFormState: FormData = {
   email: "",
   company: "",
   phone: "",
-  service: SERVICES[0],
-  date: null,
+  service: "",
   message: "",
 };
 
@@ -225,9 +224,11 @@ export default function ContactForm() {
           onChange={handleChange}
           fullWidth
           sx={textFieldSx}
+          SelectProps={{ displayEmpty: true }}
         >
+          <MenuItem value="">Choose Category</MenuItem>
           {SERVICES.map((s) => (
-            <MenuItem key={s} value={s}>
+            <MenuItem key={s} value={s} sx={{ fontSize: "0.85rem" }}>
               {s}
             </MenuItem>
           ))}
