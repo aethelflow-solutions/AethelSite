@@ -35,17 +35,25 @@ export default function FeatureAccordion() {
             {/* HEADER */}
             <button
               onClick={() => setOpenIndex(isOpen ? null : index)}
-              className="w-full flex items-center justify-between text-left"
+              className="
+                w-full
+                flex
+                items-center
+                justify-between
+                text-left
+                cursor-pointer
+                group
+              "
             >
-              {/* TITLE — VERY LIGHT */}
+              {/* TITLE */}
               <h3
-                className="text-base text-gray-900"
+                className="text-base text-gray-900 cursor-pointer"
                 style={{ fontWeight: 300 }}
               >
                 {item.title}
               </h3>
 
-              {/* + / − ICON — PERFECT CENTER */}
+              {/* + / − ICON */}
               <span
                 className="
                   w-8 h-8
@@ -54,6 +62,9 @@ export default function FeatureAccordion() {
                   bg-black
                   text-white
                   text-lg
+                  cursor-pointer
+                  transition-transform duration-200
+                  group-hover:scale-105
                 "
                 style={{
                   lineHeight: "1",
