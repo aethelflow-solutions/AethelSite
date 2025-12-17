@@ -1,19 +1,18 @@
 "use client";
 
-import { useCallback } from "react";
+import { useState } from "react";
 import { Typography } from "@mui/material";
-import AButton from "../components/AButton";
 import TextType from "../components/react-bits/TextType";
 
-function scrollToSection(sectionId: string): void {
-  const element = document.getElementById(sectionId);
-  element?.scrollIntoView({ behavior: "smooth" });
-}
+// function scrollToSection(sectionId: string): void {
+//   const element = document.getElementById(sectionId);
+//   element?.scrollIntoView({ behavior: "smooth" });
+// }
 
 export default function HeroSection() {
-  const handleContactClick = useCallback(() => {
-    scrollToSection("contact");
-  }, []);
+  const [played, setPlayed] = useState(false);
+  
+  
 
   return (
     <section
@@ -38,39 +37,33 @@ export default function HeroSection() {
       {/* CONTENT */}
       <div className="relative w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left ml-10">
         <TextType
+          
           text={[
             "Supercharge your Operations with AI that delivers seamless Automation",
-            "Transform workflows with AI-powered automation that works",
-            "Elevate your business with intelligent automation solutions",
-            "Automate smarter, scale faster with AI-driven innovation",
-            "Streamline operations with AI that adapts to your needs",
-            "Unlock efficiency through intelligent automation and AI",
-            "Power your business with seamless AI automation",
-            "Accelerate growth with intelligent workflow automation",
-            "Empower your team with AI that automates complexity",
-            "Drive innovation with AI-powered operational excellence",
           ]}
-          typingSpeed={60}
-          pauseDuration={1500}
+          typingSpeed={100}
+          pauseDuration={1200}
           showCursor={false}
-          cursorCharacter="|"
-          className="text-4xl font-extrabold heroTitle"
-          startOnVisible={true}
+          startOnVisible={!played}
           reverseMode={false}
+          loop = {false}
+          className="text-4xl heroTitle smooth-type"
+          
         />
 
         <Typography
           component="p"
           variant="body1"
           className="leading-relaxed animate-fadeIn"
-          sx={{ fontSize: { xs: "14px", md: "17px" } }}
+          sx={{ fontSize: { xs: "14px", md: "18px" } }}
         >
-          At Aethel Flow, we harness AI and automation to streamline workflows,
-          spark innovation, and empower businesses to move faster with seamless,
+          At <span className="text-amber-200 italic cursor-pointer">Aethel Flow</span>
+          , we harness AI and automation to streamline workflows, spark
+          innovation, and empower businesses to move faster with seamless,
           intelligent solutions for a future that flows effortlessly.
         </Typography>
         <div className="mt-4">
-          <AButton
+          {/* <AButton
             variant="outlined"
             onClick={handleContactClick}
             sx={{
@@ -88,7 +81,7 @@ export default function HeroSection() {
             }}
           >
             Contact Us
-          </AButton>
+          </AButton> */}
         </div>
       </div>
     </section>
