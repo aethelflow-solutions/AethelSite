@@ -26,6 +26,7 @@ const SERVICES = [
   "Custom Software Development",
   "Automation & RPA",
   "Data & Analytics",
+  "Others",
 ];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
