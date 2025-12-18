@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar";
 
-export default function AboutLayout({
+export default function FeatureLayout({
   children,
 }: {
   children: React.ReactNode;
