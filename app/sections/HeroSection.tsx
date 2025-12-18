@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Typography } from "@mui/material";
 import TextType from "../components/react-bits/TextType";
 
@@ -10,7 +9,7 @@ import TextType from "../components/react-bits/TextType";
 // }
 
 export default function HeroSection() {
-  const [played, setPlayed] = useState(false);
+  
   
   
 
@@ -28,11 +27,11 @@ export default function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/bg3.mp4" type="video/mp4" />
+        <source src="/bg2.mp4" type="video/mp4" />
       </video>
 
       {/* DARK OVERLAY (for text readability) */}
-      <div className="absolute inset-0 bg-[#00000098]"></div>
+      <div className="absolute inset-0 bg-[#000000ad]"></div>
 
       {/* CONTENT */}
       <div className="relative w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left ml-10">
@@ -40,13 +39,23 @@ export default function HeroSection() {
           
           text={[
             "Supercharge your Operations with AI that delivers seamless Automation",
+            "Transform workflows with AI-powered automation that works",
+            "Elevate your business with intelligent automation solutions",
+            "Automate smarter, scale faster with AI-driven innovation",
+            "Streamline operations with AI that adapts to your needs",
+            "Unlock efficiency through intelligent automation and AI",
+            "Power your business with seamless AI automation",
+            "Accelerate growth with intelligent workflow automation",
+            "Empower your team with AI that automates complexity",
+            "Drive innovation with AI-powered operational excellence"
+,
           ]}
-          typingSpeed={100}
-          pauseDuration={1200}
+          typingSpeed={80}
+          pauseDuration={5200}
           showCursor={false}
-          startOnVisible={!played}
+          startOnVisible={false}
           reverseMode={false}
-          loop = {false}
+          loop = {true}
           className="text-4xl heroTitle smooth-type"
           
         />
@@ -55,9 +64,9 @@ export default function HeroSection() {
           component="p"
           variant="body1"
           className="leading-relaxed animate-fadeIn"
-          sx={{ fontSize: { xs: "14px", md: "18px" } }}
+          sx={{ fontSize: { xs: "14px", md: "18px" } , color: "#cdfdff"}}
         >
-          At <span className="text-amber-200 italic cursor-pointer">Aethel Flow</span>
+          At Aethel Flow
           , we harness AI and automation to streamline workflows, spark
           innovation, and empower businesses to move faster with seamless,
           intelligent solutions for a future that flows effortlessly.

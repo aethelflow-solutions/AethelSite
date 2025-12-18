@@ -195,7 +195,12 @@ const TextType = ({
     },
     <span
       className="inline"
-      style={{ color: getCurrentTextColor() || "inherit" }}
+      style={{
+    color: getCurrentTextColor() || "inherit",
+    fontFamily: "inherit",
+    fontWeight: 700,
+    fontSize: "42px",
+  }}
     >
       {displayedText}
     </span>,
