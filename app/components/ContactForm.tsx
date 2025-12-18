@@ -219,8 +219,8 @@ const validateForm = useCallback((): boolean => {
           name="service"
           value={form.service}
           onChange={handleChange}
-            error={!!errors.service}          // 👈 ADD
-  helperText={errors.service} 
+            error={!!errors.service}          
+            helperText={errors.service} 
           fullWidth
           sx={{
             ...textFieldSx,
