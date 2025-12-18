@@ -10,50 +10,28 @@ export default function FeaturesPage() {
 
   const [text1, setText1] = useState("");
   const [text2, setText2] = useState("");
-  const [phase, setPhase] = useState<
-    "typing1" | "typing2" | "pause" | "deleting2" | "deleting1"
-  >("typing1");
+  const [phase, setPhase] = useState<"typing1" | "typing2" | "done">("typing1");
 
   useEffect(() => {
     const speed = 60;
 
     const timer = setTimeout(() => {
-      switch (phase) {
-        case "typing1":
-          if (text1.length < line1.length) {
-            setText1(line1.slice(0, text1.length + 1));
-          } else {
-            setPhase("typing2");
-          }
-          break;
+      // TYPE FIRST LINE
+      if (phase === "typing1") {
+        if (text1.length < line1.length) {
+          setText1(line1.slice(0, text1.length + 1));
+        } else {
+          setPhase("typing2");
+        }
+      }
 
-        case "typing2":
-          if (text2.length < line2.length) {
-            setText2(line2.slice(0, text2.length + 1));
-          } else {
-            setPhase("pause");
-          }
-          break;
-
-        case "pause":
-          setPhase("deleting2");
-          break;
-
-        case "deleting2":
-          if (text2.length > 0) {
-            setText2(text2.slice(0, -1));
-          } else {
-            setPhase("deleting1");
-          }
-          break;
-
-        case "deleting1":
-          if (text1.length > 0) {
-            setText1(text1.slice(0, -1));
-          } else {
-            setPhase("typing1");
-          }
-          break;
+      // TYPE SECOND LINE
+      else if (phase === "typing2") {
+        if (text2.length < line2.length) {
+          setText2(line2.slice(0, text2.length + 1));
+        } else {
+          setPhase("done"); // STOP EVERYTHING
+        }
       }
     }, speed);
 
@@ -65,27 +43,34 @@ export default function FeaturesPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 w-full max-w-7xl mx-auto">
 
         {/* LEFT IMAGE */}
-        <div className="flex justify-center">
-          <Image
-            src="/feature.png"
-            alt="Features"
-            width={480}
-            height={480}
-            priority
-          />
-        </div>
+     {/* LEFT IMAGE */}
+<div className="flex justify-center items-center">
+  <div
+    className="
+      rounded-2xl
+      shadow-[0_25px_60px_rgba(0,0,0,0.12)]
+      hover:shadow-[0_35px_80px_rgba(0,0,0,0.18)]
+      transition-shadow duration-300
+      overflow-hidden
+    "
+  >
+    <Image
+      src="/feature2.png"
+      alt="Features"
+      width={520}     // slightly wider
+      height={420}    // ⬅ increased height
+      priority
+      className="object-contain"
+    />
+  </div>
+</div>
+
 
         {/* RIGHT CONTENT */}
-       <div className="space-y-5">
-  <p className="text-sm font-light sky-shine">
-    We're here to answer all your questions
-  </p>
-
-
-
- 
-
-
+        <div className="space-y-1">
+          <p className="text-sm font-light sky-shine">
+            We're here to answer all your questions
+          </p>
 
           {/* HEADING */}
           <h2 className="text-4xl leading-snug tracking-tight font-extralight">
@@ -100,27 +85,27 @@ export default function FeaturesPage() {
 
           <FeatureAccordion />
 
-<button
-  className="
-    mt-4
-    inline-flex items-center gap-2
-    px-4 py-2
-    rounded-full
-    border border-black
-    text-black
-    bg-transparent
-    hover:bg-black hover:text-white
-    transition-all duration-300
-  "
-  style={{ fontWeight: 400, fontSize: "0.875rem" }} // slightly smaller font
->
-  Still Need Help? Contact Us Now →
-</button>
-
+          <button
+            className="
+              mt-4
+              inline-flex items-center gap-2
+              px-4 py-2
+              rounded-full
+              border border-black
+              text-black
+              bg-transparent
+              hover:bg-black hover:text-white
+              transition-all duration-300 
+              cursor-pointer
+            "
+            style={{ fontWeight: 400, fontSize: "0.875rem" }}
+          >
+            Still Need Help? Contact Us Now →
+          </button>
         </div>
       </div>
 
-      {/* SKY BLUE SHINE */}
+      {/* TEXT SHINE EFFECT */}
       <style>{`
         .aethel-text {
           background: linear-gradient(
@@ -137,31 +122,25 @@ export default function FeaturesPage() {
           font-weight: 300;
         }
 
+        .sky-shine {
+          background: linear-gradient(
+            90deg,
+            #38bdf8,
+            #7dd3fc,
+            #38bdf8
+          );
+          background-size: 200% auto;
+          color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: shine 3s linear infinite;
+        }
+
         @keyframes shine {
           to {
             background-position: 200% center;
           }
         }
-
-         .sky-shine {
-    background: linear-gradient(
-      90deg,
-      #38bdf8,
-      #7dd3fc,
-      #38bdf8
-    );
-    background-size: 200% auto;
-    color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
-    animation: shine 3s linear infinite;
-  }
-
-  @keyframes shine {
-    to {
-      background-position: 200% center;
-    }
-  }
       `}</style>
     </section>
   );

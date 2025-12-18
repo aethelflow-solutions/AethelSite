@@ -22,11 +22,13 @@ interface FormErrors {
 }
 
 const SERVICES = [
-  "AI Integration solutions",
-  "Custom Software Development",
-  "Automation & RPA",
-  "Data & Analytics",
-  "Others",
+  "AI & Automations",
+  "Agent Call Service",
+  "Full-stack solution",
+  "Software Development",
+  "Cloud Services",
+  "Digital Transformation Consulting",
+  "Data Analytics and Business Intelligence",
 ];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -92,39 +94,21 @@ export default function ContactForm() {
 
     setSubmitting(true);
     try {
-      const contactTemplateParams = {
-        from_name: form.name,
-        from_email: form.email,
-        company: form.company || "N/A",
-        phone: form.phone || "N/A",
-        service: form.service,
-        message: form.message,
-        reply_to_email: process.env.NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL!,
-      };
-
-      const response = await emailjs.send(
+      await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID!,
-        contactTemplateParams,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          company: form.company || "N/A",
+          phone: form.phone || "N/A",
+          service: form.service,
+          message: form.message,
+        },
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
       );
 
-      if (response.status === 200) {
-        setForm(initialFormState);
-
-        const welcomeTemplateParams = {
-          from_name: form.name,
-          from_email: form.email,
-          service: form.service,
-        };
-
-        await emailjs.send(
-          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-          process.env.NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID!,
-          welcomeTemplateParams,
-          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-        );
-      }
+      setForm(initialFormState);
     } catch (err) {
       console.error("Failed to send email:", err);
     } finally {
@@ -132,6 +116,7 @@ export default function ContactForm() {
     }
   };
 
+  // 🔹 Compact SaaS-style TextField
   const textFieldSx = {
     backgroundColor: "#fff",
     borderRadius: "12px",
@@ -143,7 +128,7 @@ export default function ContactForm() {
       padding: "0 12px",
     },
     "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#e2e2e2",
+      borderColor: "#e5e7eb",
     },
     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
       borderColor: "#6d28d9",
@@ -159,7 +144,7 @@ export default function ContactForm() {
     <Card
       ref={ref}
       elevation={0}
-      className={`mx-auto rounded-[22px] p-6 w-full max-w-5xl transition-all duration-700 ${
+      className={`mx-auto rounded-[22px] p-5 w-full max-w-xl transition-all duration-700 ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       }`}
     >
@@ -181,6 +166,7 @@ export default function ContactForm() {
             fullWidth
             sx={textFieldSx}
           />
+
           <TextField
             size="small"
             name="email"
@@ -204,6 +190,7 @@ export default function ContactForm() {
             fullWidth
             sx={textFieldSx}
           />
+
           <TextField
             size="small"
             name="phone"
@@ -217,8 +204,8 @@ export default function ContactForm() {
           />
         </div>
 
+        {/* ✅ SERVICE SELECT WITH SLEEK SCROLLBAR */}
         <TextField
-          id="contact-service"
           size="small"
           select
           name="service"
@@ -228,10 +215,48 @@ export default function ContactForm() {
           sx={{
             ...textFieldSx,
             "& .MuiSelect-select": {
-              color: form.service === "" ? "#9ca3af" : "#111827", // gray vs dark
+              padding: "8px 12px",
+              fontSize: "0.85rem",
+              color: form.service ? "#111827" : "#9ca3af",
             },
           }}
-          SelectProps={{ displayEmpty: true }}
+          SelectProps={{
+            displayEmpty: true,
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  borderRadius: "12px",
+                  mt: 0.5,
+                  maxHeight: 160,
+                  overflowY: "auto",
+
+                  /* 🔥 SLEEK SCROLLBAR */
+                  "&::-webkit-scrollbar": {
+                    width: "6px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    background: "transparent",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "#d1d5db",
+                    borderRadius: "8px",
+                  },
+                  "&::-webkit-scrollbar-thumb:hover": {
+                    backgroundColor: "#9ca3af",
+                  },
+
+                  "& .MuiMenuItem-root": {
+                    minHeight: "36px",
+                    fontSize: "0.85rem",
+                    paddingY: "6px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  },
+                },
+              },
+            },
+          }}
         >
           <MenuItem value="" disabled>
             Choose Category
@@ -257,7 +282,10 @@ export default function ContactForm() {
           fullWidth
           sx={{
             ...textFieldSx,
-            "& .MuiInputBase-root": { minHeight: 44, fontSize: "0.85rem" },
+            "& .MuiInputBase-root": {
+              minHeight: 44,
+              fontSize: "0.85rem",
+            },
           }}
         />
 
@@ -268,7 +296,7 @@ export default function ContactForm() {
           endIcon={<ArrowForwardIcon />}
           sx={{
             mt: 1,
-            backgroundColor: "black",
+            backgroundColor: "#000",
             borderRadius: "999px",
             height: "38px",
             fontSize: "0.9rem",

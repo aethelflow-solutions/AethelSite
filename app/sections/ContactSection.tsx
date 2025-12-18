@@ -6,12 +6,13 @@ import ContactForm from "../components/ContactForm";
 import { useEffect, useState, useRef } from "react";
 
 export default function ContactSection() {
-  // typing effect values
-  const fullHeading = "One Stop Solution for all the Services";
-  const [typed, setTyped] = useState("");
+  // NEW TYPING TEXT
+  const transformText = "Let’s transform your enterprise";
+  const [typedTransform, setTypedTransform] = useState("");
   const [inView, setInView] = useState(false);
   const sectionRef = useRef(null);
 
+  // OBSERVER (start animation when section is visible)
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
@@ -26,36 +27,23 @@ export default function ContactSection() {
     return () => obs.disconnect();
   }, []);
 
- useEffect(() => {
-  if (!inView) return;
+  // TYPING EFFECT (TYPE ONCE – NO DELETE)
+  useEffect(() => {
+    if (!inView) return;
 
-  let index = 0;
-  let deleting = false;
+    let index = 0;
 
-  const type = () => {
-  if (!deleting) {
-    setTyped(fullHeading.slice(0, index + 1));
-    index++;
-    if (index === fullHeading.length) {
-      setTimeout(() => { deleting = true; }, 1200);
-    }
-  } else {
-    setTyped(fullHeading.slice(0, index - 1));
-    index--;
-    if (index === 0) {
-      deleting = false;
-    }
-  }
-};
+    const interval = setInterval(() => {
+      setTypedTransform(transformText.slice(0, index + 1));
+      index++;
 
-const interval = setInterval(() => {
-  type();
-}, deleting ? 20 : 30);
+      if (index === transformText.length) {
+        clearInterval(interval); // STOP FOREVER
+      }
+    }, 50);
 
-
-  return () => clearInterval(interval);
-}, [inView]);
-
+    return () => clearInterval(interval);
+  }, [inView]);
 
   return (
     <section ref={sectionRef} id="contact" className="flex flex-col">
@@ -75,96 +63,73 @@ const interval = setInterval(() => {
             {/* LEFT SECTION */}
             <div className="flex items-center justify-center text-white">
               <div className="w-full px-6 md:px-10 lg:px-12 py-6 space-y-6">
+               <Typography
+  variant="body1"
+  className="leading-tight font-light animate-slideUp opacity-0 blue-orange-shine"
+  sx={{ fontSize: { xs: "14px", md: "16px" }, opacity: 0.95 }}
+>
+  We're here to answer all questions
+</Typography>
+
+
+                {/* NEW TYPING HEADING */}
                 <Typography
-                  variant="body1"
-                  className="leading-tight font-light text-gray-300 animate-slideUp opacity-0"
-                  sx={{ fontSize: { xs: "14px", md: "16px" }, opacity: 0.95 }}
-                >
-                  We&apos;re here to answer all questions
-                </Typography>
+  variant="h2"
+  className="font-semibold py-2 animate-slideUp opacity-0"
+  sx={{
+    fontSize: { xs: "24px", md: "32px" }, // 👈 REDUCED
+    lineHeight: "1.2",
+    color: "#fff",
+    marginBottom: "16px", // 👈 ADDED GAP BELOW
+  }}
+>
+  {typedTransform}
+</Typography>
 
-                {/* TYPING TEXT */}
-                <Typography
-                  variant="h2"
-                  className="font-semibold py-2 animate-slideUp opacity-0"
-                  sx={{
-                    fontSize: { xs: "26px", md: "36px" },
-                    lineHeight: "1.15",
-                    color: "#fff",
-                  }}
-                >
-                  <span>{typed}</span>
 
-                  {/* BLINKING CURSOR */}
-                  <span
-                    aria-hidden
-                    className="inline-block ml-1"
-                    style={{
-                      width: 10,
-                      height: 24,
-                      borderRadius: 3,
-                      display: "inline-block",
-                      animation: "blink 1s steps(1,end) infinite",
-                    }}
-                  />
-                </Typography>
-
+                {/* SUB TEXT (FONT INCREASED) */}
                 <Typography
                   variant="body1"
                   className="leading-tight font-light animate-slideUp opacity-0"
-                  sx={{ fontSize: { xs: "14px", md: "15px" }, opacity: 0.85 }}
+                  sx={{ fontSize: { xs: "14px", md: "16px" }, opacity: 0.9 }}
                 >
-                  Let’s transform your enterprise
-                </Typography>
-
-                <Typography
-                  variant="body1"
-                  className="leading-relaxed font-light pt-4 pb-2 animate-slideUp opacity-0"
-                  sx={{ fontSize: { xs: "11px", md: "13px" }, opacity: 0.9 }}
-                >
-                  Partner with Aethel Flow from strategy to implementation — we help solve your business problems across multiple functions and platforms for rapid innovation and boundless growth.
+                  Partner with Aethel Flow from strategy to implementation — we
+                  help solve your business problems across multiple functions
+                  and platforms for rapid innovation and boundless growth.
                 </Typography>
 
                 {/* BLOCKS */}
                 <div className="flex flex-col gap-6 mt-6">
-                  {/* BLOCK 1 */}
                   <div className="flex items-start gap-4 animate-slideUp opacity-0">
                     <Image
                       src="/Icon.png"
                       alt="Envision icon"
                       width={32}
                       height={32}
-                      className="object-contain"
                     />
-
                     <div>
                       <h3 className="text-white text-lg font-semibold">
                         Envision The Extraordinary
                       </h3>
-
-                      <p className="text-gray-300 text-sm mt-1 font-light leading-relaxed">
+                      <p className="text-gray-300 text-sm mt-1 font-light">
                         Imagine what your business can achieve with the right
                         technology.
                       </p>
                     </div>
                   </div>
 
-                  {/* BLOCK 2 */}
                   <div className="flex items-start gap-4 animate-slideUp opacity-0">
                     <Image
                       src="/Icon (1).png"
                       alt="Creative process icon"
                       width={32}
                       height={32}
-                      className="object-contain"
                     />
-
                     <div>
                       <h3 className="text-white text-lg font-semibold">
                         Immersive Creative Process
                       </h3>
-
-                      <p className="text-gray-300 text-sm mt-1 font-light leading-relaxed">
+                      <p className="text-gray-300 text-sm mt-1 font-light">
                         We design and build experiences that transform
                         businesses.
                       </p>
@@ -174,13 +139,9 @@ const interval = setInterval(() => {
               </div>
             </div>
 
-            {/* RIGHT SECTION — FORM */}
-            <div className="flex items-center justify-center py-4 px-4 md:px-6 lg:px-6">
-              <div
-                className="w-full max-w-full md:max-w-9/12
-                 bg-white rounded-2xl shadow-xl
-                 p-4 md:p-5 animate-slideUp opacity-0"
-              >
+            {/* RIGHT SECTION */}
+            <div className="flex items-center justify-center py-4 px-4">
+              <div className="bg-white rounded-2xl shadow-xl p-4 animate-slideUp opacity-0">
                 <ContactForm />
               </div>
             </div>
@@ -189,11 +150,6 @@ const interval = setInterval(() => {
       </div>
 
       <style>{`
-        @keyframes blink { 
-          0%, 50% { opacity: 1 } 
-          51%, 100% { opacity: 0 } 
-        }
-
         @keyframes slideUp {
           0% {
             opacity: 0;
@@ -207,8 +163,36 @@ const interval = setInterval(() => {
 
         .animate-slideUp {
           animation: slideUp .6s ease-out forwards;
-        }
-      `}</style>
+        }      
+
+
+        .blue-orange-shine {
+  background: linear-gradient(
+    90deg,
+    rgba(168, 85, 247, 0.95),   /* purple */
+    rgba(236, 72, 153, 0.95),   /* pink */
+    rgba(251, 146, 60, 0.9),    /* soft orange */
+    rgba(168, 85, 247, 0.95)    /* purple again */
+  );
+  background-size: 300% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: glowShift 5s ease-in-out infinite;
+}
+@keyframes glowShift {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+
+  `}</style>
     </section>
   );
 }
