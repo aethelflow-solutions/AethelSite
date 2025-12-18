@@ -4,6 +4,18 @@ const nextConfig: NextConfig = {
   // Enable React strict mode for better development practices
   reactStrictMode: true,
 
+  // Explicitly expose NEXT_PUBLIC env vars for static export
+  env: {
+    NEXT_PUBLIC_EMAILJS_SERVICE_ID: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+    NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+    NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID: process.env.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID,
+    NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID: process.env.NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID,
+    NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL: process.env.NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL,
+    NEXT_PUBLIC_CONTACT_EMAIL: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
+    NEXT_PUBLIC_CONTACT_PHONE: process.env.NEXT_PUBLIC_CONTACT_PHONE,
+    NEXT_PUBLIC_WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
+  },
+
   // Image optimization configuration
   images: {
     formats: ["image/avif", "image/webp"],
