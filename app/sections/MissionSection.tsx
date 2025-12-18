@@ -65,26 +65,7 @@ export default function MissionSection() {
 
   return (
     <>
-      {/* Vision Section */}
-      <section
-        className="w-full flex justify-center py-20 px-3 text-black"
-        aria-labelledby="vision-heading"
-      >
-        <div className="max-w-3xl text-center space-y-5">
-          <h2 className="text-black font-semibold text-3xl">Our Vision</h2>
-          <Typography
-            component="p"
-            variant="body1"
-            className="opacity-90 leading-relaxed"
-            sx={{ fontSize: { xs: "14px", md: "17px" } }}
-          >
-            At Aethel Flow, our vision is to redefine the future of work using
-            intelligent automation that blends efficiency with human
-            empathy—creating workflows that feel effortless and future-ready.
-          </Typography>
-        </div>
-      </section>
-
+     
       {/* Mission Section */}
       <section
         id="mission"

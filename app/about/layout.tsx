@@ -7,10 +7,10 @@ export default function AboutLayout({
 }) {
   return (
     <>
-      <Navbar />
-      <main className="bg-white pt-4">
+      <div className="bg-white sm:p-2 lg:p-4">
+        <Navbar />
         {children}
-      </main>
+      </div>
     </>
   );
 }

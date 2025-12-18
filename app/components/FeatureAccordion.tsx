@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 const DATA = [
   {
@@ -12,7 +12,7 @@ const DATA = [
     content: "We follow industry-grade security standards to protect data.",
   },
   {
-    title: "Fast Development",
+    title: "Easy And Fast Deployment",
     content: "Agile process ensures faster delivery and iterations.",
   },
   {
@@ -21,69 +21,77 @@ const DATA = [
   },
 ];
 
-export default function FeatureAccordion() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+interface Props {
+  activeIndex: number | null;
+  setActiveIndex: Dispatch<SetStateAction<number | null>>;
+}
 
+export default function FeatureAccordion({
+  activeIndex,
+  setActiveIndex,
+}: Props) {
   return (
     <div className="border-t border-b border-black/20 divide-y divide-black/20">
       {DATA.map((item, index) => {
-        const isOpen = openIndex === index;
+        const isOpen = activeIndex === index;
 
         return (
-          <div key={index} className="py-4">
-
+          <div key={index} className="py-5">
             {/* HEADER */}
             <button
-              onClick={() => setOpenIndex(isOpen ? null : index)}
+              onClick={() => setActiveIndex(isOpen ? null : index)}
               className="
-                w-full
-                flex
-                items-center
-                justify-between
-                text-left
-                cursor-pointer
+                w-full flex items-center justify-between
+                text-left cursor-pointer
+                transition-all duration-300
+                hover:pl-1
                 group
               "
             >
               {/* TITLE */}
               <h3
-                className="text-base text-gray-900 cursor-pointer"
-                style={{ fontWeight: 300 }}
+                className="
+                  text-[18px]
+                  text-gray-700
+                  transition-colors duration-300
+                  group-hover:text-black
+                "
+                style={{ fontWeight: 350 }}
               >
                 {item.title}
               </h3>
 
-              {/* + / − ICON */}
+              {/* ICON */}
               <span
                 className="
-                  w-8 h-8
-                  flex items-center justify-center
+                  w-8 h-8 flex items-center justify-center
                   rounded-full
-                  bg-black
-                  text-white
+                  bg-black text-white
                   text-lg
-                  cursor-pointer
-                  transition-transform duration-200
-                  group-hover:scale-105
+                  transition-all duration-300
+                  group-hover:scale-110
                 "
-                style={{
-                  lineHeight: "1",
-                  fontWeight: 400,
-                }}
+                style={{ lineHeight: "1" }}
               >
                 {isOpen ? "−" : "+"}
               </span>
             </button>
 
-            {/* CONTENT */}
-            {isOpen && (
+            {/* CONTENT WITH ANIMATION */}
+            <div
+              className={`
+                overflow-hidden
+                transition-all duration-500 ease-in-out
+                ${isOpen ? "max-h-40 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-2"}
+              `}
+            >
               <p
                 className="mt-3 text-sm text-gray-600 max-w-md"
                 style={{ fontWeight: 300, lineHeight: "1.6" }}
               >
                 {item.content}
               </p>
-            )}
+            </div>
           </div>
         );
       })}
