@@ -81,16 +81,14 @@ h6 {
   background: linear-gradient(
     90deg,
     #ceadff 0%,
-    #fff 25%,
     #ceadff 50%,
-    #fff 75%,
-    #ceadff 100%
+    #be95fd 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine 3s infinite linear;
+  will-change: contents, opacity, transform;
 }
 
 @keyframes shine {
@@ -166,5 +164,50 @@ h6 {
 
 .animate-slideUp {
   animation: slideUp 0.6s ease-out forwards;
+}
+
+.smooth-type {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+
+/* ===== Basic fade + slide animation ===== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* animation utility */
+.animate-fade-up {
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+/* delays */
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.25s;
+}
+.delay-3 {
+  animation-delay: 0.4s;
+}
+.delay-4 {
+  animation-delay: 0.55s;
+}
+
+/* hover effects */
+.scale-hover {
+  transition: transform 0.25s ease;
+}
+.scale-hover:hover {
+  transform: scale(1.05);
 }
 
