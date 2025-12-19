@@ -1,4 +1,5 @@
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function FeatureLayout({
   children,
@@ -10,6 +11,7 @@ export default function FeatureLayout({
       <div className="bg-white sm:p-2 lg:p-4">
         <Navbar />
         {children}
+        <Footer />
       </div>
     </>
   );

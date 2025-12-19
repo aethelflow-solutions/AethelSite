@@ -1,5 +1,9 @@
+"use client"
+
+
 import { Container, Typography, Button, Stack, Avatar } from "@mui/material";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function AboutUsSection() {
   return (
@@ -9,7 +13,7 @@ export default function AboutUsSection() {
         id="about-us"
         className="
           bg-white
-          min-h-screen
+          min-h-[90vh]
           rounded-3xl
           overflow-hidden
           flex
@@ -17,9 +21,8 @@ export default function AboutUsSection() {
           px-4 sm:px-6 lg:px-10
         "
       >
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" className="margin-top">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20">
-            
             {/* LEFT CONTENT */}
             <div className="flex-1 max-w-2xl text-center md:text-left">
               <Typography
@@ -42,16 +45,18 @@ export default function AboutUsSection() {
                   mb: 4,
                 }}
               >
-                At Aethel Flow, we believe the future of work should be seamless,
-                intelligent, and human-centric. Founded with the vision of
-                redefining automation, we are driven by the idea that technology
-                should not only accelerate innovation but also inspire trust and
-                clarity in every interaction.
+                At Aethel Flow, we believe the future of work should be
+                seamless, intelligent, and human-centric. Founded with the
+                vision of redefining automation, we are driven by the idea that
+                technology should not only accelerate innovation but also
+                inspire trust and clarity in every interaction.
               </Typography>
 
               <Button
+                component={Link}
                 className="animate-fade-up delay-3 scale-hover"
                 variant="contained"
+                href="/#services"
                 sx={{
                   backgroundColor: "#000",
                   borderRadius: "999px",
@@ -89,49 +94,54 @@ export default function AboutUsSection() {
             </div>
 
             {/* RIGHT MEDIA */}
+
             <div className="flex-1 w-full max-w-2xl animate-fade-up delay-2">
-              <div className="
-                w-full
-                h-[220px] sm:h-[300px] md:h-[420px] lg:h-[520px]
-                bg-[#2b2b2b]
-                rounded-2xl
-                flex
-                items-center
-                justify-center
-              ">
-                <div className="
-                  w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20
-                  bg-orange-500
-                  rounded-full
-                  flex
-                  items-center
-                  justify-center
-                  cursor-pointer
-                  scale-hover
-                ">
-                  <PlayArrowIcon className="text-white text-3xl md:text-4xl" />
-                </div>
+              <div
+                className="
+      relative
+      w-full
+      h-[220px] sm:h-[300px] md:h-[420px] lg:h-[520px]
+      rounded-2xl
+      overflow-hidden
+    "
+              >
+                <Image
+                  src="/aboutBG.png"
+                  alt="About us"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
             </div>
-
           </div>
         </Container>
       </section>
 
       {/* VISION SECTION */}
-      <section className="w-full min-h-screen flex items-center px-4 sm:px-6 lg:px-10">
+      <section className="w-full min-h-[90vh] flex items-center px-4 sm:px-6 lg:px-10">
         <Container maxWidth="xl">
           <div className="animate-fade-up flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
-            
             {/* LEFT IMAGE */}
             <div className="flex-1 w-full flex justify-center">
-              <div className="
-                w-full
-                max-w-[520px]
-                h-[240px] sm:h-[300px] md:h-[420px] lg:h-[480px]
-                rounded-2xl
-                bg-[#e5e5e5]
-              " />
+              <div
+                className="
+      relative
+      w-full
+      max-w-[700px]
+      h-[240px] sm:h-[300px] md:h-[420px] lg:h-[480px]
+      rounded-2xl
+      overflow-hidden
+    "
+              >
+                <Image
+                  src="/vision.png"
+                  alt="About section"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
             </div>
 
             {/* RIGHT CONTENT */}
@@ -169,6 +179,8 @@ export default function AboutUsSection() {
                 justifyContent={{ xs: "center", md: "flex-start" }}
               >
                 <Button
+                  component={Link}
+                  href="/#contact"
                   variant="contained"
                   sx={{
                     backgroundColor: "#000",
@@ -203,7 +215,6 @@ export default function AboutUsSection() {
                 </Button>
               </Stack>
             </div>
-
           </div>
         </Container>
       </section>
