@@ -49,12 +49,16 @@ export default function ContactSection() {
     <section ref={sectionRef} id="contact" className="flex flex-col">
       <div>
         <div className="lg:py-10 py-6 flex justify-center">
-          <h2 className=" text-[2.75rem]
+          <h2
+            className=" text-[2.75rem]
             text-gray-600
             font-[100]      /* clean, not bold */
             tracking-normal     /* removes drag/stretch issue */
             leading-tight
-            antialiased">Contact Us</h2>
+            antialiased"
+          >
+            Contact Us
+          </h2>
         </div>
 
         <div className="px-3 sm:px-4 lg:px-6">
@@ -68,29 +72,34 @@ export default function ContactSection() {
             {/* LEFT SECTION */}
             <div className="flex items-center justify-center text-white">
               <div className="w-full px-6 md:px-10 lg:px-12 py-6 space-y-6">
-               <Typography
-  variant="body1"
-  className="leading-tight font-light animate-slideUp opacity-0 blue-orange-shine"
-  sx={{ fontSize: { xs: "14px", md: "16px" }, opacity: 0.95 }}
->
-  We're here to answer all questions
-</Typography>
-
+                <Typography
+                  variant="body1"
+                  // className="leading-tight font-light animate-slideUp opacity-0 blue-orange-shine"
+                  className="font-semibold py-2 animate-slideUp opacity-0"
+                  sx={{ fontSize: { xs: "14px", md: "16px" }, opacity: 0.95 }}
+                >
+                  We're here to answer all questions
+                </Typography>
 
                 {/* NEW TYPING HEADING */}
                 <Typography
-  variant="h2"
-  className="font-semibold py-2 animate-slideUp opacity-0"
-  sx={{
-    fontSize: { xs: "24px", md: "32px" }, // 👈 REDUCED
-    lineHeight: "1.2",
-    color: "#fff",
-    marginBottom: "16px", // 👈 ADDED GAP BELOW
-  }}
->
-  {typedTransform}
-</Typography>
-
+                  variant="h2"
+                  className="py-2 animate-slideUp"
+                  sx={{
+                    fontSize: { xs: "26px", md: "36px" },
+                    fontWeight: 800,
+                    lineHeight: "1.2",
+                    marginBottom: "16px",
+                    background: "linear-gradient(90deg, #8b5cf6, #d946ef, #f97316, #eab308, #22d3ee, #8b5cf6)",
+                    backgroundSize: "200% auto",
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    animation: "glowShift 3s linear infinite",
+                  }}
+                >
+                  {typedTransform}
+                </Typography>
 
                 {/* SUB TEXT (FONT INCREASED) */}
                 <Typography
@@ -174,26 +183,23 @@ export default function ContactSection() {
         .blue-orange-shine {
   background: linear-gradient(
     90deg,
-    rgba(168, 85, 247, 0.95),   /* purple */
-    rgba(236, 72, 153, 0.95),   /* pink */
-    rgba(251, 146, 60, 0.9),    /* soft orange */
-    rgba(168, 85, 247, 0.95)    /* purple again */
+    rgba(168, 85, 247, 1),   /* purple */
+    rgba(236, 72, 153, 1),   /* pink */
+    rgba(251, 146, 60, 1),    /* soft orange */
+    rgba(168, 85, 247, 1)    /* purple again */
   );
   background-size: 300% auto;
-  color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
   animation: glowShift 5s ease-in-out infinite;
 }
 @keyframes glowShift {
   0% {
     background-position: 0% center;
   }
-  50% {
-    background-position: 100% center;
-  }
   100% {
-    background-position: 0% center;
+    background-position: 200% center;
   }
 }
 
