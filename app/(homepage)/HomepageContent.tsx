@@ -3,19 +3,19 @@
 import dynamic from "next/dynamic";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import HeroSection from "../sections/HeroSection";
+import HeroSection from "./sections/HeroSection";
 import StickyContact from "../components/stickyContact"
 
 // Lazy load sections below the fold for better performance
-const Services = dynamic(() => import("../sections/Services"), {
+const Services = dynamic(() => import("./sections/Services"), {
   loading: () => <div className="min-h-[50vh]" />,
 });
 
-const MissionSection = dynamic(() => import("../sections/MissionSection"), {
+const MissionSection = dynamic(() => import("./sections/MissionSection"), {
   loading: () => <div className="min-h-[50vh]" />,
 });
 
-const ContactSection = dynamic(() => import("../sections/ContactSection"), {
+const ContactSection = dynamic(() => import("./sections/ContactSection"), {
   loading: () => <div className="min-h-[50vh]" />,
 });
 

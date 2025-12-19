@@ -1,7 +1,7 @@
 "use client";
 
 import { Typography } from "@mui/material";
-import TextType from "../components/react-bits/TextType";
+import TextType from "../../components/react-bits/TextType";
 
 // function scrollToSection(sectionId: string): void {
 //   const element = document.getElementById(sectionId);

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import MediaCardServices from "../components/MediaCardServices";
-import { cardsData } from "../data/data";
+import MediaCardServices from "../../components/MediaCardServices";
+import { cardsData } from "../../../data/data";
 import { Box, Button } from "@mui/material";
 import { ArrowRight } from "lucide-react";
 

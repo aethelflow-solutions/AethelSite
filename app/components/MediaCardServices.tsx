@@ -3,9 +3,9 @@
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import type { CardData } from "../data/data";
+import type { CardData } from "../../data/data";
 import { ArrowRight } from "lucide-react";
-import AnimatedContent from "../utils/AnimatedContent";
+import AnimatedContent from "./AnimatedContent";
 import AButton from "./AButton";
 
 interface MediaCardProps {

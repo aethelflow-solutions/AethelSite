@@ -2,7 +2,7 @@
 
 import { Typography } from "@mui/material";
 import Image from "next/image";
-import ContactForm from "../components/ContactForm";
+import ContactForm from "../../components/ContactForm";
 import { useEffect, useState, useRef } from "react";
 
 export default function ContactSection() {

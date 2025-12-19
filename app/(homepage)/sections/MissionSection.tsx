@@ -1,9 +1,9 @@
 "use client";
 
 import { Typography } from "@mui/material";
-import { MediaCardMission1 } from "../components/MediaCardMission";
+import { MediaCardMission1 } from "../../components/MediaCardMission";
 import { useEffect, useRef, useState } from "react";
-import type { CardData } from "../data/data";
+import type { CardData } from "../../../data/data";
 
 const missionCards: CardData[] = [
   {
