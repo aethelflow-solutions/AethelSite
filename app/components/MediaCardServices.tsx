@@ -75,7 +75,7 @@ export default function MediaCardServices({ data }: MediaCardProps) {
           src={data.icon}
           alt=""
           aria-hidden="true"
-          sx={{ width: 64, height: 64 }}
+          sx={{ width: 72, height: 72 }}
         />
 
         <Box
