@@ -41,121 +41,121 @@ export default function MissionSection() {
   const [showCards, setShowCards] = useState(false);
 
   useEffect(() => {
-    const currentRef = cardsRef.current;
-    if (!currentRef) return;
+    if (!cardsRef.current) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShowCards(true);
-            observer.disconnect();
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowCards(true);
+          observer.disconnect();
+        }
       },
       { threshold: 0.2 }
     );
 
-    observer.observe(currentRef);
-
-    return () => {
-      observer.disconnect();
-    };
+    observer.observe(cardsRef.current);
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <>
-     
-      {/* Mission Section */}
-      <section
-        id="mission"
-        className="relative flex justify-center text-white py-8 px-6 rounded-[30px] overflow-hidden"
-        aria-labelledby="mission-heading"
-        style={{
-          backgroundColor: "#1B1A1A",
-          backgroundImage: "url('/Image2.png')",
-          backgroundSize: "600px 600px",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Overlay */}
+    <section
+      id="mission"
+      className="relative flex justify-center text-white py-10 px-6 rounded-[30px] overflow-hidden"
+      aria-labelledby="mission-heading"
+    >
+      {/* 🔥 IMPROVED BACKGROUND VIDEO */}
+      <video
+        className="
+          absolute inset-0 
+          w-full h-full 
+          object-cover 
+          scale-[1.02] 
+          brightness-[0.95] 
+          contrast-[1.05] 
+          saturate-[1.05]
+        "
+        src="/mission.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      />
+
+      {/* DARK OVERLAY (lighter than before) */}
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-[1px] rounded-[30px]"
+        aria-hidden="true"
+      />
+
+      {/* CONTENT */}
+      <div className="relative z-10 w-full max-w-5xl">
+        {/* Mission Statement */}
+        <div className="text-center space-y-5 pb-16 max-w-[620px] mx-auto">
+          <Typography
+            id="mission-heading"
+            component="h2"
+            className="font-semibold"
+            sx={{ fontSize: { xs: "26px", md: "42px" } }}
+          >
+            Mission Statement
+          </Typography>
+
+          <Typography
+            component="p"
+            className="leading-relaxed opacity-90"
+            sx={{ fontSize: { xs: "14px", md: "16px" } }}
+          >
+            Our mission at Aethel Flow is to empower organizations with intelligent
+            automation that is both seamless and human-centric. We design
+            solutions that eliminate inefficiencies and unlock growth.
+          </Typography>
+        </div>
+
+        {/* Cards Grid (REDUCED SIZE) */}
         <div
-          className="absolute inset-0 bg-black/40 backdrop-blur-[1.5px] rounded-[30px]"
-          aria-hidden="true"
-        />
-
-        <div className="relative z-10 w-full max-w-6xl">
-          {/* Mission Statement */}
-          <div className="text-center space-y-6 pb-20 max-w-[700px] mx-auto animate-fadeSlideUp">
-            <Typography
-              id="mission-heading"
-              component="h2"
-              variant="h2"
-              className="font-bold"
-              sx={{ fontSize: { xs: "28px", md: "46px" } }}
-            >
-              Mission Statement
-            </Typography>
-
-            <Typography
-              component="p"
-              variant="body1"
-              className="leading-relaxed opacity-90"
-              sx={{ fontSize: { xs: "15px", md: "18px" } }}
-            >
-              Our mission at Aethel Flow is to empower organizations with
-              intelligent automation that is both seamless and human-centric. We
-              design solutions that eliminate inefficiencies, enhance
-              decision-making, and unlock new growth opportunities.
-            </Typography>
+          ref={cardsRef}
+          className={`grid grid-cols-1 md:grid-cols-2 gap-8 transition-all duration-700 ${
+            showCards
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
+          }`}
+        >
+          {/* Left Cards */}
+          <div className="flex flex-col items-end gap-8">
+            {missionCards.slice(0, 2).map((card, i) => (
+              <div
+                key={card.id}
+                className={`scale-[0.92] transition-all duration-700 ${
+                  showCards
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 -translate-x-8"
+                }`}
+                style={{ transitionDelay: `${i * 120}ms` }}
+              >
+                <MediaCardMission1 data={card} />
+              </div>
+            ))}
           </div>
 
-          {/* Cards Grid */}
-          <div
-            ref={cardsRef}
-            className={`grid grid-cols-1 md:grid-cols-2 gap-12 transition-all duration-700 ${
-              showCards
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
-            {/* Left Cards */}
-            <div className="flex flex-col items-end gap-14">
-              {missionCards.slice(0, 2).map((card, i) => (
-                <div
-                  key={card.id}
-                  className={`transition-all duration-700 ${
-                    showCards
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 -translate-x-10"
-                  }`}
-                  style={{ transitionDelay: `${i * 150}ms` }}
-                >
-                  <MediaCardMission1 data={card} />
-                </div>
-              ))}
-            </div>
-
-            {/* Right Cards */}
-            <div className="flex flex-col items-start gap-14 md:pt-16">
-              {missionCards.slice(2, 4).map((card, i) => (
-                <div
-                  key={card.id}
-                  className={`transition-all duration-700 ${
-                    showCards
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 translate-x-10"
-                  }`}
-                  style={{ transitionDelay: `${(i + 2) * 150}ms` }}
-                >
-                  <MediaCardMission1 data={card} />
-                </div>
-              ))}
-            </div>
+          {/* Right Cards */}
+          <div className="flex flex-col items-start gap-8 md:pt-12">
+            {missionCards.slice(2, 4).map((card, i) => (
+              <div
+                key={card.id}
+                className={`scale-[0.92] transition-all duration-700 ${
+                  showCards
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 translate-x-8"
+                }`}
+                style={{ transitionDelay: `${(i + 2) * 120}ms` }}
+              >
+                <MediaCardMission1 data={card} />
+              </div>
+            ))}
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
