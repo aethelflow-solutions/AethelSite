@@ -1,68 +1,97 @@
 /* TAILWIND BASE */
 @import "tailwindcss";
 
-/* 
- * Note: Google Fonts are now loaded via next/font in layout.tsx
- * for better performance (no render-blocking, font subsetting, self-hosting)
- */
-
-/* Light / Dark Theme Variables */
+/* =========================
+   Theme Variables
+   ========================= */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-inter: "Inter", system-ui, sans-serif;
-  --font-poppins: "Poppins", system-ui, sans-serif;
+
+  --font-primary: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff; /* 🔒 keep white */
+    --foreground: #171717;
   }
 }
 
-/* Global Styles */
+/* =========================
+   Global Styles
+   ========================= */
 html {
   scroll-behavior: smooth;
+}
+
+/* 🔥 CRITICAL FIX — DO NOT REMOVE */
+html,
+body {
+  background-color: #ffffff !important;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter);
+  font-family: var(--font-primary);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.15px;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* Global Text Styling */
+/* =========================
+   Global Text Styling
+   ========================= */
 body,
-p,
 span,
 div,
 li,
 button,
-input {
-  font-family: var(--font-inter);
+input,
+textarea,
+label {
+  font-family: var(--font-primary);
   font-weight: 400;
   line-height: 1.65;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.15px;
 }
 
-/* Global Heading Styling */
+/* =========================
+   🔒 GLOBAL PARAGRAPH CONTROL
+   ========================= */
+p {
+  font-size: 1rem; /* ✅ SAME SIZE EVERYWHERE (dont make it important )*/ 
+  font-family: var(--font-primary);
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0.15px;
+}
+
+/* =========================
+   Headings
+   ========================= */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-poppins);
+  font-family: var(--font-primary);
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
 }
 
-/* Navigation button hover */
+/* =========================
+   Navigation hover
+   ========================= */
 .navbutton-hover {
   background: none;
 }
@@ -78,19 +107,15 @@ h6 {
 
 /* Hero Title Shimmer */
 .heroTitle {
-  background: linear-gradient(
-    90deg,
-    #ceadff 0%,
-    #fff 25%,
-    #ceadff 50%,
-    #fff 75%,
-    #ceadff 100%
-  );
+  background:#d8e4ee;
+
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine 3s infinite linear;
+  will-change: contents, opacity, transform;
+  font-family: var(--font-poppins), sans-serif !important;
+  font-weight: 800 !important;
 }
 
 @keyframes shine {
@@ -135,13 +160,13 @@ h6 {
   animation: fadeSlideUp 1.2s ease-out forwards;
 }
 
-/* Focus visible styles for accessibility */
+/* accessibility */
 :focus-visible {
   outline: 2px solid #692ac8;
   outline-offset: 2px;
 }
 
-/* Reduce motion for users who prefer it */
+/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -153,6 +178,9 @@ h6 {
   }
 }
 
+/* =========================
+   Slide Up Animation
+   ========================= */
 @keyframes slideUp {
   0% {
     opacity: 0;
@@ -168,3 +196,58 @@ h6 {
   animation: slideUp 0.6s ease-out forwards;
 }
 
+.smooth-type {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* =========================
+   Fade Up Utility
+   ========================= */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+/* delays */
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.25s;
+}
+.delay-3 {
+  animation-delay: 0.4s;
+}
+.delay-4 {
+  animation-delay: 0.55s;
+}
+
+/* hover effects */
+.scale-hover {
+  transition: transform 0.25s ease;
+}
+.scale-hover:hover {
+  transform: scale(1.05);
+}
+
+
+.margin-top {
+  margin-top: 40px; /* default */
+}
+
+@media (max-width: 760px) {
+  .margin-top {
+    margin-top: 140px;
+  }
+}

@@ -3,9 +3,9 @@
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import type { CardData } from "../data/data";
+import type { CardData } from "../../data/data";
 import { ArrowRight } from "lucide-react";
-import AnimatedContent from "../utils/AnimatedContent";
+import AnimatedContent from "./AnimatedContent";
 import AButton from "./AButton";
 
 interface MediaCardProps {
@@ -75,7 +75,7 @@ export default function MediaCardServices({ data }: MediaCardProps) {
           src={data.icon}
           alt=""
           aria-hidden="true"
-          sx={{ width: 64, height: 64 }}
+          sx={{ width: 72, height: 72 }}
         />
 
         <Box

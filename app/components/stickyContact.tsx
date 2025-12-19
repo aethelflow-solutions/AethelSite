@@ -109,9 +109,9 @@ export default function StickyContact() {
           bottom: 24,
           right: 24,
           zIndex: 1600,
-          backgroundColor: "#692ac8",
+          backgroundColor: "#28a2fe",
           color: "#fff",
-          "&:hover": { backgroundColor: "#5a24a8" },
+          "&:hover": { backgroundColor: "#228ee0" },
         }}
         aria-label="Contact options"
       >

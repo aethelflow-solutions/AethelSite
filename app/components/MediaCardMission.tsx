@@ -1,7 +1,7 @@
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { CardData } from "../data/data";
+import { CardData } from "../../data/data";
 
 interface MediaCardProps {
   data: CardData;
