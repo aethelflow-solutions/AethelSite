@@ -22,11 +22,23 @@ export default function Services() {
       className="py-24 bg-white"
       aria-labelledby="services-heading"
     >
-      <div className="text-center text-black mb-12 pb-12">
-        <h2 id="services-heading" className="text-4xl font-medium">
+      <div className="text-center mb-12 pb-12">
+        {/* FIXED HEADING */}
+        <h2
+          id="services-heading"
+          className="
+            text-[2.75rem]
+            text-gray-600
+            font-[100]      /* clean, not bold */
+            tracking-normal     /* removes drag/stretch issue */
+            leading-tight
+            antialiased
+          "
+        >
           Our Services
         </h2>
-        <p className="text-xl font-normal mt-5 max-w-3xl mx-auto px-4">
+
+        <p className="text-xl font-normal mt-5 max-w-3xl mx-auto px-4 text-black">
           Comprehensive technology solutions tailored to accelerate your digital
           journey and drive sustainable business growth.
         </p>
@@ -37,7 +49,11 @@ export default function Services() {
           {cardsData.map((card) => (
             <Box
               key={card.id}
-              sx={{ display: "flex", justifyContent: "center", paddingBottom: "5%" }}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                paddingBottom: "5%",
+              }}
             >
               <MediaCardServices data={card} />
             </Box>
@@ -50,6 +66,7 @@ export default function Services() {
           Get custom solutions for your business that help you leverage AI and
           Automation for the processes. Talk to an expert!
         </p>
+
         <Button
           variant="contained"
           disableElevation

@@ -18,6 +18,7 @@ interface FormErrors {
   name?: string;
   email?: string;
   phone?: string;
+  service?: string;
   message?: string;
 }
 
@@ -29,6 +30,7 @@ const SERVICES = [
   "Cloud Services",
   "Digital Transformation Consulting",
   "Data Analytics and Business Intelligence",
+  "Other",
 ];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -65,23 +67,29 @@ export default function ContactForm() {
     return () => obs.disconnect();
   }, []);
 
-  const validateForm = useCallback((): boolean => {
-    const newErrors: FormErrors = {};
+const validateForm = useCallback((): boolean => {
+  const newErrors: FormErrors = {};
 
-    if (!form.name.trim()) newErrors.name = "Name is required";
-    if (!form.email.trim()) newErrors.email = "Email is required";
-    else if (!EMAIL_REGEX.test(form.email))
-      newErrors.email = "Please enter a valid email";
+  if (!form.name.trim()) newErrors.name = "Name is required";
 
-    if (!form.phone.trim()) newErrors.phone = "Phone is required";
-    else if (!PHONE_REGEX.test(form.phone))
-      newErrors.phone = "Please enter a valid phone number";
+  if (!form.email.trim()) newErrors.email = "Email is required";
+  else if (!EMAIL_REGEX.test(form.email))
+    newErrors.email = "Please enter a valid email";
 
-    if (!form.message.trim()) newErrors.message = "Message is required";
+  if (!form.phone.trim()) newErrors.phone = "Phone is required";
+  else if (!PHONE_REGEX.test(form.phone))
+    newErrors.phone = "Please enter a valid phone number";
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [form]);
+  if (!form.service)
+    newErrors.service = "Please choose a category"; // ✅ REQUIRED
+
+  if (!form.message.trim())
+    newErrors.message = "Message is required";
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+}, [form]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -211,6 +219,8 @@ export default function ContactForm() {
           name="service"
           value={form.service}
           onChange={handleChange}
+            error={!!errors.service}          
+            helperText={errors.service} 
           fullWidth
           sx={{
             ...textFieldSx,

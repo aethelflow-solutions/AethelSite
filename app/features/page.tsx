@@ -2,118 +2,116 @@
 
 import Image from "next/image";
 import FeatureAccordion from "../components/FeatureAccordion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+const FEATURE_IMAGES = [
+  "/feature2.png",
+  "/accordian1.png",
+  "/accordian2.png",
+  "/feature1.png",
+  "/feature-support.png",
+];
 
 export default function FeaturesPage() {
-  const line1 = "Embrace the future with";
-  const line2 = "Aethal Flow";
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const [text1, setText1] = useState("");
-  const [text2, setText2] = useState("");
-  const [phase, setPhase] = useState<"typing1" | "typing2" | "done">("typing1");
-
-  useEffect(() => {
-    const speed = 60;
-
-    const timer = setTimeout(() => {
-      // TYPE FIRST LINE
-      if (phase === "typing1") {
-        if (text1.length < line1.length) {
-          setText1(line1.slice(0, text1.length + 1));
-        } else {
-          setPhase("typing2");
-        }
-      }
-
-      // TYPE SECOND LINE
-      else if (phase === "typing2") {
-        if (text2.length < line2.length) {
-          setText2(line2.slice(0, text2.length + 1));
-        } else {
-          setPhase("done"); // STOP EVERYTHING
-        }
-      }
-    }, speed);
-
-    return () => clearTimeout(timer);
-  }, [text1, text2, phase]);
+  const currentImage =
+    activeIndex === null
+      ? FEATURE_IMAGES[0]
+      : FEATURE_IMAGES[activeIndex + 1];
 
   return (
-    <section className="min-h-screen bg-white text-black flex items-center px-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 w-full max-w-7xl mx-auto">
+    <section className="bg-white text-black pt-24">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
 
-        {/* LEFT IMAGE */}
-     {/* LEFT IMAGE */}
-<div className="flex justify-center items-center">
-  <div
-    className="
-      rounded-2xl
-      shadow-[0_25px_60px_rgba(0,0,0,0.12)]
-      hover:shadow-[0_35px_80px_rgba(0,0,0,0.18)]
-      transition-shadow duration-300
-      overflow-hidden
-    "
-  >
-    <Image
-      src="/feature2.png"
-      alt="Features"
-      width={520}     // slightly wider
-      height={420}    // ⬅ increased height
-      priority
-      className="object-contain"
-    />
-  </div>
-</div>
+        {/* LEFT IMAGE — FULL HEIGHT + 20px LEFT GAP */}
+        <div className="relative w-full h-[calc(100vh-6rem)] pl-[20px]">
+          <div
+            className="
+              absolute inset-y-6 left-[20px] right-0
+              rounded-2xl
+              overflow-hidden
+              shadow-[0_60px_100px_rgba(0,0,0,0.22)]
+            "
+          >
+            <Image
+              key={currentImage}
+              src={currentImage}
+              alt="Feature Image"
+              fill
+              priority
+              className="object-cover animate-imageReveal"
+            />
+          </div>
+        </div>
 
-
-        {/* RIGHT CONTENT */}
-        <div className="space-y-1">
+        {/* RIGHT CONTENT — 20px RIGHT GAP */}
+        <div className="flex flex-col justify-center space-y-5 pb-10 pr-[20px]">
           <p className="text-sm font-light sky-shine">
             We're here to answer all your questions
           </p>
 
-          {/* HEADING */}
           <h2 className="text-4xl leading-snug tracking-tight font-extralight">
-            <span>{text1}</span>
-            <br />
-            <span className="aethel-text">{text2}</span>
+            Embrace the future with <br />
+            <span className="aethel-text">Aethel Flow</span>
           </h2>
 
           <p className="text-gray-600 text-base max-w-md font-light">
             We deliver scalable and secure solutions tailored to your needs.
           </p>
 
-          <FeatureAccordion />
+          <FeatureAccordion
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
+          />
 
+          {/* COMPACT BUTTON */}
           <button
             className="
-              mt-4
-              inline-flex items-center gap-2
-              px-4 py-2
+              mt-5 inline-flex
+              items-center
+              gap-1.5
+              px-3 py-1.5
               rounded-full
               border border-black
-              text-black
-              bg-transparent
+              text-sm
+              w-fit
               hover:bg-black hover:text-white
-              transition-all duration-300 
-              cursor-pointer
+              transition-all duration-300
             "
-            style={{ fontWeight: 400, fontSize: "0.875rem" }}
+            style={{ fontWeight: 400 }}
           >
-            Still Need Help? Contact Us Now →
+            Still Need Help? Contact Us →
           </button>
         </div>
       </div>
 
-      {/* TEXT SHINE EFFECT */}
+      {/* ADVANCED IMAGE ANIMATION */}
       <style>{`
+        @keyframes imageReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(40px) scale(0.96);
+            filter: brightness(0.9);
+          }
+          60% {
+            opacity: 1;
+            transform: translateY(-6px) scale(1.02);
+            filter: brightness(1.05);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: brightness(1);
+          }
+        }
+
+        .animate-imageReveal {
+          animation: imageReveal 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
         .aethel-text {
-          background: linear-gradient(
-            90deg,
-            #38bdf8,
-            #7dd3fc,
-            #38bdf8
-          );
+          background: linear-gradient(90deg, #38bdf8, #7dd3fc, #38bdf8);
           background-size: 200% auto;
           color: transparent;
           -webkit-background-clip: text;
@@ -123,12 +121,7 @@ export default function FeaturesPage() {
         }
 
         .sky-shine {
-          background: linear-gradient(
-            90deg,
-            #38bdf8,
-            #7dd3fc,
-            #38bdf8
-          );
+          background: linear-gradient(90deg, #38bdf8, #7dd3fc, #38bdf8);
           background-size: 200% auto;
           color: transparent;
           -webkit-background-clip: text;
