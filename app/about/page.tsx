@@ -4,27 +4,28 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 export default function AboutUsSection() {
   return (
     <>
+      {/* ABOUT SECTION */}
       <section
         id="about-us"
         className="
-        min-h-[100vh]
-        rounded-3xl
-        overflow-hidden
-        bg-cover
-        bg-center
-        flex
-        items-center
-      "
-        style={{ backgroundImage: "url('/aboutBG.jpg')" }}
+          bg-white
+          min-h-screen
+          rounded-3xl
+          overflow-hidden
+          flex
+          items-center
+          px-4 sm:px-6 lg:px-10
+        "
       >
-        <Container maxWidth="xl" disableGutters>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-14 md:gap-24">
+        <Container maxWidth="xl">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20">
+            
             {/* LEFT CONTENT */}
-            <div className="flex-1 max-w-2xl">
+            <div className="flex-1 max-w-2xl text-center md:text-left">
               <Typography
-                className="animate-fade-up delay-1 text-[#c7a2ff]"
+                className="animate-fade-up delay-1 text-black"
                 sx={{
-                  fontSize: { xs: "16px", md: "32px", lg: "50px" },
+                  fontSize: { xs: "22px", sm: "28px", md: "40px", lg: "50px" },
                   fontWeight: 600,
                   mb: 2,
                 }}
@@ -35,35 +36,31 @@ export default function AboutUsSection() {
               <Typography
                 className="animate-fade-up delay-2"
                 sx={{
-                  fontSize: { xs: "14px", md: "18px" },
+                  fontSize: { xs: "14px", sm: "15px", md: "18px" },
                   lineHeight: 1.75,
-                  color: "white",
+                  color: "black",
                   mb: 4,
                 }}
               >
-                At{" "}
-                <span className="text-amber-200 italic cursor-pointer">
-                  Aethel Flow
-                </span>
-                , we believe the future of work should be seamless, intelligent,
-                and human-centric. Founded with the vision of redefining
-                automation, we are driven by the idea that technology should not
-                only accelerate innovation but also inspire trust and clarity in
-                every interaction.
+                At Aethel Flow, we believe the future of work should be seamless,
+                intelligent, and human-centric. Founded with the vision of
+                redefining automation, we are driven by the idea that technology
+                should not only accelerate innovation but also inspire trust and
+                clarity in every interaction.
               </Typography>
 
               <Button
                 className="animate-fade-up delay-3 scale-hover"
                 variant="contained"
                 sx={{
-                  backgroundColor: "#692ac8",
+                  backgroundColor: "#000",
                   borderRadius: "999px",
                   px: 5,
                   py: 2,
-                  fontSize: "16px",
+                  fontSize: "15px",
                   textTransform: "none",
                   mb: 4,
-                  "&:hover": { backgroundColor: "#5a24a8" },
+                  "&:hover": { backgroundColor: "#232526" },
                 }}
               >
                 Explore our Services →
@@ -73,6 +70,7 @@ export default function AboutUsSection() {
                 direction="row"
                 spacing={2}
                 alignItems="center"
+                justifyContent={{ xs: "center", md: "flex-start" }}
                 className="animate-fade-up delay-4"
               >
                 <Stack direction="row" spacing={-1}>
@@ -92,30 +90,56 @@ export default function AboutUsSection() {
 
             {/* RIGHT MEDIA */}
             <div className="flex-1 w-full max-w-2xl animate-fade-up delay-2">
-              <div className="w-full h-[260px] sm:h-[320px] md:h-[420px] lg:h-[520px] bg-[#2b2b2b] rounded-2xl flex items-center justify-center">
-                <div className="w-18 h-18 md:w-22 md:h-22 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer scale-hover">
-                  <PlayArrowIcon className="text-white text-4xl md:text-5xl" />
+              <div className="
+                w-full
+                h-[220px] sm:h-[300px] md:h-[420px] lg:h-[520px]
+                bg-[#2b2b2b]
+                rounded-2xl
+                flex
+                items-center
+                justify-center
+              ">
+                <div className="
+                  w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20
+                  bg-orange-500
+                  rounded-full
+                  flex
+                  items-center
+                  justify-center
+                  cursor-pointer
+                  scale-hover
+                ">
+                  <PlayArrowIcon className="text-white text-3xl md:text-4xl" />
                 </div>
               </div>
             </div>
+
           </div>
         </Container>
       </section>
-      <section className="w-full min-h-[100vh] flex items-center">
+
+      {/* VISION SECTION */}
+      <section className="w-full min-h-screen flex items-center px-4 sm:px-6 lg:px-10">
         <Container maxWidth="xl">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
-            {/* LEFT IMAGE PLACEHOLDER */}
+          <div className="animate-fade-up flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
+            
+            {/* LEFT IMAGE */}
             <div className="flex-1 w-full flex justify-center">
-              {/* Image will be inserted here later */}
-              <div className="w-full max-w-[520px] h-[280px] sm:h-[340px] md:h-[420px] lg:h-[480px] rounded-2xl bg-[#e5e5e5]" />
+              <div className="
+                w-full
+                max-w-[520px]
+                h-[240px] sm:h-[300px] md:h-[420px] lg:h-[480px]
+                rounded-2xl
+                bg-[#e5e5e5]
+              " />
             </div>
 
             {/* RIGHT CONTENT */}
             <div className="flex-1 max-w-xl text-center md:text-left">
               <Typography
                 sx={{
-                  color: "black",
-                  fontSize: { xs: "30px", md: "40px", lg: "48px" },
+                  color: "#000",
+                  fontSize: { xs: "26px", sm: "32px", md: "40px", lg: "48px" },
                   fontWeight: 600,
                   mb: 3,
                 }}
@@ -125,7 +149,7 @@ export default function AboutUsSection() {
 
               <Typography
                 sx={{
-                  fontSize: { xs: "15px", md: "17px", lg: "18px" },
+                  fontSize: { xs: "14px", sm: "15px", md: "17px", lg: "18px" },
                   lineHeight: 1.75,
                   color: "#444",
                   mb: 5,
@@ -147,13 +171,13 @@ export default function AboutUsSection() {
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: "#692ac8",
+                    backgroundColor: "#000",
                     borderRadius: "999px",
                     px: 4,
                     py: 1.6,
                     textTransform: "none",
                     fontSize: "15px",
-                    "&:hover": { backgroundColor: "#5a24a8" },
+                    "&:hover": { backgroundColor: "#1a1919" },
                   }}
                 >
                   Get Started →
@@ -179,6 +203,7 @@ export default function AboutUsSection() {
                 </Button>
               </Stack>
             </div>
+
           </div>
         </Container>
       </section>

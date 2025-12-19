@@ -105,9 +105,29 @@ h6 {
   );
 }
 
-/* =========================
-   Animations
-   ========================= */
+/* Hero Title Shimmer */
+.heroTitle {
+  background:#d8e4ee;
+
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  will-change: contents, opacity, transform;
+  font-family: var(--font-poppins), sans-serif !important;
+  font-weight: 800 !important;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Fade animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
