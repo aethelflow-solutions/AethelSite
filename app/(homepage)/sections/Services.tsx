@@ -79,7 +79,7 @@ export default function Services() {
           id="services-heading"
           className="
             text-[3rem]
-            text-gray-600
+            text-black
             font-[100]
             tracking-normal
             leading-tight
@@ -89,7 +89,7 @@ export default function Services() {
           Our Services
         </h2>
 
-        <p className="font-normal mt-5 max-w-3xl mx-auto px-4 text-black">
+        <p className="font-normal mt-5 max-w-3xl mx-auto px-4 text-gray-600">
           Comprehensive technology solutions tailored to accelerate your digital
           journey and drive sustainable business growth.
         </p>
@@ -119,7 +119,7 @@ export default function Services() {
 
       {/* ================= CTA ================= */}
       <div className="mt-4 flex flex-col justify-center items-center px-4">
-        <p className="text-center text-black py-2 max-w-2xl">
+        <p className="text-center text-gray-600 py-2 max-w-2xl">
           Get custom solutions for your business that help you leverage AI and
           Automation for the processes. Talk to an expert!
         </p>
