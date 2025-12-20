@@ -5,9 +5,10 @@ import { CardData } from "../../data/data";
 
 interface MediaCardProps {
   data: CardData;
+  descriptionFontSize?: { xs: string; md: string }; // added prop
 }
 
-export function MediaCardMission1({ data }: MediaCardProps) {
+export function MediaCardMission1({ data, descriptionFontSize }: MediaCardProps) {
   return (
     <Card
       elevation={0}
@@ -63,7 +64,13 @@ export function MediaCardMission1({ data }: MediaCardProps) {
           <Typography variant="h6" fontWeight={600}>
             {data.title}
           </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.8 }}>
+          <Typography
+            variant="body2"
+            sx={{
+              opacity: 0.8,
+              fontSize: descriptionFontSize || { xs: "14px", md: "16px" }, // use custom size if passed
+            }}
+          >
             {data.description}
           </Typography>
         </Box>
