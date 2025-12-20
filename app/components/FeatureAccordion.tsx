@@ -31,7 +31,7 @@ export default function FeatureAccordion({
   setActiveIndex,
 }: Props) {
   return (
-    <div className="border-t border-b border-black/20 divide-y divide-black/20">
+    <div className="border-t border-b border-white divide-y divide-white">
       {DATA.map((item, index) => {
         const isOpen = activeIndex === index;
 
@@ -44,50 +44,30 @@ export default function FeatureAccordion({
                 w-full flex items-center justify-between
                 text-left cursor-pointer
                 transition-all duration-300
-                hover:pl-1
-                group
               "
             >
-              {/* TITLE */}
-              <h3
-                className="
-                  text-[18px]
-                  text-gray-700
-                  transition-colors duration-300
-                  group-hover:text-black
-                "
-                style={{ fontWeight: 350 }}
-              >
+              <h3 className="text-white text-[18px]" style={{ fontWeight: 400 }}>
                 {item.title}
               </h3>
 
-              {/* ICON */}
-              <span
-                className="
-                  w-8 h-8 flex items-center justify-center
-                  rounded-full
-                  bg-black text-white
-                  text-lg
-                  transition-all duration-300
-                  group-hover:scale-110
-                "
-                style={{ lineHeight: "1" }}
-              >
+              <span className="
+                w-8 h-8 flex items-center justify-center
+                rounded-full bg-white text-black text-lg
+                transition-transform duration-300
+              ">
                 {isOpen ? "−" : "+"}
               </span>
             </button>
 
-            {/* CONTENT WITH ANIMATION */}
+            {/* CONTENT */}
             <div
-              className={`
-                overflow-hidden
-                transition-all duration-500 ease-in-out
-                ${isOpen ? "max-h-40 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-2"}
-              `}
+              className={`overflow-hidden transition-all duration-500 ${
+                isOpen ? "max-h-40 opacity-100 mt-3" : "max-h-0 opacity-0"
+              }`}
             >
               <p
-                className="mt-3 text-sm text-gray-600 max-w-md"
-                style={{ fontWeight: 300, lineHeight: "1.6" }}
+                className="text-white text-sm max-w-md"
+                style={{ lineHeight: "1.6", fontWeight: 300 }}
               >
                 {item.content}
               </p>

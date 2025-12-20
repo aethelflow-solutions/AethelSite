@@ -60,10 +60,10 @@ export default function MissionSection() {
   return (
     <section
       id="mission"
-      className="relative flex justify-center text-white py-10 px-6 rounded-[30px] overflow-hidden"
+      className="relative flex justify-center text-white py-6 px-6 rounded-[30px] overflow-hidden"
       aria-labelledby="mission-heading"
     >
-      {/* 🔥 IMPROVED BACKGROUND VIDEO */}
+      {/* Background Video */}
       <video
         className="
           absolute inset-0 
@@ -82,21 +82,21 @@ export default function MissionSection() {
         preload="metadata"
       />
 
-      {/* DARK OVERLAY (lighter than before) */}
+      {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-[1px] rounded-[30px]"
         aria-hidden="true"
       />
 
-      {/* CONTENT */}
+      {/* Content */}
       <div className="relative z-10 w-full max-w-5xl">
         {/* Mission Statement */}
-        <div className="text-center space-y-5 pb-16 max-w-[620px] mx-auto">
+        <div className="text-center space-y-3 pt-1 pb-8 max-w-[480px] mx-auto"> {/* reduced width for 2 lines */}
           <Typography
             id="mission-heading"
             component="h2"
             className="font-semibold"
-            sx={{ fontSize: { xs: "26px", md: "42px" } }}
+            sx={{ fontSize: { xs: "26px", md: "38px" } }}
           >
             Mission Statement
           </Typography>
@@ -104,53 +104,57 @@ export default function MissionSection() {
           <Typography
             component="p"
             className="leading-relaxed opacity-90"
-            sx={{ fontSize: { xs: "14px", md: "16px" } }}
+            sx={{ fontSize: { xs: "14px", md: "15px" }, lineHeight: 1.5 }}
           >
-            Our mission at Aethel Flow is to empower organizations with intelligent
-            automation that is both seamless and human-centric. We design
-            solutions that eliminate inefficiencies and unlock growth.
+            Our mission at Aethel Flow is to empower organizations with intelligent automation that is seamless and human-centric.
           </Typography>
         </div>
 
-        {/* Cards Grid (REDUCED SIZE) */}
+        {/* Cards Grid */}
         <div
           ref={cardsRef}
-          className={`grid grid-cols-1 md:grid-cols-2 gap-8 transition-all duration-700 ${
+          className={`grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-700 ${
             showCards
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-8"
           }`}
         >
           {/* Left Cards */}
-          <div className="flex flex-col items-end gap-8">
+          <div className="flex flex-col items-end gap-6">
             {missionCards.slice(0, 2).map((card, i) => (
               <div
                 key={card.id}
-                className={`scale-[0.92] transition-all duration-700 ${
+                className={`scale-[0.88] transition-all duration-700 mb-4 ${
                   showCards
                     ? "opacity-100 translate-x-0"
                     : "opacity-0 -translate-x-8"
                 }`}
                 style={{ transitionDelay: `${i * 120}ms` }}
               >
-                <MediaCardMission1 data={card} />
+                <MediaCardMission1
+                  data={card}
+                  descriptionFontSize={{ xs: "15px", md: "17px" }}
+                />
               </div>
             ))}
           </div>
 
           {/* Right Cards */}
-          <div className="flex flex-col items-start gap-8 md:pt-12">
+          <div className="flex flex-col items-start gap-6 md:pt-8">
             {missionCards.slice(2, 4).map((card, i) => (
               <div
                 key={card.id}
-                className={`scale-[0.92] transition-all duration-700 ${
+                className={`scale-[0.88] transition-all duration-700 mb-4 ${
                   showCards
                     ? "opacity-100 translate-x-0"
                     : "opacity-0 translate-x-8"
                 }`}
                 style={{ transitionDelay: `${(i + 2) * 120}ms` }}
               >
-                <MediaCardMission1 data={card} />
+                <MediaCardMission1
+                  data={card}
+                  descriptionFontSize={{ xs: "15px", md: "17px" }}
+                />
               </div>
             ))}
           </div>
