@@ -125,28 +125,43 @@ const validateForm = useCallback((): boolean => {
   };
 
   // 🔹 Compact SaaS-style TextField
-  const textFieldSx = {
-    backgroundColor: "#fff",
-    borderRadius: "12px",
-    "& .MuiInputBase-root": {
-      height: 44,
-      fontSize: "0.85rem",
-    },
-    "& .MuiInputBase-input": {
-      padding: "0 12px",
-    },
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#e5e7eb",
-    },
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#6d28d9",
-      borderWidth: 1.5,
-    },
-    "& .MuiFormHelperText-root": {
-      fontSize: "0.7rem",
-      marginLeft: "4px",
-    },
-  };
+const textFieldSx = {
+  backgroundColor: "#fff",
+  borderRadius: "14px",
+
+  "& .MuiInputBase-root": {
+    minHeight: 46,
+    fontSize: "0.9rem",
+  },
+
+  // 🔥 PLACEHOLDER + INPUT SPACING CONTROL
+  "& .MuiInputBase-input": {
+    padding: "2px 12px", // ⬅️ TOP/BOTTOM | LEFT/RIGHT
+  },
+
+  // 🔥 PLACEHOLDER STYLE CONTROL
+  "& input::placeholder": {
+    fontSize: "0.85rem",
+    color: "#9ca3af",
+    opacity: 1,
+  },
+
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#e5e7eb",
+  },
+
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#6d28d9",
+    borderWidth: 1.5,
+  },
+
+  "& .MuiFormHelperText-root": {
+    fontSize: "0.72rem",
+    marginLeft: "3px",
+    marginTop: "4px",
+  },
+};
+
 
   return (
     <Card
@@ -279,25 +294,26 @@ const validateForm = useCallback((): boolean => {
           ))}
         </TextField>
 
-        <TextField
-          size="small"
-          name="message"
-          placeholder="Write your message..."
-          value={form.message}
-          onChange={handleChange}
-          multiline
-          rows={3}
-          error={!!errors.message}
-          helperText={errors.message}
-          fullWidth
-          sx={{
-            ...textFieldSx,
-            "& .MuiInputBase-root": {
-              minHeight: 44,
-              fontSize: "0.85rem",
-            },
-          }}
-        />
+       <TextField
+  size="small"
+  name="message"
+  placeholder="Write your message..."
+  multiline
+  rows={3}
+  value={form.message}
+  onChange={handleChange}
+  error={!!errors.message}
+  helperText={errors.message}
+  fullWidth
+  sx={{
+    ...textFieldSx,
+
+    "& .MuiInputBase-input": {
+      padding: "10px 0px", // 👈 multiline padding fix
+    },
+  }}
+/>
+
 
         <Button
           type="submit"
