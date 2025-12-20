@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { gsap } from "gsap"; // ✅ ADDED (only import)
 
 interface NavItem {
   label: string;
@@ -31,6 +32,30 @@ export default function Navbar() {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  /* =======================
+     NAVBAR ENTRY ANIMATION (ONLY ADDITION)
+  ======================== */
+  useEffect(() => {
+    if (!navRef.current) return;
+
+    gsap.fromTo(
+      navRef.current,
+      {
+        y: -40,
+        opacity: 0,
+        scale: 0.98,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: 0.15,
+      }
+    );
+  }, []);
 
   /* =======================
      OUTSIDE CLICK CLOSE
@@ -117,7 +142,7 @@ export default function Navbar() {
         </button>
 
         {/* DESKTOP NAV */}
-        <ul className="hidden md:flex items-center gap-2">
+        <ul className="hidden min-[930px]:flex items-center gap-2">
           {NAV_ITEMS.map((item) => (
             <li key={item.sectionId}>
               <button
@@ -152,10 +177,10 @@ export default function Navbar() {
             Enquire here
           </button>
 
-          {/* MOBILE TOGGLE (SVGs) */}
+          {/* MOBILE TOGGLE */}
           <button
             onClick={toggleMobileMenu}
-            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
+            className="min-[930px]:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
@@ -195,7 +220,7 @@ export default function Navbar() {
 
         {/* MOBILE MENU */}
         <div
-          className={`w-full md:hidden transition-all duration-300 overflow-hidden ${
+          className={`w-full min-[930px]:hidden transition-all duration-300 overflow-hidden ${
             mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`}
         >

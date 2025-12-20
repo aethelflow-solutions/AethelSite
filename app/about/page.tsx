@@ -1,15 +1,87 @@
-"use client"
+"use client";
 
-
+import { useEffect, useRef } from "react";
 import { Container, Typography, Button, Stack, Avatar } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutUsSection() {
+  const aboutSectionRef = useRef<HTMLElement | null>(null);
+  const visionSectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      /* ======================
+         ABOUT SECTION CONTENT
+      ====================== */
+      gsap.from("#about-us .about-content > *", {
+        scrollTrigger: {
+          trigger: aboutSectionRef.current,
+          start: "top 75%",
+        },
+        opacity: 0,
+        y: 60,
+        stagger: 0.18,
+        duration: 0.9,
+        ease: "power1.out",
+      });
+
+      /* ======================
+         ABOUT IMAGE
+      ====================== */
+      gsap.from("#about-us .about-image", {
+        scrollTrigger: {
+          trigger: aboutSectionRef.current,
+          start: "top 75%",
+        },
+        opacity: 0,
+        scale: 0.88,
+        duration: 1,
+        ease: "power1.out",
+      });
+
+      /* ======================
+         VISION SECTION CONTENT
+      ====================== */
+      gsap.from("#vision-section .vision-content > *", {
+        scrollTrigger: {
+          trigger: visionSectionRef.current,
+          start: "top 75%",
+        },
+        opacity: 0,
+        x: 60,
+        stagger: 0.16,
+        duration: 0.9,
+        ease: "power1.out",
+      });
+
+      /* ======================
+         VISION IMAGE
+      ====================== */
+      gsap.from("#vision-section .vision-image", {
+        scrollTrigger: {
+          trigger: visionSectionRef.current,
+          start: "top 75%",
+        },
+        opacity: 0,
+        x: -60,
+        duration: 1,
+        ease: "power1.out",
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <>
       {/* ABOUT SECTION */}
       <section
+        ref={aboutSectionRef}
         id="about-us"
         className="
           bg-white
@@ -24,11 +96,11 @@ export default function AboutUsSection() {
         <Container maxWidth="xl" className="margin-top">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20">
             {/* LEFT CONTENT */}
-            <div className="flex-1 max-w-2xl text-center md:text-left">
+            <div className="about-content flex-1 max-w-2xl text-center md:text-left">
               <Typography
-                className="animate-fade-up delay-1 text-black"
+                className="text-black"
                 sx={{
-                  fontSize: { xs: "22px", sm: "28px", md: "40px", lg: "50px" },
+                  fontSize: { xs: "22px", sm: "28px", md: "40px", lg: "58px" },
                   fontWeight: 600,
                   mb: 2,
                 }}
@@ -37,11 +109,10 @@ export default function AboutUsSection() {
               </Typography>
 
               <Typography
-                className="animate-fade-up delay-2"
                 sx={{
-                  fontSize: { xs: "14px", sm: "15px", md: "18px" },
+                  fontSize: { xs: "14px", sm: "15px", md: "18px", lg: "20px" },
                   lineHeight: 1.75,
-                  color: "black",
+                  color: "#303030",
                   mb: 4,
                 }}
               >
@@ -54,7 +125,6 @@ export default function AboutUsSection() {
 
               <Button
                 component={Link}
-                className="animate-fade-up delay-3 scale-hover"
                 variant="contained"
                 href="/#services"
                 sx={{
@@ -76,7 +146,6 @@ export default function AboutUsSection() {
                 spacing={2}
                 alignItems="center"
                 justifyContent={{ xs: "center", md: "flex-start" }}
-                className="animate-fade-up delay-4"
               >
                 <Stack direction="row" spacing={-1}>
                   <Avatar />
@@ -94,16 +163,15 @@ export default function AboutUsSection() {
             </div>
 
             {/* RIGHT MEDIA */}
-
-            <div className="flex-1 w-full max-w-2xl animate-fade-up delay-2">
+            <div className="about-image flex-1 w-full max-w-2xl">
               <div
                 className="
-      relative
-      w-full
-      h-[220px] sm:h-[300px] md:h-[420px] lg:h-[520px]
-      rounded-2xl
-      overflow-hidden
-    "
+                  relative
+                  w-full
+                  h-[220px] sm:h-[300px] md:h-[420px] lg:h-[520px]
+                  rounded-2xl
+                  overflow-hidden
+                "
               >
                 <Image
                   src="/aboutBG.png"
@@ -119,20 +187,24 @@ export default function AboutUsSection() {
       </section>
 
       {/* VISION SECTION */}
-      <section className="w-full min-h-[90vh] flex items-center px-4 sm:px-6 lg:px-10">
+      <section
+        ref={visionSectionRef}
+        id="vision-section"
+        className="w-full min-h-[90vh] flex items-center px-4 sm:px-6 lg:px-10"
+      >
         <Container maxWidth="xl">
-          <div className="animate-fade-up flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
             {/* LEFT IMAGE */}
-            <div className="flex-1 w-full flex justify-center">
+            <div className="vision-image flex-1 w-full flex justify-center">
               <div
                 className="
-      relative
-      w-full
-      max-w-[700px]
-      h-[240px] sm:h-[300px] md:h-[420px] lg:h-[480px]
-      rounded-2xl
-      overflow-hidden
-    "
+                  relative
+                  w-full
+                  max-w-[700px]
+                  h-[240px] sm:h-[300px] md:h-[420px] lg:h-[480px]
+                  rounded-2xl
+                  overflow-hidden
+                "
               >
                 <Image
                   src="/vision.png"
@@ -145,11 +217,11 @@ export default function AboutUsSection() {
             </div>
 
             {/* RIGHT CONTENT */}
-            <div className="flex-1 max-w-xl text-center md:text-left">
+            <div className="vision-content flex-1 max-w-xl text-center md:text-left">
               <Typography
                 sx={{
                   color: "#000",
-                  fontSize: { xs: "26px", sm: "32px", md: "40px", lg: "48px" },
+                  fontSize: { xs: "26px", sm: "32px", md: "40px", lg: "58px" },
                   fontWeight: 600,
                   mb: 3,
                 }}
@@ -159,17 +231,17 @@ export default function AboutUsSection() {
 
               <Typography
                 sx={{
-                  fontSize: { xs: "14px", sm: "15px", md: "17px", lg: "18px" },
+                  fontSize: { xs: "14px", sm: "15px", md: "17px", lg: "20px" },
                   lineHeight: 1.75,
-                  color: "#444",
+                  color: "#3b3b3b",
                   mb: 5,
                 }}
               >
                 “At Aethel Flow, our vision is to redefine the future of work
                 through intelligent automation that blends efficiency with
                 human-like adaptability. We aim to empower businesses with
-                seamless, scalable solutions that spark rapid innovation, foster
-                meaningful connections, and create workflows that flow
+                seamless, scalable solutions that spark rapid innovation,
+                foster meaningful connections, and create workflows that flow
                 effortlessly into tomorrow’s possibilities.”
               </Typography>
 
