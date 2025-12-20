@@ -67,7 +67,7 @@ label {
    🔒 GLOBAL PARAGRAPH CONTROL
    ========================= */
 p {
-  font-size: 1rem; /* ✅ SAME SIZE EVERYWHERE (dont make it important )*/ 
+  font-size: 20px; /* ✅ SAME SIZE EVERYWHERE (dont make it important )*/ 
   font-family: var(--font-primary);
   font-weight: 400;
   line-height: 1.65;
