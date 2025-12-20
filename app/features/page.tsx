@@ -36,7 +36,7 @@ export default function FeaturesPage() {
   return (
     <>
       {/* ✅ SMALL OUTER GAP (2–3px) */}
-      <div className="px-[3px]">
+      <div className="px-5">
         {/* MAIN BLACK SECTION */}
         <section className="bg-black text-white pt-24 px-4 rounded-[30px] overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-14">
