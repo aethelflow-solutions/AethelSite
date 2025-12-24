@@ -115,8 +115,16 @@ h6 {
    Hero Title Shimmer
    ========================= */
 .heroTitle {
-  background: #d8e4ee;
-  background-size: 200% 100%;
+  background: linear-gradient(
+    120deg,
+    #ffffff 20%,
+    #bfefff 40%,
+    #7dd3fc 50%,
+    #bfefff 60%,
+    #ffffff 80%
+  );
+  background-size: 300% 100%;
+
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -125,8 +133,24 @@ h6 {
   font-weight: 600;
   letter-spacing: -0.02em;
 
-  will-change: contents, opacity, transform;
+  animation: floatWave 6s ease-in-out infinite;
+  will-change: background-position;
 }
+
+@keyframes floatWave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+
 
 /* =========================
    Animations

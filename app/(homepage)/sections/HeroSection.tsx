@@ -16,7 +16,7 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex items-center min-h-screen text-white pt-32 pb-28 px-6 rounded-3xl overflow-hidden"
+      className="relative flex items-center min-h-screen text-white pt-32 pb-28 px-6 rounded-3xl max-[640px]:rounded-t-none max-[640px]:rounded-b-2xl overflow-hidden"
       aria-label="Hero section"
     >
       {/* VIDEO BACKGROUND */}
@@ -27,7 +27,7 @@ export default function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/bg2.mp4" type="video/mp4" />
+        <source src="/bg.webm" type="video/mp4" />
       </video>
 
       {/* DARK OVERLAY (for text readability) */}
@@ -50,13 +50,14 @@ export default function HeroSection() {
             "Drive innovation with AI-powered operational excellence"
 ,
           ]}
+          
           typingSpeed={80}
           pauseDuration={5200}
           showCursor={false}
           startOnVisible={false}
           reverseMode={false}
           loop = {true}
-          className="text-4xl heroTitle smooth-type"
+          className="text-4xl heroTitle smooth-type min-h-[140px] max-[640px]:min-h-[400px]"
           
         />
 

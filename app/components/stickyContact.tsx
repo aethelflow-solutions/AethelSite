@@ -16,7 +16,8 @@ const EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL!;
 export default function StickyContact() {
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
-  const whatsappMessage = "Hi! I’m interested in your AI services. Please get in touch.";
+  const whatsappMessage =
+    "Hi! I’m interested in your AI services. Please get in touch.";
   const encodedMsg = encodeURIComponent(whatsappMessage);
 
   const closeWithAnimation = () => {
@@ -40,8 +41,8 @@ export default function StickyContact() {
     {
       icon: <CallIcon fontSize="large" />,
       href: `tel:+${PHONE}`,
-      bg: "#692ac8",
-      hoverBg: "#5a24a8",
+      bg: "#28a2fe",
+      hoverBg: "#228ee0",
       delayIn: "90ms",
       delayOut: "80ms",
       translate: "translate(-90px, -70px)",
@@ -110,12 +111,23 @@ export default function StickyContact() {
           right: 24,
           zIndex: 1600,
           backgroundColor: "#28a2fe",
-          color: "#fff",
-          "&:hover": { backgroundColor: "#228ee0" },
+          boxShadow: "none",
+          "&:hover": {
+            backgroundColor: "#228ee0",
+          },
         }}
         aria-label="Contact options"
       >
-        <PhoneIcon />
+        <img
+          src="/customer-service.png"
+          alt="Contact"
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: "50%",
+            objectFit: "cover",
+          }}
+        />
       </Fab>
 
       {/* Animations */}
