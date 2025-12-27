@@ -51,7 +51,7 @@ export default function ContactSection() {
         <div className="lg:py-10 py-6 flex justify-center">
           <h2
             className=" text-[2.75rem]
-            text-gray-600
+            text-black
             font-[100]      /* clean, not bold */
             tracking-normal     /* removes drag/stretch issue */
             leading-tight
