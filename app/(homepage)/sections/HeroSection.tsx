@@ -2,21 +2,19 @@
 
 import { Typography } from "@mui/material";
 import TextType from "../../components/react-bits/TextType";
-
-// function scrollToSection(sectionId: string): void {
-//   const element = document.getElementById(sectionId);
-//   element?.scrollIntoView({ behavior: "smooth" });
-// }
+import { useEffect, useState } from "react";
 
 export default function HeroSection() {
-  
-  
-  
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  useEffect(() => {
+    // Optional: can trigger any animation after video is loaded
+  }, []);
 
   return (
     <section
       id="home"
-      className="relative flex items-center min-h-screen text-white pt-32 pb-28 px-6 rounded-3xl overflow-hidden"
+      className="relative flex items-center min-h-screen text-white pt-32 pb-28 px-6 rounded-3xl max-[640px]:rounded-t-none max-[640px]:rounded-b-2xl overflow-hidden"
       aria-label="Hero section"
     >
       {/* VIDEO BACKGROUND */}
@@ -25,18 +23,20 @@ export default function HeroSection() {
         loop
         muted
         playsInline
+        preload="auto"
+        poster="/banner.png" // fallback image while loading
         className="absolute inset-0 w-full h-full object-cover"
+        onCanPlayThrough={() => setVideoLoaded(true)}
       >
-        <source src="/bg2.mp4" type="video/mp4" />
+        <source src="/bg.webm" type="video/mp4" />
       </video>
 
-      {/* DARK OVERLAY (for text readability) */}
-      <div className="absolute inset-0 bg-[#000000ad]"></div>
+      {/* DARK OVERLAY */}
+      <div className="absolute inset-0 bg-black/50"></div>
 
       {/* CONTENT */}
-      <div className="relative w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left ml-10">
+      <div className="relative w-full flex flex-col items-start justify-center gap-6 max-w-3xl mx-auto text-left md:ml-10">
         <TextType
-          
           text={[
             "Supercharge your Operations with AI that delivers seamless Automation",
             "Transform workflows with AI-powered automation that works",
@@ -47,16 +47,16 @@ export default function HeroSection() {
             "Power your business with seamless AI automation",
             "Accelerate growth with intelligent workflow automation",
             "Empower your team with AI that automates complexity",
-            "Drive innovation with AI-powered operational excellence"
-,
+            "Drive innovation with AI-powered operational excellence",
           ]}
+          
           typingSpeed={80}
           pauseDuration={5200}
           showCursor={false}
           startOnVisible={false}
           reverseMode={false}
           loop = {true}
-          className="text-4xl heroTitle smooth-type"
+          className="text-4xl heroTitle smooth-type min-h-[140px] max-[640px]:min-h-[400px]"
           
         />
 
@@ -64,34 +64,12 @@ export default function HeroSection() {
           component="p"
           variant="body1"
           className="leading-relaxed animate-fadeIn"
-          sx={{ fontSize: { xs: "14px", md: "18px" } , color: "#cdfdff"}}
+          sx={{ fontSize: { xs: "14px", md: "18px" }, color: "#cdfdff" }}
         >
-          At Aethel Flow
-          , we harness AI and automation to streamline workflows, spark
-          innovation, and empower businesses to move faster with seamless,
+          At Aethel Flow, we harness AI and automation to streamline workflows,
+          spark innovation, and empower businesses to move faster with seamless,
           intelligent solutions for a future that flows effortlessly.
         </Typography>
-        <div className="mt-4">
-          {/* <AButton
-            variant="outlined"
-            onClick={handleContactClick}
-            sx={{
-              color: "white",
-              border: "none",
-              backgroundColor: "#692ac8",
-              borderRadius: "50px",
-              paddingX: 5,
-              paddingY: 2.5,
-              textTransform: "none",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#5a24a8",
-              },
-            }}
-          >
-            Contact Us
-          </AButton> */}
-        </div>
       </div>
     </section>
   );

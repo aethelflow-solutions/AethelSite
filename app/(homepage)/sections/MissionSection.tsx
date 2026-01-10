@@ -60,7 +60,7 @@ export default function MissionSection() {
   return (
     <section
       id="mission"
-      className="relative flex justify-center text-white py-6 px-6 rounded-[30px] overflow-hidden"
+      className="relative flex justify-center text-white py-6 px-6 rounded-3xl max-[640px]:rounded-2xl overflow-hidden"
       aria-labelledby="mission-heading"
     >
       {/* Background Video */}
