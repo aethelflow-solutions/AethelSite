@@ -4,6 +4,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { TextField, MenuItem, Button, Card } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
 
 interface FormData {
   name: string;
@@ -133,9 +134,12 @@ export default function ContactForm() {
           welcomeTemplateParams,
           process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
         );
+
+        toast.success("Successfully Form Details is Submitted");
       }
     } catch (err) {
       console.error("Failed to send email:", err);
+      toast.error("Failed to send Email");
     } finally {
       setSubmitting(false);
     }
