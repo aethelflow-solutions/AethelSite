@@ -4,6 +4,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { TextField, MenuItem, Button, Card } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
 
 interface FormData {
   name: string;
@@ -67,29 +68,26 @@ export default function ContactForm() {
     return () => obs.disconnect();
   }, []);
 
-const validateForm = useCallback((): boolean => {
-  const newErrors: FormErrors = {};
+  const validateForm = useCallback((): boolean => {
+    const newErrors: FormErrors = {};
 
-  if (!form.name.trim()) newErrors.name = "Name is required";
+    if (!form.name.trim()) newErrors.name = "Name is required";
 
-  if (!form.email.trim()) newErrors.email = "Email is required";
-  else if (!EMAIL_REGEX.test(form.email))
-    newErrors.email = "Please enter a valid email";
+    if (!form.email.trim()) newErrors.email = "Email is required";
+    else if (!EMAIL_REGEX.test(form.email))
+      newErrors.email = "Please enter a valid email";
 
-  if (!form.phone.trim()) newErrors.phone = "Phone is required";
-  else if (!PHONE_REGEX.test(form.phone))
-    newErrors.phone = "Please enter a valid phone number";
+    if (!form.phone.trim()) newErrors.phone = "Phone is required";
+    else if (!PHONE_REGEX.test(form.phone))
+      newErrors.phone = "Please enter a valid phone number";
 
-  if (!form.service)
-    newErrors.service = "Please choose a category"; // ✅ REQUIRED
+    if (!form.service) newErrors.service = "Please choose a category"; // ✅ REQUIRED
 
-  if (!form.message.trim())
-    newErrors.message = "Message is required";
+    if (!form.message.trim()) newErrors.message = "Message is required";
 
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-}, [form]);
-
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [form]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -102,66 +100,88 @@ const validateForm = useCallback((): boolean => {
 
     setSubmitting(true);
     try {
-      await emailjs.send(
+      const contactTemplateParams = {
+        template_variable_user_name: form.name,
+        template_variable_user_email: form.email,
+        template_variable_company: form.company || "N/A",
+        template_variable_phone: form.phone || "N/A",
+        template_variable_service: form.service,
+        template_variable_message: form.message,
+        template_variable_reply_to_email:
+          process.env.NEXT_PUBLIC_EMAILJS_REPLY_TO_EMAIL,
+      };
+
+      const response = await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID!,
-        {
-          from_name: form.name,
-          from_email: form.email,
-          company: form.company || "N/A",
-          phone: form.phone || "N/A",
-          service: form.service,
-          message: form.message,
-        },
+        contactTemplateParams,
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
       );
+      if (response.status === 200) {
+        setForm(initialFormState);
 
-      setForm(initialFormState);
+        const welcomeTemplateParams = {
+          template_variable_user_name: form.name,
+          template_variable_user_email: form.email,
+          template_variable_company: form.company || "N/A",
+          template_variable_phone: form.phone || "N/A",
+          template_variable_service: form.service,
+        };
+
+        await emailjs.send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+          process.env.NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID!,
+          welcomeTemplateParams,
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        );
+
+        toast.success("Successfully Form Details is Submitted");
+      }
     } catch (err) {
       console.error("Failed to send email:", err);
+      toast.error("Failed to send Email");
     } finally {
       setSubmitting(false);
     }
   };
 
   // 🔹 Compact SaaS-style TextField
-const textFieldSx = {
-  backgroundColor: "#fff",
-  borderRadius: "14px",
+  const textFieldSx = {
+    backgroundColor: "#fff",
+    borderRadius: "14px",
 
-  "& .MuiInputBase-root": {
-    minHeight: 46,
-    fontSize: "0.9rem",
-  },
+    "& .MuiInputBase-root": {
+      minHeight: 46,
+      fontSize: "0.9rem",
+    },
 
-  // 🔥 PLACEHOLDER + INPUT SPACING CONTROL
-  "& .MuiInputBase-input": {
-    padding: "2px 12px", // ⬅️ TOP/BOTTOM | LEFT/RIGHT
-  },
+    // 🔥 PLACEHOLDER + INPUT SPACING CONTROL
+    "& .MuiInputBase-input": {
+      padding: "2px 12px", // ⬅️ TOP/BOTTOM | LEFT/RIGHT
+    },
 
-  // 🔥 PLACEHOLDER STYLE CONTROL
-  "& input::placeholder": {
-    fontSize: "0.85rem",
-    color: "#9ca3af",
-    opacity: 1,
-  },
+    // 🔥 PLACEHOLDER STYLE CONTROL
+    "& input::placeholder": {
+      fontSize: "0.85rem",
+      color: "#9ca3af",
+      opacity: 1,
+    },
 
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#e5e7eb",
-  },
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#e5e7eb",
+    },
 
-  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#6d28d9",
-    borderWidth: 1.5,
-  },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#6d28d9",
+      borderWidth: 1.5,
+    },
 
-  "& .MuiFormHelperText-root": {
-    fontSize: "0.72rem",
-    marginLeft: "3px",
-    marginTop: "4px",
-  },
-};
-
+    "& .MuiFormHelperText-root": {
+      fontSize: "0.72rem",
+      marginLeft: "3px",
+      marginTop: "4px",
+    },
+  };
 
   return (
     <Card
@@ -234,8 +254,8 @@ const textFieldSx = {
           name="service"
           value={form.service}
           onChange={handleChange}
-            error={!!errors.service}          
-            helperText={errors.service} 
+          error={!!errors.service}
+          helperText={errors.service}
           fullWidth
           sx={{
             ...textFieldSx,
@@ -294,26 +314,25 @@ const textFieldSx = {
           ))}
         </TextField>
 
-       <TextField
-  size="small"
-  name="message"
-  placeholder="Write your message..."
-  multiline
-  rows={3}
-  value={form.message}
-  onChange={handleChange}
-  error={!!errors.message}
-  helperText={errors.message}
-  fullWidth
-  sx={{
-    ...textFieldSx,
+        <TextField
+          size="small"
+          name="message"
+          placeholder="Write your message..."
+          multiline
+          rows={3}
+          value={form.message}
+          onChange={handleChange}
+          error={!!errors.message}
+          helperText={errors.message}
+          fullWidth
+          sx={{
+            ...textFieldSx,
 
-    "& .MuiInputBase-input": {
-      padding: "10px 0px", // 👈 multiline padding fix
-    },
-  }}
-/>
-
+            "& .MuiInputBase-input": {
+              padding: "10px 0px", // 👈 multiline padding fix
+            },
+          }}
+        />
 
         <Button
           type="submit"
