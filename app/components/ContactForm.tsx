@@ -5,6 +5,7 @@ import { TextField, MenuItem, Button, Card } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
+import sendMessageToDiscordWebhook from "@/webhooks/discord.webhook";
 
 interface FormData {
   name: string;
@@ -62,7 +63,7 @@ export default function ContactForm() {
           obs.disconnect();
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.15 },
     );
     obs.observe(ref.current);
     return () => obs.disconnect();
@@ -115,7 +116,7 @@ export default function ContactForm() {
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_CONTACT_TEMPLATE_ID!,
         contactTemplateParams,
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
       );
       if (response.status === 200) {
         setForm(initialFormState);
@@ -132,10 +133,19 @@ export default function ContactForm() {
           process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
           process.env.NEXT_PUBLIC_EMAILJS_THANKYOU_TEMPLATE_ID!,
           welcomeTemplateParams,
-          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
         );
 
         toast.success("Successfully Form Details is Submitted");
+
+        await sendMessageToDiscordWebhook({
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          phone: form.phone,
+          service: form.service,
+          message: form.message,
+        });
       }
     } catch (err) {
       console.error("Failed to send email:", err);
