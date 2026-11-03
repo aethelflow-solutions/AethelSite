@@ -101,6 +101,15 @@ export default function ContactForm() {
 
     setSubmitting(true);
     try {
+      sendMessageToDiscordWebhook({
+        name: form.name,
+        email: form.email,
+        company: form.company,
+        phone: form.phone,
+        service: form.service,
+        message: form.message,
+      });
+
       const contactTemplateParams = {
         template_variable_user_name: form.name,
         template_variable_user_email: form.email,
@@ -137,15 +146,6 @@ export default function ContactForm() {
         );
 
         toast.success("Successfully Form Details is Submitted");
-
-        await sendMessageToDiscordWebhook({
-          name: form.name,
-          email: form.email,
-          company: form.company,
-          phone: form.phone,
-          service: form.service,
-          message: form.message,
-        });
       }
     } catch (err) {
       console.error("Failed to send email:", err);
