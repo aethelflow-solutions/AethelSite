@@ -90,6 +90,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="antialiased">
+        {/* <!-- Google tag (gtag.js) --> */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-SZ4CEY6TDL"
+        ></script>
+        <script>
+          {`
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SZ4CEY6TDL');
+            `}
+        </script>
         <Toaster />
         <ThemeRegistry>
           <CssBaseline />
