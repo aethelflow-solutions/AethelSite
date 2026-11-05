@@ -4,6 +4,7 @@ import "./globals.css";
 import { CssBaseline } from "@mui/material";
 import ThemeRegistry from "./themeRegistry";
 import { Toaster } from "react-hot-toast";
+import { ChatBot } from "./components/chatbot";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -109,6 +110,7 @@ export default function RootLayout({
         <ThemeRegistry>
           <CssBaseline />
           {children}
+          <ChatBot />
         </ThemeRegistry>
       </body>
     </html>
