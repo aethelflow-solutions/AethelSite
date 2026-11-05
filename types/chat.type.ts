@@ -17,6 +17,7 @@ export interface Message {
 }
 
 export interface ChatSession {
+  _id: string;
   date: Date;
   deviceType?: DeviceType;
   title?: String;

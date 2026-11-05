@@ -2,10 +2,17 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import { ChatSession, DeviceType, Message } from "@/types/chat.type";
+import {
+  createNewChatSessionApi,
+  getChatSessionApi,
+} from "@/_api/chat-bot.api";
+import {
+  getSessionToken,
+  setSessionToken,
+} from "@/helpers/sessionStorage.helper";
 import ChatTriggerButton from "./ChatTriggerButton";
 import ChatWindow from "./ChatWindow";
 import {
-  INITIAL_CHAT_SESSION,
   QUICK_SUGGESTIONS,
   STATIC_BOT_REPLIES,
   DEFAULT_STATIC_REPLY,
@@ -30,27 +37,70 @@ export default function ChatBot() {
     isProcessing: false,
   });
 
-  const [session, setSession] = useState<ChatSession | null>(
-    INITIAL_CHAT_SESSION,
-  );
+  const [session, setSession] = useState<ChatSession | null>(null);
 
-  useEffect(() => {
-    setSession((prev) =>
-      prev
-        ? {
-            ...prev,
-            deviceType: detectDeviceType(),
-          }
-        : null,
-    );
+  /**
+   * Fetch existing session by ID
+   */
+  const fetchExistingSession = useCallback(async (sessionId: string) => {
+    setInfo((prev) => ({ ...prev, isProcessing: true }));
+    try {
+      const [status, response] = await getChatSessionApi(sessionId);
+      if (status && response?.data) {
+        setSession(response.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch chat session:", error);
+    } finally {
+      setInfo((prev) => ({ ...prev, isProcessing: false }));
+    }
   }, []);
 
-  const handleToggleOpen = useCallback(() => {
+  /**
+   * Create a new chat session & store its _id in sessionStorage
+   */
+  const createNewSession = useCallback(async () => {
+    setInfo((prev) => ({ ...prev, isProcessing: true }));
+    try {
+      const [status, response] = await createNewChatSessionApi({});
+      if (status && response?.data) {
+        if (response.data._id) {
+          setSessionToken(response.data._id);
+        }
+        setSession(response.data);
+      }
+    } catch (error) {
+      console.error("Failed to create new chat session:", error);
+    } finally {
+      setInfo((prev) => ({ ...prev, isProcessing: false }));
+    }
+  }, []);
+
+  /**
+   * 1st Render: Check if session ID exists in sessionStorage and fetch session details
+   */
+  useEffect(() => {
+    const existingSessionId = getSessionToken();
+    if (existingSessionId) {
+      fetchExistingSession(existingSessionId);
+    }
+  }, []);
+
+  /**
+   * On clicking the bot: toggle open, and if no session details exist, create a new session
+   */
+  const handleToggleOpen = useCallback(async () => {
+    const nextIsOpen = !info.isOpen;
+
     setInfo((prev) => ({
       ...prev,
-      isOpen: !prev.isOpen,
+      isOpen: nextIsOpen,
     }));
-  }, []);
+
+    if (nextIsOpen && !session && !info.isProcessing) {
+      await createNewSession();
+    }
+  }, [info.isOpen, info.isProcessing, session, createNewSession]);
 
   const handleClose = useCallback(() => {
     setInfo((prev) => ({
@@ -59,21 +109,9 @@ export default function ChatBot() {
     }));
   }, []);
 
-  const handleResetChat = useCallback(() => {
-    const now = new Date();
-    setInfo((prev) => ({
-      ...prev,
-      isProcessing: false,
-    }));
-    setSession({
-      date: now,
-      deviceType: detectDeviceType(),
-      title: "Aethel Flow AI Support",
-      messages: [],
-      createdAt: now,
-      updatedAt: now,
-    });
-  }, []);
+  const handleResetChat = useCallback(async () => {
+    await createNewSession();
+  }, [createNewSession]);
 
   const handleSendMessage = useCallback(
     (content: string) => {
@@ -115,6 +153,7 @@ export default function ChatBot() {
       setSession((prev) => {
         if (!prev) {
           return {
+            _id: getSessionToken() || `session_${Date.now()}`,
             date: now,
             deviceType: detectDeviceType(),
             title: "Aethel Flow AI Support",
@@ -130,7 +169,7 @@ export default function ChatBot() {
         };
       });
 
-      // Static simulation (will be replaced with real API call later)
+      // Static simulation (until message-sending API is integrated)
       setTimeout(() => {
         const replyText =
           STATIC_BOT_REPLIES[content.trim()] || DEFAULT_STATIC_REPLY;

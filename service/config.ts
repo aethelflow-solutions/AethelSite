@@ -10,16 +10,16 @@ interface ServerConfig {
 // Development configuration
 const development: ServerConfig = {
   API_SERVER:
-    process.env.EXPO_PUBLIC_API_BASE_URL || "https://api.aethelflow.com/api",
-  WS_URL: process.env.EXPO_PUBLIC_WS_URL || "wss://api.aethelflow.com",
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8001/api/v1",
+  WS_URL: process.env.NEXT_PUBLIC_WS_URL || "ws://api.localhost:8001",
 };
 
 // Production configuration
 const production: ServerConfig = {
-  API_SERVER:
-    process.env.EXPO_PUBLIC_API_BASE_URL + "/api" ||
-    "https://api.aethelflow.com/api",
-  WS_URL: process.env.EXPO_PUBLIC_WS_URL || "wss://api.aethelflow.com",
+  API_SERVER: process.env.NEXT_PUBLIC_API_BASE_URL
+    ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1`
+    : "https://api.aethelflow.com/api/v1",
+  WS_URL: process.env.NEXT_PUBLIC_WS_URL || "wss://api.aethelflow.com",
 };
 
 // Map environments to configs
@@ -29,7 +29,7 @@ const configUrls: Record<EnvMode, ServerConfig> = {
 };
 
 // Get current environment mode (default to development)
-const currentMode = "production";
+const currentMode = "development";
 
 const API_URLS: ServerConfig = configUrls[currentMode];
 

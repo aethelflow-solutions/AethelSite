@@ -48,6 +48,7 @@ export const INITIAL_MESSAGES: Message[] = [
 ];
 
 export const INITIAL_CHAT_SESSION: ChatSession = {
+  _id: "session_static_1",
   date: new Date(),
   deviceType: "desktop",
   title: "Aethel Flow AI Support",

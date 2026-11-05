@@ -3,7 +3,7 @@ import axios from "axios";
 import router from "next/router";
 import { AxiosConfig, RequestMethodInstance } from "./axiosInstance";
 import API_URLS from "./config";
-import { clearAllSession } from "@/helpers/storage.helper";
+import { clearAll } from "@/helpers/sessionStorage.helper";
 
 // Define access point keys based on API_URLS
 type AccessPoint = "server";
@@ -200,7 +200,7 @@ export const setOnKickoutListener = (listener: () => void | null) => {
  */
 const onUserKickedOut = async (): Promise<void> => {
   console.log("User kicked out");
-  await clearAllSession();
+  clearAll();
   if (onKickoutListener) {
     try {
       onKickoutListener();

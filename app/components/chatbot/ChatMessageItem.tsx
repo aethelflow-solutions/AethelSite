@@ -56,7 +56,8 @@ export default function ChatMessageItem({
 }: ChatMessageItemProps) {
   const [copied, setCopied] = useState(false);
   const isHuman = message.role === "human";
-  const isProcessing = message.status === "processing";
+  const isProcessing =
+    message.status === "processing" && !message.content?.trim();
   const isFailed = message.status === "failed";
 
   const handleCopy = async () => {
