@@ -6,13 +6,11 @@ import { Bot, X, Sparkles } from "lucide-react";
 interface ChatTriggerButtonProps {
   isOpen: boolean;
   onClick: () => void;
-  unreadCount?: number;
 }
 
 export default function ChatTriggerButton({
   isOpen,
   onClick,
-  unreadCount = 0,
 }: ChatTriggerButtonProps) {
   return (
     <div className="fixed bottom-24 right-6 z-[1650] flex items-center gap-3 group">
@@ -50,15 +48,6 @@ export default function ChatTriggerButton({
             <Bot className="w-7 h-7 text-[#28a2fe] drop-shadow" />
           )}
         </span>
-
-        {/* Online / Unread Badge */}
-        {!isOpen && (
-          <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#28a2fe] opacity-75" />
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#28a2fe] border-2 border-white" />
-            {unreadCount > 0 && <span className="sr-only">{unreadCount}</span>}
-          </span>
-        )}
       </button>
     </div>
   );

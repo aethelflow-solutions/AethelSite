@@ -30,7 +30,7 @@ export default function ChatHeader({
       {/* Ambient sky-blue glow matching FeaturesPage & Hero */}
       <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-[#28a2fe]/15 blur-2xl pointer-events-none" />
 
-      {/* Left: Brand Avatar + Title & Status */}
+      {/* Left: Brand Avatar + Title */}
       <div className="relative z-10 flex items-center gap-3.5 min-w-0">
         <div className="relative shrink-0">
           <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 p-0.5 shadow-md overflow-hidden">
@@ -42,7 +42,6 @@ export default function ChatHeader({
               />
             </div>
           </div>
-          <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#0d0d11]" />
         </div>
 
         <div className="min-w-0">
@@ -56,15 +55,8 @@ export default function ChatHeader({
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs text-gray-300/85">
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${
-                isProcessing ? "bg-[#28a2fe] animate-pulse" : "bg-emerald-400"
-              }`}
-            />
-            <span className="truncate">
-              {isProcessing ? "Thinking..." : "Online • Instant answers"}
-            </span>
+          <div className="text-xs text-gray-300/85 truncate">
+            {isProcessing ? "Thinking..." : "AI Assistant"}
           </div>
         </div>
       </div>
