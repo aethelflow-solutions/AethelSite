@@ -56,7 +56,6 @@ export default function ChatWindow({
         }`}
       >
         <ChatHeader
-          title={session?.title ? String(session.title) : "Aethel Flow AI"}
           isProcessing={isProcessing}
           isExpanded={isExpanded}
           onToggleExpand={() => setIsExpanded((prev) => !prev)}

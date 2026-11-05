@@ -4,7 +4,6 @@ import React from "react";
 import { RotateCcw, X, Sparkles, Maximize2, Minimize2 } from "lucide-react";
 
 interface ChatHeaderProps {
-  title?: string;
   isProcessing?: boolean;
   isExpanded?: boolean;
   onToggleExpand?: () => void;
@@ -13,7 +12,6 @@ interface ChatHeaderProps {
 }
 
 export default function ChatHeader({
-  title = "Aethel Flow AI",
   isProcessing = false,
   isExpanded = false,
   onToggleExpand,
@@ -47,7 +45,7 @@ export default function ChatHeader({
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
             <h3 className="text-sm sm:text-base font-semibold text-white truncate">
-              {title}
+              Aethel Flow AI Support
             </h3>
             <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-medium bg-[#28a2fe]/15 text-[#7dd3fc] border border-[#28a2fe]/25">
               <Sparkles className="w-2.5 h-2.5" />
