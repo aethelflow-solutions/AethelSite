@@ -42,9 +42,15 @@ export default function ChatBot() {
   const fetchExistingSession = useCallback(async (sessionId: string) => {
     setInfo((prev) => ({ ...prev, isProcessing: true }));
     try {
-      const [status, response] = await getChatSessionApi(sessionId);
+      const [status, response, statusCode] = await getChatSessionApi(sessionId);
       if (status && response?.data) {
         setSession(response.data);
+      }
+      if (statusCode === 404 || statusCode === 500) {
+        console.warn(
+          `Session with ID ${sessionId} not found. Creating a new session.`,
+        );
+        await createNewSession();
       }
     } catch (error) {
       console.error("Failed to fetch chat session:", error);
