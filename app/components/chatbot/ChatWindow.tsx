@@ -9,7 +9,7 @@ import ChatInput from "./ChatInput";
 
 interface ChatWindowProps {
   isOpen: boolean;
-  session: ChatSession;
+  session: ChatSession | null;
   suggestions: string[];
   isProcessing: boolean;
   onSendMessage: (content: string) => void;
@@ -32,7 +32,8 @@ export default function ChatWindow({
 
   if (!isOpen) return null;
 
-  const isMessagesEmpty = session.messages.length === 0;
+  const messages = session?.messages ?? [];
+  const isMessagesEmpty = messages.length === 0;
 
   return (
     <>
@@ -55,7 +56,7 @@ export default function ChatWindow({
         }`}
       >
         <ChatHeader
-          title={session.title ? String(session.title) : "Aethel Flow AI"}
+          title={session?.title ? String(session.title) : "Aethel Flow AI"}
           isProcessing={isProcessing}
           isExpanded={isExpanded}
           onToggleExpand={() => setIsExpanded((prev) => !prev)}
@@ -64,8 +65,8 @@ export default function ChatWindow({
         />
 
         <ChatMessageList
-          messages={session.messages}
-          sessionDate={session.date}
+          messages={messages}
+          sessionDate={session?.date}
           onRetry={onRetryMessage}
         />
 

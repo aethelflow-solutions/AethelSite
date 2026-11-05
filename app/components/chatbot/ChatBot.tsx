@@ -6,11 +6,15 @@ import ChatTriggerButton from "./ChatTriggerButton";
 import ChatWindow from "./ChatWindow";
 import {
   INITIAL_CHAT_SESSION,
-  INITIAL_MESSAGES,
   QUICK_SUGGESTIONS,
   STATIC_BOT_REPLIES,
   DEFAULT_STATIC_REPLY,
 } from "./staticChatData";
+
+export interface ChatInfoState {
+  isOpen: boolean;
+  isProcessing: boolean;
+}
 
 function detectDeviceType(): DeviceType {
   if (typeof window === "undefined") return "unknown";
@@ -21,28 +25,46 @@ function detectDeviceType(): DeviceType {
 }
 
 export default function ChatBot() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [session, setSession] = useState<ChatSession>(INITIAL_CHAT_SESSION);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [info, setInfo] = useState<ChatInfoState>({
+    isOpen: false,
+    isProcessing: false,
+  });
+
+  const [session, setSession] = useState<ChatSession | null>(
+    INITIAL_CHAT_SESSION,
+  );
 
   useEffect(() => {
-    setSession((prev) => ({
-      ...prev,
-      deviceType: detectDeviceType(),
-    }));
+    setSession((prev) =>
+      prev
+        ? {
+            ...prev,
+            deviceType: detectDeviceType(),
+          }
+        : null,
+    );
   }, []);
 
   const handleToggleOpen = useCallback(() => {
-    setIsOpen((prev) => !prev);
+    setInfo((prev) => ({
+      ...prev,
+      isOpen: !prev.isOpen,
+    }));
   }, []);
 
   const handleClose = useCallback(() => {
-    setIsOpen(false);
+    setInfo((prev) => ({
+      ...prev,
+      isOpen: false,
+    }));
   }, []);
 
   const handleResetChat = useCallback(() => {
     const now = new Date();
-    setIsProcessing(false);
+    setInfo((prev) => ({
+      ...prev,
+      isProcessing: false,
+    }));
     setSession({
       date: now,
       deviceType: detectDeviceType(),
@@ -55,13 +77,14 @@ export default function ChatBot() {
 
   const handleSendMessage = useCallback(
     (content: string) => {
-      if (!content.trim() || isProcessing) return;
+      if (!content.trim() || info.isProcessing) return;
 
       const now = new Date();
       const humanMsgId = `msg_human_${Date.now()}`;
       const aiMsgId = `msg_ai_${Date.now() + 1}`;
 
-      const currentMaxOrder = session.messages.reduce(
+      const existingMessages = session?.messages ?? [];
+      const currentMaxOrder = existingMessages.reduce(
         (max, m) => Math.max(max, m.order ?? 0),
         0,
       );
@@ -84,12 +107,28 @@ export default function ChatBot() {
         order: currentMaxOrder + 2,
       };
 
-      setIsProcessing(true);
-      setSession((prev) => ({
+      setInfo((prev) => ({
         ...prev,
-        updatedAt: now,
-        messages: [...prev.messages, humanMessage, pendingAiMessage],
+        isProcessing: true,
       }));
+
+      setSession((prev) => {
+        if (!prev) {
+          return {
+            date: now,
+            deviceType: detectDeviceType(),
+            title: "Aethel Flow AI Support",
+            messages: [humanMessage, pendingAiMessage],
+            createdAt: now,
+            updatedAt: now,
+          };
+        }
+        return {
+          ...prev,
+          updatedAt: now,
+          messages: [...prev.messages, humanMessage, pendingAiMessage],
+        };
+      });
 
       // Static simulation (will be replaced with real API call later)
       setTimeout(() => {
@@ -118,28 +157,35 @@ export default function ChatBot() {
           },
         };
 
-        setSession((prev) => ({
+        setSession((prev) => {
+          if (!prev) return null;
+          return {
+            ...prev,
+            updatedAt: completedTime,
+            messages: prev.messages.map((m) =>
+              m._id === aiMsgId ? completedAiMessage : m,
+            ),
+          };
+        });
+
+        setInfo((prev) => ({
           ...prev,
-          updatedAt: completedTime,
-          messages: prev.messages.map((m) =>
-            m._id === aiMsgId ? completedAiMessage : m,
-          ),
+          isProcessing: false,
         }));
-        setIsProcessing(false);
       }, 900);
     },
-    [isProcessing, session.messages],
+    [info.isProcessing, session],
   );
 
   return (
     <>
-      <ChatTriggerButton isOpen={isOpen} onClick={handleToggleOpen} />
+      <ChatTriggerButton isOpen={info.isOpen} onClick={handleToggleOpen} />
 
       <ChatWindow
-        isOpen={isOpen}
+        isOpen={info.isOpen}
         session={session}
         suggestions={QUICK_SUGGESTIONS}
-        isProcessing={isProcessing}
+        isProcessing={info.isProcessing}
         onSendMessage={handleSendMessage}
         onResetChat={handleResetChat}
         onClose={handleClose}
