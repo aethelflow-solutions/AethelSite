@@ -30,9 +30,23 @@ export interface NewSessionChatPayload {
   title?: string;
 }
 
+export interface sendMessagePayload {
+  inputQuestion: string;
+}
+
 export interface ChatSessionResponse {
   success: boolean;
   statusCode: number;
   message: string;
   data: ChatSession;
+}
+
+export interface AiMessageResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: Message[];
+  aiMessageId: string;
+  promp: string;
+  aiMessageAnswer: string;
 }

@@ -1,4 +1,9 @@
-import { ChatSessionResponse, NewSessionChatPayload } from "@/types/chat.type";
+import {
+  AiMessageResponse,
+  ChatSessionResponse,
+  NewSessionChatPayload,
+  sendMessagePayload,
+} from "@/types/chat.type";
 import service from "../service";
 
 /**
@@ -17,6 +22,17 @@ export const createNewChatSessionApi = async (
 export const getChatSessionApi = async (sessionId: string) => {
   const response = await service.fetchGet<ChatSessionResponse>(
     `/chat/${sessionId}`,
+  );
+  return response;
+};
+
+export const sendMessageApi = async (
+  sessionId: string,
+  payload: sendMessagePayload,
+) => {
+  const response = await service.fetchPost<AiMessageResponse>(
+    `/chat/${sessionId}`,
+    payload,
   );
   return response;
 };

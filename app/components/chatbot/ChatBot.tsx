@@ -5,6 +5,7 @@ import { ChatSession, DeviceType, Message } from "@/types/chat.type";
 import {
   createNewChatSessionApi,
   getChatSessionApi,
+  sendMessageApi,
 } from "@/_api/chat-bot.api";
 import {
   getSessionToken,
@@ -12,11 +13,7 @@ import {
 } from "@/helpers/sessionStorage.helper";
 import ChatTriggerButton from "./ChatTriggerButton";
 import ChatWindow from "./ChatWindow";
-import {
-  QUICK_SUGGESTIONS,
-  STATIC_BOT_REPLIES,
-  DEFAULT_STATIC_REPLY,
-} from "./staticChatData";
+import { QUICK_SUGGESTIONS } from "./staticChatData";
 
 export interface ChatInfoState {
   isOpen: boolean;
@@ -59,22 +56,26 @@ export default function ChatBot() {
   /**
    * Create a new chat session & store its _id in sessionStorage
    */
-  const createNewSession = useCallback(async () => {
-    setInfo((prev) => ({ ...prev, isProcessing: true }));
-    try {
-      const [status, response] = await createNewChatSessionApi({});
-      if (status && response?.data) {
-        if (response.data._id) {
-          setSessionToken(response.data._id);
+  const createNewSession =
+    useCallback(async (): Promise<ChatSession | null> => {
+      setInfo((prev) => ({ ...prev, isProcessing: true }));
+      try {
+        const [status, response] = await createNewChatSessionApi({});
+        if (status && response?.data) {
+          if (response.data._id) {
+            setSessionToken(response.data._id);
+          }
+          setSession(response.data);
+          return response.data;
         }
-        setSession(response.data);
+        return null;
+      } catch (error) {
+        console.error("Failed to create new chat session:", error);
+        return null;
+      } finally {
+        setInfo((prev) => ({ ...prev, isProcessing: false }));
       }
-    } catch (error) {
-      console.error("Failed to create new chat session:", error);
-    } finally {
-      setInfo((prev) => ({ ...prev, isProcessing: false }));
-    }
-  }, []);
+    }, []);
 
   /**
    * 1st Render: Check if session ID exists in sessionStorage and fetch session details
@@ -114,12 +115,21 @@ export default function ChatBot() {
   }, [createNewSession]);
 
   const handleSendMessage = useCallback(
-    (content: string) => {
-      if (!content.trim() || info.isProcessing) return;
+    async (content: string) => {
+      const trimmedQuestion = content.trim();
+      if (!trimmedQuestion || info.isProcessing) return;
+
+      let activeSessionId = session?._id || getSessionToken();
+      if (!activeSessionId) {
+        const createdSession = await createNewSession();
+        activeSessionId = createdSession?._id || null;
+      }
+
+      if (!activeSessionId) return;
 
       const now = new Date();
-      const humanMsgId = `msg_human_${Date.now()}`;
-      const aiMsgId = `msg_ai_${Date.now() + 1}`;
+      const tempHumanMsgId = `temp_human_${Date.now()}`;
+      const tempAiMsgId = `temp_ai_${Date.now() + 1}`;
 
       const existingMessages = session?.messages ?? [];
       const currentMaxOrder = existingMessages.reduce(
@@ -127,17 +137,17 @@ export default function ChatBot() {
         0,
       );
 
-      const humanMessage: Message = {
-        _id: humanMsgId,
-        content: content.trim(),
+      const optimisticHumanMessage: Message = {
+        _id: tempHumanMsgId,
+        content: trimmedQuestion,
         role: "human",
         timestamp: now.toISOString(),
         status: "completed",
         order: currentMaxOrder + 1,
       };
 
-      const pendingAiMessage: Message = {
-        _id: aiMsgId,
+      const optimisticAiMessage: Message = {
+        _id: tempAiMsgId,
         content: "",
         role: "ai",
         timestamp: new Date(now.getTime() + 100).toISOString(),
@@ -153,11 +163,11 @@ export default function ChatBot() {
       setSession((prev) => {
         if (!prev) {
           return {
-            _id: getSessionToken() || `session_${Date.now()}`,
+            _id: activeSessionId!,
             date: now,
             deviceType: detectDeviceType(),
             title: "Aethel Flow AI Support",
-            messages: [humanMessage, pendingAiMessage],
+            messages: [optimisticHumanMessage, optimisticAiMessage],
             createdAt: now,
             updatedAt: now,
           };
@@ -165,55 +175,80 @@ export default function ChatBot() {
         return {
           ...prev,
           updatedAt: now,
-          messages: [...prev.messages, humanMessage, pendingAiMessage],
+          messages: [
+            ...prev.messages,
+            optimisticHumanMessage,
+            optimisticAiMessage,
+          ],
         };
       });
 
-      // Static simulation (until message-sending API is integrated)
-      setTimeout(() => {
-        const replyText =
-          STATIC_BOT_REPLIES[content.trim()] || DEFAULT_STATIC_REPLY;
-        const completedTime = new Date();
+      try {
+        const [status, response] = await sendMessageApi(activeSessionId, {
+          inputQuestion: trimmedQuestion,
+        });
 
-        const completedAiMessage: Message = {
-          _id: aiMsgId,
-          content: replyText,
-          role: "ai",
-          timestamp: completedTime.toISOString(),
-          status: "completed",
-          order: currentMaxOrder + 2,
-          metadata: {
-            mode: "static_preview",
-            model: "aethel-ai-v1",
-          },
-          tokenUsage: {
-            input_tokens: content.trim().split(/\s+/).length * 2,
-            output_tokens: replyText.split(/\s+/).length * 2,
-            total_tokens:
-              (content.trim().split(/\s+/).length +
-                replyText.split(/\s+/).length) *
-              2,
-          },
-        };
+        if (status && Array.isArray(response?.data)) {
+          const [humanMsgData, aiMsgData] = response.data;
+          const returnedMessages = [humanMsgData, aiMsgData].filter(
+            Boolean,
+          ) as Message[];
 
+          setSession((prev) => {
+            if (!prev) return null;
+            const filteredMessages = prev.messages.filter(
+              (m) => m._id !== tempHumanMsgId && m._id !== tempAiMsgId,
+            );
+            return {
+              ...prev,
+              updatedAt: new Date(),
+              messages: [...filteredMessages, ...returnedMessages],
+            };
+          });
+        } else {
+          setSession((prev) => {
+            if (!prev) return null;
+            return {
+              ...prev,
+              messages: prev.messages.map((m) =>
+                m._id === tempAiMsgId
+                  ? {
+                      ...m,
+                      status: "failed",
+                      error:
+                        response?.message ||
+                        "Failed to get a response from AI.",
+                    }
+                  : m,
+              ),
+            };
+          });
+        }
+      } catch (error) {
+        console.error("Failed to send message:", error);
         setSession((prev) => {
           if (!prev) return null;
           return {
             ...prev,
-            updatedAt: completedTime,
             messages: prev.messages.map((m) =>
-              m._id === aiMsgId ? completedAiMessage : m,
+              m._id === tempAiMsgId
+                ? {
+                    ...m,
+                    status: "failed",
+                    error: "Something went wrong. Please try again.",
+                  }
+                : m,
             ),
           };
         });
-
+      } finally {
         setInfo((prev) => ({
           ...prev,
           isProcessing: false,
         }));
-      }, 900);
+      }
     },
-    [info.isProcessing, session],
+    [info.isProcessing, session, createNewSession],
   );
 
   return (
