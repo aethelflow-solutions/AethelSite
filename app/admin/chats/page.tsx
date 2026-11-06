@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import {
   MessageSquare,
   Calendar,
@@ -11,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
   RefreshCw,
+  ArrowUpRight,
 } from "lucide-react";
 import { fetchChatSessionsListApi } from "@/_api/admin-chat.api";
 import { AdminChatSessionItem } from "@/types/admin-chat.type";
@@ -52,6 +54,7 @@ function getDeviceIcon(deviceType?: DeviceType) {
 }
 
 export default function AdminChatsPage() {
+  const router = useRouter();
   const [sessions, setSessions] = useState<AdminChatSessionItem[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     totalDocs: 0,
@@ -137,7 +140,7 @@ export default function AdminChatsPage() {
             Chat Sessions
           </h1>
           <span className="text-sm text-gray-500 mt-1 block">
-            AI chatbot sessions and visitor conversations.
+            Click on any session to inspect the full conversation.
           </span>
         </div>
 
@@ -206,14 +209,16 @@ export default function AdminChatsPage() {
                   <th className="py-3.5 px-4">Session ID</th>
                   <th className="py-3.5 px-4">Device</th>
                   <th className="py-3.5 px-4">Session Date</th>
-                  <th className="py-3.5 px-5">Created At</th>
+                  <th className="py-3.5 px-4">Created At</th>
+                  <th className="py-3.5 px-5 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 text-sm">
                 {sessions.map((item) => (
                   <tr
                     key={item._id}
-                    className="hover:bg-gray-50/70 transition-colors"
+                    onClick={() => router.push(`/admin/chats/${item._id}`)}
+                    className="group hover:bg-gray-50/90 transition-colors cursor-pointer"
                   >
                     {/* Title */}
                     <td className="py-4 px-5 align-middle">
@@ -221,7 +226,7 @@ export default function AdminChatsPage() {
                         <div className="w-8 h-8 rounded-xl bg-[#1B1A1A] text-[#28a2fe] flex items-center justify-center shrink-0">
                           <MessageSquare className="w-4 h-4" />
                         </div>
-                        <span className="font-semibold text-gray-900">
+                        <span className="font-semibold text-gray-900 group-hover:text-[#28a2fe] transition-colors">
                           {item.title || "Untitled Chat"}
                         </span>
                       </div>
@@ -251,8 +256,16 @@ export default function AdminChatsPage() {
                     </td>
 
                     {/* Created At */}
-                    <td className="py-4 px-5 align-middle whitespace-nowrap text-xs text-gray-500">
+                    <td className="py-4 px-4 align-middle whitespace-nowrap text-xs text-gray-500">
                       {formatDate(item.createdAt)}
+                    </td>
+
+                    {/* Open Action */}
+                    <td className="py-4 px-5 align-middle text-right">
+                      <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-medium bg-gray-100 group-hover:bg-[#1B1A1A] text-gray-700 group-hover:text-white transition-colors">
+                        <span>Open</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </span>
                     </td>
                   </tr>
                 ))}
