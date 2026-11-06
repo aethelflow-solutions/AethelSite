@@ -27,12 +27,14 @@ function formatDate(dateStr?: string): string {
   try {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return "—";
-    return date.toLocaleDateString([], {
+    return date.toLocaleString("en-US", {
+      weekday: "short",
       month: "short",
       day: "numeric",
       year: "numeric",
-      hour: "2-digit",
+      hour: "numeric",
       minute: "2-digit",
+      hour12: true,
     });
   } catch {
     return "—";
@@ -54,29 +56,32 @@ export default function AdminFormsPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedForm, setSelectedForm] = useState<Form | null>(null);
 
-  const loadForms = useCallback(async (currentPage: number, currentLimit: number) => {
-    setIsLoading(true);
-    try {
-      const [status, response] = await fetchFormsListApi({
-        page: currentPage,
-        limit: currentLimit,
-      });
+  const loadForms = useCallback(
+    async (currentPage: number, currentLimit: number) => {
+      setIsLoading(true);
+      try {
+        const [status, response] = await fetchFormsListApi({
+          page: currentPage,
+          limit: currentLimit,
+        });
 
-      if (status && response?.success && response?.data) {
-        setForms(response.data.forms || []);
-        if (response.data.pagination) {
-          setPagination(response.data.pagination);
+        if (status && response?.success && response?.data) {
+          setForms(response.data.forms || []);
+          if (response.data.pagination) {
+            setPagination(response.data.pagination);
+          }
+        } else {
+          setForms([]);
         }
-      } else {
+      } catch (error) {
+        console.error("Failed to fetch forms list:", error);
         setForms([]);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Failed to fetch forms list:", error);
-      setForms([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [],
+  );
 
   useEffect(() => {
     loadForms(page, limit);

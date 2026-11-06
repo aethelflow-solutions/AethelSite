@@ -14,9 +14,10 @@ function formatTime(timestamp?: string): string {
   try {
     const date = new Date(timestamp);
     if (isNaN(date.getTime())) return "";
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
       minute: "2-digit",
+      hour12: true,
     });
   } catch {
     return "";
