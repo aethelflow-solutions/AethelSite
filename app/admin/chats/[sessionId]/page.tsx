@@ -110,9 +110,14 @@ export default function AdminChatSessionDetailPage() {
     (a, b) => (a.order ?? 0) - (b.order ?? 0),
   );
 
-  const totalTokens = messages.reduce(
-    (sum, m) => sum + (m.tokenUsage?.total_tokens ?? 0),
-    0,
+  const tokenStats = messages.reduce(
+    (acc, m) => {
+      acc.input += m.tokenUsage?.input_tokens ?? 0;
+      acc.output += m.tokenUsage?.output_tokens ?? 0;
+      acc.total += m.tokenUsage?.total_tokens ?? 0;
+      return acc;
+    },
+    { input: 0, output: 0, total: 0 },
   );
 
   return (
@@ -168,12 +173,21 @@ export default function AdminChatSessionDetailPage() {
             <span>{messages.length} msgs</span>
           </div>
 
-          {totalTokens > 0 && (
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/10 text-xs text-gray-200">
-              <Cpu className="w-3.5 h-3.5 text-[#7dd3fc]" />
-              <span>{totalTokens} tokens</span>
-            </div>
-          )}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 border border-white/10 text-xs text-gray-200 flex-wrap">
+            <Cpu className="w-3.5 h-3.5 text-[#7dd3fc] shrink-0" />
+            <span>
+              In: <strong className="text-white">{tokenStats.input}</strong>
+            </span>
+            <span className="text-white/30">•</span>
+            <span>
+              Out: <strong className="text-white">{tokenStats.output}</strong>
+            </span>
+            <span className="text-white/30">•</span>
+            <span>
+              Total:{" "}
+              <strong className="text-[#7dd3fc]">{tokenStats.total}</strong>
+            </span>
+          </div>
 
           <button
             type="button"
