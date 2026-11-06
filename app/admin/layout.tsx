@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { UserContextProvider } from "@/context/userContextProvider";
+import AdminShell from "./components/AdminShell";
 
 export const metadata: Metadata = {
   title: "Admin Portal",
@@ -10,5 +12,9 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="min-h-screen bg-[#05060a]">{children}</div>;
+  return (
+    <UserContextProvider>
+      <AdminShell>{children}</AdminShell>
+    </UserContextProvider>
+  );
 }

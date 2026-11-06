@@ -3,7 +3,7 @@ import { AuthLoginPayload, AuthLoginResponse } from "@/types/admin-auth.type";
 
 export const loginApi = async (payload: AuthLoginPayload) => {
   const response = await Service.fetchPost<AuthLoginResponse>(
-    "/auth/login",
+    "/admin/auth/login",
     payload,
   );
   return response;

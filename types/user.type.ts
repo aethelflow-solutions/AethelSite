@@ -12,3 +12,10 @@ export interface UserProfile {
   __v: 0;
   lastLoginAt: string;
 }
+
+export interface UserPrfoileApiResponse {
+  success: boolean;
+  status: number;
+  message: number;
+  data: UserProfile;
+}

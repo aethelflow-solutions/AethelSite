@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import {
   Mail,
   Lock,
@@ -11,6 +13,9 @@ import {
   ShieldCheck,
   AlertCircle,
 } from "lucide-react";
+import { loginApi } from "@/_api/admin-auth.api";
+import { setAccessToken } from "@/helpers/localStorage.helper";
+import { useProfileHook } from "@/hooks/useProfileHook";
 
 interface LoginFormState {
   email: string;
@@ -26,6 +31,9 @@ interface LoginFormErrors {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function AdminLoginPage() {
+  const router = useRouter();
+  const { setUserProfile } = useProfileHook();
+
   const [form, setForm] = useState<LoginFormState>({
     email: "",
     password: "",
@@ -67,12 +75,30 @@ export default function AdminLoginPage() {
 
     setIsLoading(true);
     try {
-      // Ready for login API integration
-      await new Promise((resolve) => setTimeout(resolve, 800));
-    } catch {
-      setErrors({
-        general: "Invalid email or password. Please try again.",
+      const [status, response] = await loginApi({
+        email: form.email.trim(),
+        password: form.password,
       });
+
+      if (status && response) {
+        if (response.accessToken) {
+          setAccessToken(response.accessToken);
+        }
+        if (response.data) {
+          setUserProfile(response.data);
+        }
+        toast.success(response.message || "Logged in successfully");
+        router.push("/admin/dashboard");
+      } else {
+        const errorMessage =
+          response?.message || "Invalid email or password. Please try again.";
+        setErrors({ general: errorMessage });
+        toast.error(errorMessage);
+      }
+    } catch {
+      const errorMessage = "Something went wrong. Please try again.";
+      setErrors({ general: errorMessage });
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
