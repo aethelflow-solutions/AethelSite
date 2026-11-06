@@ -81,11 +81,12 @@ export default function AdminLoginPage() {
       });
 
       if (status && response) {
-        if (response.accessToken) {
-          setAccessToken(response.accessToken);
+        console.log("Login API Response:", response);
+        if (response.data?.accessToken) {
+          setAccessToken(response.data.accessToken);
         }
-        if (response.data) {
-          setUserProfile(response.data);
+        if (response.data?.userDetails) {
+          setUserProfile(response.data.userDetails);
         }
         toast.success(response.message || "Logged in successfully");
         router.push("/admin/dashboard");

@@ -9,6 +9,8 @@ export interface AuthLoginResponse {
   success: boolean;
   status: number;
   message: string;
-  data: UserProfile;
-  accessToken: string;
+  data: {
+    userDetails: UserProfile;
+    accessToken: string;
+  };
 }
