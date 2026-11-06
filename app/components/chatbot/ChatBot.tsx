@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ChatSession, DeviceType, Message } from "@/types/chat.type";
 import {
   createNewChatSessionApi,
@@ -29,6 +30,9 @@ function detectDeviceType(): DeviceType {
 }
 
 export default function ChatBot() {
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith("/admin");
+
   const [info, setInfo] = useState<ChatInfoState>({
     isOpen: false,
     isProcessing: false,
@@ -256,6 +260,8 @@ export default function ChatBot() {
     },
     [info.isProcessing, session, createNewSession],
   );
+
+  if (isAdminRoute) return null;
 
   return (
     <>
