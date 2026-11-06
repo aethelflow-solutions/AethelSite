@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { UserContextProvider } from "@/context/userContextProvider";
-import AdminShell from "./components/AdminShell";
+import AdminShell from "./_components/AdminShell";
 
 export const metadata: Metadata = {
   title: "Admin Portal",
