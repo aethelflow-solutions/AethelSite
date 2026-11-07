@@ -6,6 +6,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
 import sendMessageToDiscordWebhook from "@/webhooks/discord.webhook";
+import { sendFormDetailsApi } from "@/_api/form.api";
 
 interface FormData {
   name: string;
@@ -101,12 +102,12 @@ export default function ContactForm() {
 
     setSubmitting(true);
     try {
-      sendMessageToDiscordWebhook({
+      sendFormDetailsApi({
         name: form.name,
         email: form.email,
-        company: form.company,
-        phone: form.phone,
-        service: form.service,
+        companyName: form.company,
+        phoneNumber: form.phone,
+        category: form.service,
         message: form.message,
       });
 
