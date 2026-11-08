@@ -35,7 +35,7 @@ export default function ChatMessageList({
     : "Today";
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4 bg-gradient-to-b from-gray-50/70 via-white to-gray-50/50">
+    <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-5 space-y-4 bg-gradient-to-b from-gray-50/70 via-white to-gray-50/50">
       {/* Top Session Intro Card */}
       <div className="flex flex-col items-center text-center mb-4">
         <span className="px-3 py-1 rounded-full text-[11px] font-medium bg-gray-100 text-gray-500 border border-gray-200/70 mb-3">

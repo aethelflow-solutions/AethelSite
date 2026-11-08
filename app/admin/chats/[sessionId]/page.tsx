@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { getChatSessionApi } from "@/_api/chat-bot.api";
 import { ChatSession, DeviceType, Message } from "@/types/chat.type";
+import MarkdownRenderer from "@/app/components/chatbot/MarkdownRenderer";
 
 function formatDateTime(dateStr?: string | Date): string {
   if (!dateStr) return "—";
@@ -49,29 +50,6 @@ function getDeviceIcon(deviceType?: DeviceType) {
     default:
       return <HelpCircle className="w-3.5 h-3.5 text-gray-400" />;
   }
-}
-
-function renderFormattedContent(content?: string) {
-  if (!content) return null;
-  const lines = content.split("\n");
-  return lines.map((line, lineIdx) => {
-    const parts = line.split(/(\*\*.*?\*\*)/g);
-    return (
-      <React.Fragment key={lineIdx}>
-        {parts.map((part, partIdx) => {
-          if (part.startsWith("**") && part.endsWith("**")) {
-            return (
-              <strong key={partIdx} className="font-semibold">
-                {part.slice(2, -2)}
-              </strong>
-            );
-          }
-          return <span key={partIdx}>{part}</span>;
-        })}
-        {lineIdx < lines.length - 1 && <br />}
-      </React.Fragment>
-    );
-  });
 }
 
 export default function AdminChatSessionDetailPage() {
@@ -167,7 +145,7 @@ export default function AdminChatSessionDetailPage() {
         </div>
 
         {/* Right Stats & Refresh */}
-        <div className="flex items-center gap-2.5 self-start sm:self-auto shrink-0">
+        <div className="flex items-center gap-2.5 self-start sm:self-auto shrink-0 flex-wrap">
           <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/10 text-xs text-gray-200">
             <MessageSquare className="w-3.5 h-3.5 text-[#28a2fe]" />
             <span>{messages.length} msgs</span>
@@ -204,7 +182,7 @@ export default function AdminChatSessionDetailPage() {
       </div>
 
       {/* Full-Screen Messages Body */}
-      <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-5 bg-gradient-to-b from-gray-50/70 via-white to-gray-50/50">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden p-5 sm:p-8 space-y-5 bg-gradient-to-b from-gray-50/70 via-white to-gray-50/50">
         {isLoading ? (
           <div className="max-w-4xl mx-auto space-y-4">
             {Array.from({ length: 4 }).map((_, idx) => (
@@ -237,7 +215,7 @@ export default function AdminChatSessionDetailPage() {
               return (
                 <div
                   key={message._id}
-                  className={`flex items-start gap-3 w-full ${
+                  className={`flex items-start gap-3 w-full min-w-0 ${
                     isHuman ? "flex-row-reverse" : "flex-row"
                   }`}
                 >
@@ -258,21 +236,23 @@ export default function AdminChatSessionDetailPage() {
 
                   {/* Bubble + Admin Metadata */}
                   <div
-                    className={`flex flex-col max-w-[82%] sm:max-w-[75%] ${
+                    className={`flex flex-col max-w-[82%] sm:max-w-[75%] min-w-0 ${
                       isHuman ? "items-end" : "items-start"
                     }`}
                   >
                     <div
-                      className={`px-5 py-3.5 rounded-2xl text-sm leading-relaxed shadow-2xs ${
+                      className={`w-full max-w-full overflow-hidden px-5 py-3.5 rounded-2xl text-sm leading-relaxed shadow-2xs ${
                         isHuman
                           ? "bg-[#1B1A1A] text-white rounded-tr-xs"
                           : isFailed
-                          ? "bg-red-50 border border-red-200 text-red-800 rounded-tl-xs"
-                          : "bg-white border border-gray-200/90 text-gray-800 rounded-tl-xs"
+                            ? "bg-red-50 border border-red-200 text-red-800 rounded-tl-xs"
+                            : "bg-white border border-gray-200/90 text-gray-800 rounded-tl-xs"
                       }`}
                     >
-                      <div className="break-words">
-                        {renderFormattedContent(message.content) || (
+                      <div className="break-words min-w-0 max-w-full">
+                        {message.content ? (
+                          <MarkdownRenderer answer={message.content} />
+                        ) : (
                           <span className="italic opacity-60">
                             {message.error || "No content"}
                           </span>
@@ -282,7 +262,7 @@ export default function AdminChatSessionDetailPage() {
 
                     {/* Footer Meta */}
                     <div
-                      className={`flex items-center gap-3 mt-1.5 px-1 text-[11px] text-gray-400 flex-wrap ${
+                      className={`flex items-center gap-2.5 mt-1.5 px-1 text-[11px] text-gray-400 flex-wrap ${
                         isHuman ? "flex-row-reverse" : "flex-row"
                       }`}
                     >
@@ -294,13 +274,31 @@ export default function AdminChatSessionDetailPage() {
                         <span>{formatDateTime(message.timestamp)}</span>
                       )}
 
-                      {message.tokenUsage?.total_tokens ? (
-                        <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[10px] font-medium">
-                          {message.tokenUsage.total_tokens} tokens (in:{" "}
-                          {message.tokenUsage.input_tokens}, out:{" "}
-                          {message.tokenUsage.output_tokens})
+                      {!isHuman && message.tokenUsage && (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-gray-100 border border-gray-200/70 text-gray-700 text-[10.5px] font-medium">
+                          <Cpu className="w-3 h-3 text-[#28a2fe]" />
+                          <span>
+                            In:{" "}
+                            <strong>
+                              {message.tokenUsage.input_tokens ?? 0}
+                            </strong>
+                          </span>
+                          <span className="text-gray-300">•</span>
+                          <span>
+                            Out:{" "}
+                            <strong>
+                              {message.tokenUsage.output_tokens ?? 0}
+                            </strong>
+                          </span>
+                          <span className="text-gray-300">•</span>
+                          <span>
+                            Total:{" "}
+                            <strong className="text-gray-900">
+                              {message.tokenUsage.total_tokens ?? 0}
+                            </strong>
+                          </span>
                         </span>
-                      ) : null}
+                      )}
                     </div>
                   </div>
                 </div>

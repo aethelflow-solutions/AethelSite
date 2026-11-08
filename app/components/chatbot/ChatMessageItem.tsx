@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Message } from "@/types/chat.type";
 import { Bot, User, Copy, Check, AlertCircle, RefreshCw } from "lucide-react";
+import MarkdownRenderer from "./MarkdownRenderer";
 
 interface ChatMessageItemProps {
   message: Message;
@@ -22,33 +23,6 @@ function formatTime(timestamp?: string): string {
   } catch {
     return "";
   }
-}
-
-/**
- * Lightweight inline formatter for **bold** text and line breaks
- */
-function renderFormattedContent(content?: string) {
-  if (!content) return null;
-
-  const lines = content.split("\n");
-  return lines.map((line, lineIdx) => {
-    const parts = line.split(/(\*\*.*?\*\*)/g);
-    return (
-      <React.Fragment key={lineIdx}>
-        {parts.map((part, partIdx) => {
-          if (part.startsWith("**") && part.endsWith("**")) {
-            return (
-              <strong key={partIdx} className="font-semibold">
-                {part.slice(2, -2)}
-              </strong>
-            );
-          }
-          return <span key={partIdx}>{part}</span>;
-        })}
-        {lineIdx < lines.length - 1 && <br />}
-      </React.Fragment>
-    );
-  });
 }
 
 export default function ChatMessageItem({
@@ -74,7 +48,7 @@ export default function ChatMessageItem({
 
   return (
     <div
-      className={`group flex items-end gap-2.5 w-full animate-fadeIn ${
+      className={`group flex items-end gap-2.5 w-full min-w-0 animate-fadeIn ${
         isHuman ? "flex-row-reverse" : "flex-row"
       }`}
       style={{ animationDuration: "0.28s", animationDelay: "0s" }}
@@ -96,17 +70,17 @@ export default function ChatMessageItem({
 
       {/* Bubble Container */}
       <div
-        className={`flex flex-col max-w-[80%] ${
+        className={`flex flex-col max-w-[82%] min-w-0 ${
           isHuman ? "items-end" : "items-start"
         }`}
       >
         <div
-          className={`relative px-4 py-3 rounded-2xl text-[13.5px] leading-relaxed shadow-2xs transition-all ${
+          className={`relative w-full max-w-full overflow-hidden px-4 py-3 rounded-2xl text-[13.5px] leading-relaxed shadow-2xs transition-all ${
             isHuman
               ? "bg-[#1B1A1A] text-white rounded-br-xs"
               : isFailed
-              ? "bg-red-50 border border-red-200 text-red-800 rounded-bl-xs"
-              : "bg-white border border-gray-200/90 text-gray-800 rounded-bl-xs"
+                ? "bg-red-50 border border-red-200 text-red-800 rounded-bl-xs"
+                : "bg-white border border-gray-200/90 text-gray-800 rounded-bl-xs"
           }`}
         >
           {/* Processing State */}
@@ -121,14 +95,14 @@ export default function ChatMessageItem({
             </div>
           ) : isFailed ? (
             /* Failed State */
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 min-w-0 max-w-full">
               <div className="flex items-center gap-1.5 text-red-600 font-medium text-xs">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{message.error || "Failed to get a response."}</span>
               </div>
               {message.content && (
-                <div className="text-gray-700 text-xs opacity-80">
-                  {renderFormattedContent(message.content)}
+                <div className="text-gray-700 text-xs opacity-80 min-w-0 max-w-full">
+                  <MarkdownRenderer answer={message.content || ""} />
                 </div>
               )}
               {onRetry && (
@@ -144,8 +118,8 @@ export default function ChatMessageItem({
             </div>
           ) : (
             /* Completed Content */
-            <div className="break-words">
-              {renderFormattedContent(message.content)}
+            <div className="break-words min-w-0 max-w-full leading-relaxed">
+              <MarkdownRenderer answer={message.content || ""} />
             </div>
           )}
         </div>
