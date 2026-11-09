@@ -29,7 +29,7 @@ const configUrls: Record<EnvMode, ServerConfig> = {
 };
 
 // Get current environment mode (default to development)
-const currentMode = "development" as EnvMode;
+const currentMode = "production" as EnvMode;
 
 const API_URLS: ServerConfig = configUrls[currentMode];
 
