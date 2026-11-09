@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   FileText,
   MessageSquare,
+  Settings,
   LogOut,
   X,
   ShieldCheck,
@@ -38,6 +39,11 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     label: "Chats",
     href: "/admin/chats",
     icon: MessageSquare,
+  },
+  {
+    label: "Settings",
+    href: "/admin/settings",
+    icon: Settings,
   },
 ];
 
