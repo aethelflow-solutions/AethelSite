@@ -50,3 +50,16 @@ export interface AiMessageResponse {
   promp: string;
   aiMessageAnswer: string;
 }
+
+export interface ChatBotSettings {
+  isBotActive: boolean;
+  max_token_usage: number;
+  initialQuestions: string[];
+}
+
+export interface ChatBotSettingsResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: ChatBotSettings;
+}

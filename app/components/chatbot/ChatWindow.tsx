@@ -33,7 +33,8 @@ export default function ChatWindow({
   if (!isOpen) return null;
 
   const messages = session?.messages ?? [];
-  const isMessagesEmpty = messages.length === 0;
+  const showInitialQuestions =
+    messages.length === 0 || !messages.some((m) => m.role === "human");
 
   return (
     <>
@@ -69,7 +70,7 @@ export default function ChatWindow({
           onRetry={onRetryMessage}
         />
 
-        {isMessagesEmpty && (
+        {showInitialQuestions && (
           <ChatSuggestions
             suggestions={suggestions}
             onSelect={onSendMessage}

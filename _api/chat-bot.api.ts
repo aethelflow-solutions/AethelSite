@@ -1,5 +1,6 @@
 import {
   AiMessageResponse,
+  ChatBotSettingsResponse,
   ChatSessionResponse,
   NewSessionChatPayload,
   sendMessagePayload,
@@ -34,5 +35,10 @@ export const sendMessageApi = async (
     `/chat/${sessionId}`,
     payload,
   );
+  return response;
+};
+
+export const getChatBotSettingsApi = async () => {
+  const response = await service.fetchGet<ChatBotSettingsResponse>(`/settings`);
   return response;
 };

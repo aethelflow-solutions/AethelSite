@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ChatSession, DeviceType, Message } from "@/types/chat.type";
 import {
   createNewChatSessionApi,
+  getChatBotSettingsApi,
   getChatSessionApi,
   sendMessageApi,
 } from "@/_api/chat-bot.api";
@@ -14,11 +15,12 @@ import {
 } from "@/helpers/sessionStorage.helper";
 import ChatTriggerButton from "./ChatTriggerButton";
 import ChatWindow from "./ChatWindow";
-import { QUICK_SUGGESTIONS } from "./staticChatData";
 
 export interface ChatInfoState {
   isOpen: boolean;
   isProcessing: boolean;
+  isBotActive: boolean;
+  initialQuestions: string[];
 }
 
 function detectDeviceType(): DeviceType {
@@ -36,6 +38,8 @@ export default function ChatBot() {
   const [info, setInfo] = useState<ChatInfoState>({
     isOpen: false,
     isProcessing: false,
+    isBotActive: false,
+    initialQuestions: [],
   });
 
   const [session, setSession] = useState<ChatSession | null>(null);
@@ -46,15 +50,9 @@ export default function ChatBot() {
   const fetchExistingSession = useCallback(async (sessionId: string) => {
     setInfo((prev) => ({ ...prev, isProcessing: true }));
     try {
-      const [status, response, statusCode] = await getChatSessionApi(sessionId);
+      const [status, response] = await getChatSessionApi(sessionId);
       if (status && response?.data) {
         setSession(response.data);
-      }
-      if (statusCode === 404 || statusCode === 500) {
-        console.warn(
-          `Session with ID ${sessionId} not found. Creating a new session.`,
-        );
-        await createNewSession();
       }
     } catch (error) {
       console.error("Failed to fetch chat session:", error);
@@ -88,14 +86,38 @@ export default function ChatBot() {
     }, []);
 
   /**
-   * 1st Render: Check if session ID exists in sessionStorage and fetch session details
+   * 1st Render: Fetch chatbot settings (/settings); if active, check existing session in sessionStorage
    */
   useEffect(() => {
-    const existingSessionId = getSessionToken();
-    if (existingSessionId) {
-      fetchExistingSession(existingSessionId);
-    }
-  }, []);
+    if (isAdminRoute) return;
+
+    const initChatBot = async () => {
+      try {
+        const [status, response] = await getChatBotSettingsApi();
+        if (status && response?.success && response?.data) {
+          const { isBotActive, initialQuestions } = response.data;
+          setInfo((prev) => ({
+            ...prev,
+            isBotActive: Boolean(isBotActive),
+            initialQuestions: Array.isArray(initialQuestions)
+              ? initialQuestions
+              : [],
+          }));
+
+          if (isBotActive) {
+            const existingSessionId = getSessionToken();
+            if (existingSessionId) {
+              await fetchExistingSession(existingSessionId);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch chatbot settings:", error);
+      }
+    };
+
+    initChatBot();
+  }, [isAdminRoute]);
 
   /**
    * On clicking the bot: toggle open, and if no session details exist, create a new session
@@ -111,7 +133,7 @@ export default function ChatBot() {
     if (nextIsOpen && !session && !info.isProcessing) {
       await createNewSession();
     }
-  }, [info.isOpen, info.isProcessing, session, createNewSession]);
+  }, [info.isOpen, info.isProcessing, session]);
 
   const handleClose = useCallback(() => {
     setInfo((prev) => ({
@@ -122,7 +144,7 @@ export default function ChatBot() {
 
   const handleResetChat = useCallback(async () => {
     await createNewSession();
-  }, [createNewSession]);
+  }, []);
 
   const handleSendMessage = useCallback(
     async (content: string) => {
@@ -258,10 +280,10 @@ export default function ChatBot() {
         }));
       }
     },
-    [info.isProcessing, session, createNewSession],
+    [info.isProcessing, session],
   );
 
-  if (isAdminRoute) return null;
+  if (isAdminRoute || !info.isBotActive) return null;
 
   return (
     <>
@@ -270,7 +292,7 @@ export default function ChatBot() {
       <ChatWindow
         isOpen={info.isOpen}
         session={session}
-        suggestions={QUICK_SUGGESTIONS}
+        suggestions={info.initialQuestions}
         isProcessing={info.isProcessing}
         onSendMessage={handleSendMessage}
         onResetChat={handleResetChat}
