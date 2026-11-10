@@ -7,7 +7,7 @@ import React, {
   useCallback,
   type ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { UserProfile } from "@/types/user.type";
 import { userProfileApi } from "@/_api/admin-user.api";
 import {
@@ -32,6 +32,7 @@ interface UserContextProviderProps {
 export function UserContextProvider({ children }: UserContextProviderProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleInvalidSession = useCallback(() => {
     clearAllLocalStorage();
@@ -42,7 +43,15 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
 
   useEffect(() => {
     const token = getAccessToken();
-    if (!token) return;
+
+    if (!token) {
+      if (pathname !== "/admin/login") {
+        router.replace("/admin/login");
+      }
+      return;
+    }
+
+    if (userProfile) return;
 
     const fetchProfile = async () => {
       try {
@@ -59,7 +68,7 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
     };
 
     fetchProfile();
-  }, []);
+  }, [pathname, router, userProfile]);
 
   return (
     <UserContext.Provider value={{ userProfile, setUserProfile }}>

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { usePathname } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu } from "lucide-react";
+import { getAccessToken } from "@/helpers/localStorage.helper";
 import AdminSidebar from "./AdminSidebar";
 
 interface AdminShellProps {
@@ -11,11 +12,37 @@ interface AdminShellProps {
 
 export default function AdminShell({ children }: AdminShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (pathname === "/admin/login") {
+      setIsAuthorized(true);
+      return;
+    }
+
+    const token = getAccessToken();
+    if (!token) {
+      setIsAuthorized(false);
+      router.replace("/admin/login");
+    } else {
+      setIsAuthorized(true);
+    }
+  }, [pathname, router]);
 
   // Do not show sidebar on login page
   if (pathname === "/admin/login") {
     return <>{children}</>;
+  }
+
+  // Prevent rendering protected admin pages when there is no token
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#05060a] text-white">
+        <div className="w-8 h-8 rounded-full border-2 border-[#28a2fe] border-t-transparent animate-spin" />
+      </div>
+    );
   }
 
   return (
