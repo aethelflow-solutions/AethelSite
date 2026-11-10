@@ -17,6 +17,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://aethelflow.com/features",
+    languages: {
+      "x-default": "https://aethelflow.com/features",
+      "en-US": "https://aethelflow.com/features",
+      "en-IN": "https://aethelflow.com/features",
+      "en-AE": "https://aethelflow.com/features",
+      "en-SA": "https://aethelflow.com/features",
+      "en-QA": "https://aethelflow.com/features",
+      "en-KW": "https://aethelflow.com/features",
+      "en-BH": "https://aethelflow.com/features",
+      "en-OM": "https://aethelflow.com/features",
+    },
   },
   robots: {
     index: true,

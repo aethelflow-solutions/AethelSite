@@ -18,6 +18,17 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://aethelflow.com/about",
+    languages: {
+      "x-default": "https://aethelflow.com/about",
+      "en-US": "https://aethelflow.com/about",
+      "en-IN": "https://aethelflow.com/about",
+      "en-AE": "https://aethelflow.com/about",
+      "en-SA": "https://aethelflow.com/about",
+      "en-QA": "https://aethelflow.com/about",
+      "en-KW": "https://aethelflow.com/about",
+      "en-BH": "https://aethelflow.com/about",
+      "en-OM": "https://aethelflow.com/about",
+    },
   },
   robots: {
     index: true,
