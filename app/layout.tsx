@@ -21,6 +21,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://aethelflow.com"),
   title: {
     default: "Aethel Flow - AI & Automation Solutions",
     template: "%s | Aethel Flow",
@@ -80,7 +81,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#692ac8",
+  themeColor: "#05060a",
 };
 
 export default function RootLayout({
