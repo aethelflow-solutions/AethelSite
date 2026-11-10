@@ -1,0 +1,30 @@
+# Aethel Flow Solutions Pvt. Ltd. (Aethel Flow)
+
+> Aethel Flow harnesses AI and intelligent automation to streamline workflows, spark innovation, and empower businesses across the Gulf (UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman), India, and globally.
+
+## Company Overview
+- **Company Name**: Aethel Flow Solutions Pvt. Ltd.
+- **Website**: https://aethelflow.com
+- **Email**: contact@aethelflow.com
+- **Phone**: +91 7416656592
+- **Headquarters**: 9-4-136/19,20 & 21/A, Shareef Residency, 3rd Floor, 7 Tombs Road, Tolichowki, Hyderabad, Telangana, India
+- **Primary Regions Served**: United Arab Emirates (Dubai, Abu Dhabi), Saudi Arabia (Riyadh, Jeddah), Qatar (Doha), Kuwait, Bahrain, Oman, India, Global
+
+## Core Services
+1. **AI & Automations**: Design and deploy custom AI/ML models for workflow automation, predictive analytics, and intelligent decision-making.
+2. **Full Stack Solutions**: End-to-end web, mobile, and cloud architectures built with modern technologies and AI integrations.
+3. **Agent Call Services**: Intelligent conversational AI voice and call agents for 24/7 customer support, lead qualification, and sales funnel optimization.
+4. **Digital Transformation Consulting**: Strategic guidance to help enterprises adopt and scale digital and AI technologies across operations.
+5. **Software Development and Modernization**: Architecting, engineering, and upgrading legacy enterprise systems to modern cloud platforms.
+6. **Data Analytics and Business Intelligence**: Data strategy, governance, advanced analytics, and actionable insights for data-driven decision-making.
+
+## Key Platform Features (https://aethelflow.com/features)
+- **Scalable Architecture**: Systems engineered to scale seamlessly with enterprise growth.
+- **Enterprise Security**: Industry-grade security standards to protect sensitive business data.
+- **Easy and Fast Deployment**: Agile delivery for rapid time-to-market and continuous iteration.
+- **Dedicated Support**: Continuous technical assistance, monitoring, and maintenance.
+
+## Key Pages
+- Home: https://aethelflow.com
+- Features: https://aethelflow.com/features
+- About Us: https://aethelflow.com/about

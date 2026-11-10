@@ -68,44 +68,70 @@ export const metadata: Metadata = {
 
 const featuresJsonLd = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": "https://aethelflow.com/features#webpage",
-  url: "https://aethelflow.com/features",
-  name: "Features | Aethel Flow",
-  description:
-    "Scalable architecture, enterprise security, fast deployment, and dedicated support tailored to your enterprise needs.",
-  mainEntity: {
-    "@type": "ItemList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Scalable Architecture",
-        description:
-          "Our systems grow with your business without performance issues.",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://aethelflow.com/features#webpage",
+      url: "https://aethelflow.com/features",
+      name: "Features | Aethel Flow",
+      description:
+        "Scalable architecture, enterprise security, fast deployment, and dedicated support tailored to your enterprise needs.",
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Scalable Architecture",
+            description:
+              "Our systems grow with your business without performance issues.",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Enterprise Security",
+            description:
+              "We follow industry-grade security standards to protect data.",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Easy And Fast Deployment",
+            description: "Agile process ensures faster delivery and iterations.",
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: "Dedicated Support",
+            description:
+              "Our team is always available for assistance and maintenance.",
+          },
+        ],
       },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Enterprise Security",
-        description:
-          "We follow industry-grade security standards to protect data.",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "Easy And Fast Deployment",
-        description: "Agile process ensures faster delivery and iterations.",
-      },
-      {
-        "@type": "ListItem",
-        position: 4,
-        name: "Dedicated Support",
-        description:
-          "Our team is always available for assistance and maintenance.",
-      },
-    ],
-  },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://aethelflow.com/features#faq",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "What makes Aethel Flow's architecture scalable and secure?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Aethel Flow builds cloud-native, modular AI and software architectures following industry-grade enterprise security standards, ensuring systems scale smoothly as business demand grows.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How fast can Aethel Flow deploy AI and automation solutions?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Aethel Flow uses an agile engineering and deployment process that enables rapid prototyping, fast production rollouts, and continuous post-launch support.",
+          },
+        },
+      ],
+    },
+  ],
 };
 
 export default function FeatureLayout({

@@ -8,6 +8,20 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/admin", "/admin/"],
       },
+      {
+        userAgent: [
+          "GPTBot",
+          "OAI-SearchBot",
+          "ChatGPT-User",
+          "PerplexityBot",
+          "ClaudeBot",
+          "anthropic-ai",
+          "Google-Extended",
+          "Applebot-Extended",
+        ],
+        allow: ["/", "/features", "/about", "/llms.txt"],
+        disallow: ["/admin", "/admin/"],
+      },
     ],
     sitemap: "https://aethelflow.com/sitemap.xml",
   };

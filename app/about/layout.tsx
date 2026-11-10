@@ -69,21 +69,39 @@ export const metadata: Metadata = {
 
 const aboutJsonLd = {
   "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "@id": "https://aethelflow.com/about#webpage",
-  url: "https://aethelflow.com/about",
-  name: "About Us | Aethel Flow",
-  description:
-    "At Aethel Flow, we believe the future of work should be seamless, intelligent, and human-centric, redefining automation with trust and clarity.",
-  mainEntity: {
-    "@type": "Organization",
-    "@id": "https://aethelflow.com/#organization",
-    name: "Aethel Flow Solutions Pvt. Ltd.",
-    url: "https://aethelflow.com",
-    logo: "https://aethelflow.com/logo.png",
-    email: "contact@aethelflow.com",
-    telephone: "+91-7416656592",
-  },
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://aethelflow.com/about#webpage",
+      url: "https://aethelflow.com/about",
+      name: "About Us | Aethel Flow",
+      description:
+        "At Aethel Flow, we believe the future of work should be seamless, intelligent, and human-centric, redefining automation with trust and clarity.",
+      mainEntity: {
+        "@type": "Organization",
+        "@id": "https://aethelflow.com/#organization",
+        name: "Aethel Flow Solutions Pvt. Ltd.",
+        url: "https://aethelflow.com",
+        logo: "https://aethelflow.com/logo.png",
+        email: "contact@aethelflow.com",
+        telephone: "+91-7416656592",
+      },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://aethelflow.com/about#faq",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "What is Aethel Flow's mission and vision?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Aethel Flow's mission and vision is to redefine the future of work through intelligent, human-centric automation that blends efficiency with adaptability, empowering businesses with seamless and scalable AI solutions.",
+          },
+        },
+      ],
+    },
+  ],
 };
 
 export default function AboutLayout({
