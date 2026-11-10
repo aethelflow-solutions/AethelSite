@@ -207,9 +207,9 @@ export default function AdminChatsPage() {
                 <tr className="border-b border-gray-200/80 bg-gray-50/80 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
                   <th className="py-3.5 px-5">Title</th>
                   <th className="py-3.5 px-4">Session ID</th>
+                  <th className="py-3.5 px-4">Messages</th>
                   <th className="py-3.5 px-4">Device</th>
                   <th className="py-3.5 px-4">Session Date</th>
-                  <th className="py-3.5 px-4">Created At</th>
                   <th className="py-3.5 px-5 text-right">Action</th>
                 </tr>
               </thead>
@@ -239,6 +239,14 @@ export default function AdminChatsPage() {
                       </code>
                     </td>
 
+                    {/* Messages Count */}
+                    <td className="py-4 px-4 align-middle">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-50 text-[#28a2fe] border border-sky-200/70">
+                        <MessageSquare className="w-3 h-3" />
+                        <span>{item.messagesCount ?? 0}</span>
+                      </span>
+                    </td>
+
                     {/* Device Type */}
                     <td className="py-4 px-4 align-middle">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-[#1B1A1A] text-white capitalize">
@@ -253,11 +261,6 @@ export default function AdminChatsPage() {
                         <Calendar className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                         <span>{formatDate(item.date)}</span>
                       </div>
-                    </td>
-
-                    {/* Created At */}
-                    <td className="py-4 px-4 align-middle whitespace-nowrap text-xs text-gray-500">
-                      {formatDate(item.createdAt)}
                     </td>
 
                     {/* Open Action */}

@@ -5,6 +5,7 @@ export interface AdminChatSessionItem {
   _id: string;
   title: string;
   deviceType: DeviceType;
+  messagesCount?: number;
   date: string;
   createdAt: string;
 }
