@@ -15,6 +15,8 @@ interface ChatInputProps {
   disabled?: boolean;
 }
 
+const SILENCE_AUTO_SEND_MS = 1800;
+
 export default function ChatInput({
   onSendMessage,
   disabled = false,
@@ -27,6 +29,22 @@ export default function ChatInput({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const baseTextRef = useRef<string>("");
+  const latestTranscriptRef = useRef<string>("");
+  const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onSendMessageRef = useRef(onSendMessage);
+  const disabledRef = useRef(disabled);
+
+  useEffect(() => {
+    onSendMessageRef.current = onSendMessage;
+    disabledRef.current = disabled;
+  }, [onSendMessage, disabled]);
+
+  const clearSilenceTimer = () => {
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+  };
 
   useEffect(() => {
     const SpeechRecognitionAPI = getSpeechRecognitionAPI();
@@ -63,10 +81,28 @@ export default function ChatInput({
         ? `${prefix}${spokenText ? ` ${spokenText}` : ""}`
         : spokenText;
 
+      latestTranscriptRef.current = combined;
       setInputValue(combined);
+
+      // Reset silence timer to auto-send after user pauses speaking
+      clearSilenceTimer();
+      if (combined.trim()) {
+        silenceTimerRef.current = setTimeout(() => {
+          const textToSend = latestTranscriptRef.current.trim();
+          if (!textToSend || disabledRef.current) return;
+
+          recognition.stop();
+          setIsListening(false);
+          onSendMessageRef.current(textToSend);
+          setInputValue("");
+          baseTextRef.current = "";
+          latestTranscriptRef.current = "";
+        }, SILENCE_AUTO_SEND_MS);
+      }
     };
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      clearSilenceTimer();
       setIsListening(false);
       if (event.error === "not-allowed") {
         setSpeechError("Microphone access denied.");
@@ -82,12 +118,14 @@ export default function ChatInput({
     recognitionRef.current = recognition;
 
     return () => {
+      clearSilenceTimer();
       recognition.abort();
     };
   }, []);
 
   useEffect(() => {
     if (disabled && isListening) {
+      clearSilenceTimer();
       recognitionRef.current?.stop();
       setIsListening(false);
     }
@@ -96,6 +134,7 @@ export default function ChatInput({
   const handleToggleSpeech = () => {
     if (!recognitionRef.current || disabled) return;
     setSpeechError(null);
+    clearSilenceTimer();
 
     if (isListening) {
       recognitionRef.current.stop();
@@ -104,6 +143,7 @@ export default function ChatInput({
     } else {
       try {
         baseTextRef.current = inputValue.trim();
+        latestTranscriptRef.current = inputValue.trim();
         recognitionRef.current.start();
         setIsListening(true);
       } catch {
@@ -114,6 +154,7 @@ export default function ChatInput({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    clearSilenceTimer();
     if (isListening) {
       recognitionRef.current?.stop();
       setIsListening(false);
@@ -123,6 +164,7 @@ export default function ChatInput({
     onSendMessage(trimmed);
     setInputValue("");
     baseTextRef.current = "";
+    latestTranscriptRef.current = "";
     inputRef.current?.focus();
   };
 
@@ -141,7 +183,9 @@ export default function ChatInput({
           type="text"
           value={inputValue}
           onChange={(e) => {
+            clearSilenceTimer();
             setInputValue(e.target.value);
+            latestTranscriptRef.current = e.target.value;
             if (!isListening) {
               baseTextRef.current = e.target.value;
             }

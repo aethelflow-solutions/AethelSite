@@ -33,7 +33,7 @@ export default function ChatWindow({
   onClose,
 }: ChatWindowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [autoSpeak, setAutoSpeak] = useState(false);
+  const [autoSpeak, setAutoSpeak] = useState(true);
   const [isSpeechSupported, setIsSpeechSupported] = useState(false);
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(
     null,
