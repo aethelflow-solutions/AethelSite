@@ -1,11 +1,22 @@
 "use client";
 
 import React from "react";
-import { RotateCcw, X, Sparkles, Maximize2, Minimize2 } from "lucide-react";
+import {
+  RotateCcw,
+  X,
+  Sparkles,
+  Maximize2,
+  Minimize2,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 
 interface ChatHeaderProps {
   isProcessing?: boolean;
   isExpanded?: boolean;
+  autoSpeak?: boolean;
+  isSpeechSupported?: boolean;
+  onToggleAutoSpeak?: () => void;
   onToggleExpand?: () => void;
   onResetChat: () => void;
   onClose: () => void;
@@ -14,6 +25,9 @@ interface ChatHeaderProps {
 export default function ChatHeader({
   isProcessing = false,
   isExpanded = false,
+  autoSpeak = false,
+  isSpeechSupported = false,
+  onToggleAutoSpeak,
   onToggleExpand,
   onResetChat,
   onClose,
@@ -61,6 +75,34 @@ export default function ChatHeader({
 
       {/* Right: Controls */}
       <div className="relative z-10 flex items-center gap-1">
+        {isSpeechSupported && onToggleAutoSpeak && (
+          <button
+            type="button"
+            onClick={onToggleAutoSpeak}
+            title={
+              autoSpeak
+                ? "Auto-read AI responses: ON"
+                : "Auto-read AI responses: OFF"
+            }
+            aria-label={
+              autoSpeak
+                ? "Disable auto-read AI responses"
+                : "Enable auto-read AI responses"
+            }
+            className={`p-2 rounded-xl transition-colors cursor-pointer ${
+              autoSpeak
+                ? "text-[#7dd3fc] bg-[#28a2fe]/20 hover:bg-[#28a2fe]/30"
+                : "text-gray-300 hover:text-white hover:bg-white/10"
+            }`}
+          >
+            {autoSpeak ? (
+              <Volume2 className="w-4 h-4" />
+            ) : (
+              <VolumeX className="w-4 h-4" />
+            )}
+          </button>
+        )}
+
         <button
           type="button"
           onClick={onResetChat}

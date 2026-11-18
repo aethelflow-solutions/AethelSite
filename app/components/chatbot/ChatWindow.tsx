@@ -1,7 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { ChatSession, Message } from "@/types/chat.type";
+import {
+  getBestEnglishVoice,
+  stripMarkdownForSpeech,
+} from "@/helpers/speech.helper";
 import ChatHeader from "./ChatHeader";
 import ChatMessageList from "./ChatMessageList";
 import ChatSuggestions from "./ChatSuggestions";
@@ -29,6 +33,172 @@ export default function ChatWindow({
   onClose,
 }: ChatWindowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [autoSpeak, setAutoSpeak] = useState(false);
+  const [isSpeechSupported, setIsSpeechSupported] = useState(false);
+  const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(
+    null,
+  );
+
+  const lastSpokenMessageIdRef = useRef<string | null>(null);
+  const hasSeededHistoryRef = useRef(false);
+  const preferredVoiceRef = useRef<SpeechSynthesisVoice | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+
+    setIsSpeechSupported(true);
+
+    const loadPreferredVoice = () => {
+      const availableVoices = window.speechSynthesis.getVoices();
+      if (availableVoices.length > 0) {
+        preferredVoiceRef.current = getBestEnglishVoice(availableVoices);
+      }
+    };
+
+    loadPreferredVoice();
+    window.speechSynthesis.addEventListener(
+      "voiceschanged",
+      loadPreferredVoice,
+    );
+
+    return () => {
+      window.speechSynthesis.removeEventListener(
+        "voiceschanged",
+        loadPreferredVoice,
+      );
+      window.speechSynthesis.cancel();
+    };
+  }, []);
+
+  const stopSpeaking = useCallback(() => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    setSpeakingMessageId(null);
+  }, []);
+
+  const speakMessage = useCallback(
+    (message: Message) => {
+      if (
+        typeof window === "undefined" ||
+        !("speechSynthesis" in window) ||
+        !message.content
+      ) {
+        return;
+      }
+
+      const plainText = stripMarkdownForSpeech(message.content);
+      if (!plainText) return;
+
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(plainText);
+      const selectedVoice =
+        preferredVoiceRef.current ||
+        getBestEnglishVoice(window.speechSynthesis.getVoices());
+
+      if (selectedVoice) {
+        preferredVoiceRef.current = selectedVoice;
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      } else {
+        utterance.lang = "en-US";
+      }
+
+      utterance.rate = 0.98;
+      utterance.pitch = 1.0;
+
+      utterance.onstart = () => {
+        setSpeakingMessageId(message._id);
+      };
+      utterance.onend = () => {
+        setSpeakingMessageId((current) =>
+          current === message._id ? null : current,
+        );
+      };
+      utterance.onerror = () => {
+        setSpeakingMessageId((current) =>
+          current === message._id ? null : current,
+        );
+      };
+
+      setSpeakingMessageId(message._id);
+      window.speechSynthesis.speak(utterance);
+    },
+    [],
+  );
+
+  const handleToggleSpeakMessage = useCallback(
+    (message: Message) => {
+      if (speakingMessageId === message._id) {
+        stopSpeaking();
+      } else {
+        speakMessage(message);
+      }
+    },
+    [speakingMessageId, stopSpeaking, speakMessage],
+  );
+
+  const handleToggleAutoSpeak = useCallback(() => {
+    setAutoSpeak((prev) => {
+      const next = !prev;
+      if (!next) {
+        stopSpeaking();
+      }
+      return next;
+    });
+  }, [stopSpeaking]);
+
+  // Stop speech when chat closes
+  useEffect(() => {
+    if (!isOpen) {
+      stopSpeaking();
+    }
+  }, [isOpen, stopSpeaking]);
+
+  // Track latest completed AI message and auto-read new responses when autoSpeak is enabled
+  useEffect(() => {
+    const msgs = session?.messages ?? [];
+    const completedAiMessages = msgs.filter(
+      (m) =>
+        m.role === "ai" &&
+        m.status === "completed" &&
+        !m._id.startsWith("temp_") &&
+        Boolean(m.content?.trim()),
+    );
+    const latestAiMsg =
+      completedAiMessages[completedAiMessages.length - 1] ?? null;
+
+    if (!hasSeededHistoryRef.current) {
+      hasSeededHistoryRef.current = true;
+      lastSpokenMessageIdRef.current = latestAiMsg?._id ?? null;
+      return;
+    }
+
+    if (
+      latestAiMsg &&
+      latestAiMsg._id !== lastSpokenMessageIdRef.current
+    ) {
+      lastSpokenMessageIdRef.current = latestAiMsg._id;
+      if (autoSpeak && isOpen) {
+        speakMessage(latestAiMsg);
+      }
+    }
+  }, [session?.messages, autoSpeak, isOpen, speakMessage]);
+
+  const handleReset = useCallback(() => {
+    stopSpeaking();
+    lastSpokenMessageIdRef.current = null;
+    onResetChat();
+  }, [stopSpeaking, onResetChat]);
+
+  const handleSend = useCallback(
+    (content: string) => {
+      stopSpeaking();
+      onSendMessage(content);
+    },
+    [stopSpeaking, onSendMessage],
+  );
 
   if (!isOpen) return null;
 
@@ -59,8 +229,11 @@ export default function ChatWindow({
         <ChatHeader
           isProcessing={isProcessing}
           isExpanded={isExpanded}
+          autoSpeak={autoSpeak}
+          isSpeechSupported={isSpeechSupported}
+          onToggleAutoSpeak={handleToggleAutoSpeak}
           onToggleExpand={() => setIsExpanded((prev) => !prev)}
-          onResetChat={onResetChat}
+          onResetChat={handleReset}
           onClose={onClose}
         />
 
@@ -68,17 +241,20 @@ export default function ChatWindow({
           messages={messages}
           sessionDate={session?.date}
           onRetry={onRetryMessage}
+          speakingMessageId={speakingMessageId}
+          isSpeechSupported={isSpeechSupported}
+          onToggleSpeak={handleToggleSpeakMessage}
         />
 
         {showInitialQuestions && (
           <ChatSuggestions
             suggestions={suggestions}
-            onSelect={onSendMessage}
+            onSelect={handleSend}
             disabled={isProcessing}
           />
         )}
 
-        <ChatInput onSendMessage={onSendMessage} disabled={isProcessing} />
+        <ChatInput onSendMessage={handleSend} disabled={isProcessing} />
       </aside>
     </>
   );

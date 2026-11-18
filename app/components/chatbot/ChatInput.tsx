@@ -2,51 +2,17 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { SendHorizontal, Mic, MicOff } from "lucide-react";
+import {
+  getSpeechRecognitionAPI,
+  SpeechRecognitionErrorEvent,
+  SpeechRecognitionEvent,
+  SpeechRecognitionInstance,
+} from "@/helpers/speech.helper";
 
 interface ChatInputProps {
   onSendMessage: (content: string) => void;
   disabled?: boolean;
 }
-
-interface SpeechRecognitionAlternative {
-  transcript: string;
-  confidence: number;
-}
-
-interface SpeechRecognitionResult {
-  readonly isFinal: boolean;
-  readonly length: number;
-  [index: number]: SpeechRecognitionAlternative;
-}
-
-interface SpeechRecognitionResultList {
-  readonly length: number;
-  [index: number]: SpeechRecognitionResult;
-}
-
-interface SpeechRecognitionEvent extends Event {
-  readonly resultIndex: number;
-  readonly results: SpeechRecognitionResultList;
-}
-
-interface SpeechRecognitionErrorEvent extends Event {
-  readonly error: string;
-  readonly message?: string;
-}
-
-interface SpeechRecognitionInstance extends EventTarget {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  onresult: ((event: SpeechRecognitionEvent) => void) | null;
-  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
-  onend: (() => void) | null;
-  start: () => void;
-  stop: () => void;
-  abort: () => void;
-}
-
-type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
 
 export default function ChatInput({
   onSendMessage,
@@ -62,20 +28,7 @@ export default function ChatInput({
   const baseTextRef = useRef<string>("");
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const SpeechRecognitionAPI =
-      (
-        window as unknown as {
-          SpeechRecognition?: SpeechRecognitionConstructor;
-          webkitSpeechRecognition?: SpeechRecognitionConstructor;
-        }
-      ).SpeechRecognition ||
-      (
-        window as unknown as {
-          webkitSpeechRecognition?: SpeechRecognitionConstructor;
-        }
-      ).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
 
     if (!SpeechRecognitionAPI) {
       setIsSpeechSupported(false);

@@ -9,12 +9,18 @@ interface ChatMessageListProps {
   messages: Message[];
   sessionDate?: Date;
   onRetry?: (message: Message) => void;
+  speakingMessageId?: string | null;
+  isSpeechSupported?: boolean;
+  onToggleSpeak?: (message: Message) => void;
 }
 
 export default function ChatMessageList({
   messages,
   sessionDate,
   onRetry,
+  speakingMessageId = null,
+  isSpeechSupported = false,
+  onToggleSpeak,
 }: ChatMessageListProps) {
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -58,7 +64,14 @@ export default function ChatMessageList({
 
       {/* Messages */}
       {sortedMessages.map((msg) => (
-        <ChatMessageItem key={msg._id} message={msg} onRetry={onRetry} />
+        <ChatMessageItem
+          key={msg._id}
+          message={msg}
+          onRetry={onRetry}
+          isSpeaking={speakingMessageId === msg._id}
+          isSpeechSupported={isSpeechSupported}
+          onToggleSpeak={onToggleSpeak}
+        />
       ))}
 
       <div ref={bottomRef} />

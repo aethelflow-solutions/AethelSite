@@ -2,32 +2,33 @@
 
 import React, { useState } from "react";
 import { Message } from "@/types/chat.type";
-import { Bot, User, Copy, Check, AlertCircle, RefreshCw } from "lucide-react";
+import {
+  Bot,
+  User,
+  Copy,
+  Check,
+  AlertCircle,
+  RefreshCw,
+  Volume2,
+  Square,
+} from "lucide-react";
 import MarkdownRenderer from "./MarkdownRenderer";
+import { formatMessageTime } from "@/helpers/speech.helper";
 
 interface ChatMessageItemProps {
   message: Message;
   onRetry?: (message: Message) => void;
-}
-
-function formatTime(timestamp?: string): string {
-  if (!timestamp) return "";
-  try {
-    const date = new Date(timestamp);
-    if (isNaN(date.getTime())) return "";
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  } catch {
-    return "";
-  }
+  isSpeaking?: boolean;
+  isSpeechSupported?: boolean;
+  onToggleSpeak?: (message: Message) => void;
 }
 
 export default function ChatMessageItem({
   message,
   onRetry,
+  isSpeaking = false,
+  isSpeechSupported = false,
+  onToggleSpeak,
 }: ChatMessageItemProps) {
   const [copied, setCopied] = useState(false);
   const isHuman = message.role === "human";
@@ -124,32 +125,63 @@ export default function ChatMessageItem({
           )}
         </div>
 
-        {/* Footer Meta: Timestamp & Copy Action */}
+        {/* Footer Meta: Timestamp, Read Aloud & Copy Action */}
         {!isProcessing && (
           <div
-            className={`flex items-center gap-2 mt-1 px-1 text-[11px] text-gray-400 ${
+            className={`flex items-center gap-2.5 mt-1 px-1 text-[11px] text-gray-400 ${
               isHuman ? "flex-row-reverse" : "flex-row"
             }`}
           >
-            {message.timestamp && <span>{formatTime(message.timestamp)}</span>}
+            {message.timestamp && (
+              <span>{formatMessageTime(message.timestamp)}</span>
+            )}
 
             {!isHuman && message.content && !isFailed && (
-              <button
-                type="button"
-                onClick={handleCopy}
-                title="Copy message"
-                aria-label="Copy message"
-                className="opacity-0 group-hover:opacity-100 inline-flex items-center gap-1 text-gray-400 hover:text-gray-700 transition-opacity cursor-pointer"
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-3 h-3 text-emerald-500" />
-                    <span className="text-[10px] text-emerald-600">Copied</span>
-                  </>
-                ) : (
-                  <Copy className="w-3 h-3" />
+              <div className="flex items-center gap-2">
+                {isSpeechSupported && onToggleSpeak && (
+                  <button
+                    type="button"
+                    onClick={() => onToggleSpeak(message)}
+                    title={isSpeaking ? "Stop reading" : "Read response aloud"}
+                    aria-label={
+                      isSpeaking ? "Stop reading" : "Read response aloud"
+                    }
+                    className={`inline-flex items-center gap-1 transition-all cursor-pointer ${
+                      isSpeaking
+                        ? "opacity-100 text-[#28a2fe] font-medium"
+                        : "opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-700"
+                    }`}
+                  >
+                    {isSpeaking ? (
+                      <>
+                        <Square className="w-2.5 h-2.5 fill-current" />
+                        <span className="text-[10px]">Stop</span>
+                      </>
+                    ) : (
+                      <Volume2 className="w-3.5 h-3.5" />
+                    )}
+                  </button>
                 )}
-              </button>
+
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  title="Copy message"
+                  aria-label="Copy message"
+                  className="opacity-0 group-hover:opacity-100 inline-flex items-center gap-1 text-gray-400 hover:text-gray-700 transition-opacity cursor-pointer"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-3 h-3 text-emerald-500" />
+                      <span className="text-[10px] text-emerald-600">
+                        Copied
+                      </span>
+                    </>
+                  ) : (
+                    <Copy className="w-3 h-3" />
+                  )}
+                </button>
+              </div>
             )}
           </div>
         )}

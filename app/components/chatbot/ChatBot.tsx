@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { ChatSession, DeviceType, Message } from "@/types/chat.type";
+import { ChatSession, Message } from "@/types/chat.type";
 import {
   createNewChatSessionApi,
   getChatBotSettingsApi,
@@ -13,6 +13,7 @@ import {
   getSessionToken,
   setSessionToken,
 } from "@/helpers/sessionStorage.helper";
+import { detectDeviceType } from "@/helpers/speech.helper";
 import ChatTriggerButton from "./ChatTriggerButton";
 import ChatWindow from "./ChatWindow";
 
@@ -21,14 +22,6 @@ export interface ChatInfoState {
   isProcessing: boolean;
   isBotActive: boolean;
   initialQuestions: string[];
-}
-
-function detectDeviceType(): DeviceType {
-  if (typeof window === "undefined") return "unknown";
-  const width = window.innerWidth;
-  if (width < 640) return "mobile";
-  if (width < 1024) return "tablet";
-  return "desktop";
 }
 
 export default function ChatBot() {
