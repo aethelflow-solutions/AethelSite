@@ -10,9 +10,11 @@ import {
   Volume2,
   VolumeX,
 } from "lucide-react";
+import AudioWaveform from "./AudioWaveform";
 
 interface ChatHeaderProps {
   isProcessing?: boolean;
+  isSpeaking?: boolean;
   isExpanded?: boolean;
   autoSpeak?: boolean;
   isSpeechSupported?: boolean;
@@ -24,6 +26,7 @@ interface ChatHeaderProps {
 
 export default function ChatHeader({
   isProcessing = false,
+  isSpeaking = false,
   isExpanded = false,
   autoSpeak = false,
   isSpeechSupported = false,
@@ -67,8 +70,17 @@ export default function ChatHeader({
             </span>
           </div>
 
-          <div className="text-xs text-gray-300/85 truncate">
-            {isProcessing ? "Thinking..." : "AI Assistant"}
+          <div className="flex items-center gap-1.5 text-xs text-gray-300/85 truncate">
+            {isProcessing ? (
+              <span>Thinking...</span>
+            ) : isSpeaking ? (
+              <span className="inline-flex items-center gap-1.5 text-[#7dd3fc] font-medium">
+                <AudioWaveform variant="sm" bars={3} />
+                <span>Speaking...</span>
+              </span>
+            ) : (
+              <span>AI Assistant</span>
+            )}
           </div>
         </div>
       </div>

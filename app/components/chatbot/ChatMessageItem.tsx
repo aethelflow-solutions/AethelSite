@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Message } from "@/types/chat.type";
 import {
   Bot,
@@ -13,6 +13,7 @@ import {
   Square,
 } from "lucide-react";
 import MarkdownRenderer from "./MarkdownRenderer";
+import AudioWaveform from "./AudioWaveform";
 import { formatMessageTime } from "@/helpers/speech.helper";
 
 interface ChatMessageItemProps {
@@ -56,14 +57,18 @@ export default function ChatMessageItem({
     >
       {/* Avatar */}
       <div
-        className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs ${
+        className={`relative w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs transition-all ${
           isHuman
             ? "bg-[#28a2fe] text-white"
-            : "bg-[#1B1A1A] text-[#28a2fe] border border-black/10"
+            : isSpeaking
+              ? "bg-[#1B1A1A] text-[#28a2fe] border border-[#28a2fe]/60 ring-2 ring-[#28a2fe]/25"
+              : "bg-[#1B1A1A] text-[#28a2fe] border border-black/10"
         }`}
       >
         {isHuman ? (
           <User className="w-4 h-4" />
+        ) : isSpeaking ? (
+          <AudioWaveform variant="md" bars={4} ariaLabel="AI speaking" />
         ) : (
           <Bot className="w-4 h-4 text-[#28a2fe]" />
         )}
@@ -154,6 +159,11 @@ export default function ChatMessageItem({
                   >
                     {isSpeaking ? (
                       <>
+                        <AudioWaveform
+                          variant="sm"
+                          bars={3}
+                          className="mr-0.5"
+                        />
                         <Square className="w-2.5 h-2.5 fill-current" />
                         <span className="text-[10px]">Stop</span>
                       </>

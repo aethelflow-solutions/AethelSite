@@ -54,3 +54,19 @@
 #markdown_div td {
   @apply border-b border-gray-200 dark:border-gray-700 px-3 py-2 text-left text-xs whitespace-nowrap;
 }
+
+/* Audio Equalizer Waveform Animation */
+@keyframes audioWaveBar {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.audio-wave-bar {
+  transform-origin: center;
+  animation: audioWaveBar 0.85s ease-in-out infinite;
+}

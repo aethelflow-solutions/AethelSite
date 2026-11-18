@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Bot, X, Sparkles } from "lucide-react";
 
 interface ChatTriggerButtonProps {

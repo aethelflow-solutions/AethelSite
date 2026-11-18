@@ -228,6 +228,7 @@ export default function ChatWindow({
       >
         <ChatHeader
           isProcessing={isProcessing}
+          isSpeaking={Boolean(speakingMessageId)}
           isExpanded={isExpanded}
           autoSpeak={autoSpeak}
           isSpeechSupported={isSpeechSupported}

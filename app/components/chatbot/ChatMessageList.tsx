@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Message } from "@/types/chat.type";
 import ChatMessageItem from "./ChatMessageItem";
 import { Sparkles } from "lucide-react";
@@ -29,7 +29,7 @@ export default function ChatMessageList({
   }, [messages]);
 
   const sortedMessages = [...messages].sort(
-    (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    (a, b) => (a.order ?? 0) - (b.order ?? 0),
   );
 
   const formattedSessionDate = sessionDate

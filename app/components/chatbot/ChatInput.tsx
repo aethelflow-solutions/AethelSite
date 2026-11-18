@@ -8,6 +8,7 @@ import {
   SpeechRecognitionEvent,
   SpeechRecognitionInstance,
 } from "@/helpers/speech.helper";
+import AudioWaveform from "./AudioWaveform";
 
 interface ChatInputProps {
   onSendMessage: (content: string) => void;
@@ -156,6 +157,10 @@ export default function ChatInput({
           style={{ outline: "none", boxShadow: "none" }}
           className="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 border-none outline-none focus:outline-none focus-visible:!outline-none focus:ring-0 disabled:opacity-60"
         />
+
+        {isListening && (
+          <AudioWaveform variant="lg" bars={4} className="px-1.5" />
+        )}
 
         {isSpeechSupported && (
           <button
